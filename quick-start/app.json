@@ -1,5 +1,7 @@
 {
   "pages": [
+    "pages/classfiy/classfiy",
+    "pages/swiper/swiper",
     "pages/demo/demo",
     "pages/index/index",
     "pages/logs/logs"

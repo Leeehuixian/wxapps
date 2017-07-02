@@ -7,7 +7,10 @@ Page({
    */
   data: {
     toView:"red",
-    scrollTop:100
+    scrollTop:100,
+    staffA: { firstName: 'Hulk', lastName: 'Hu' },
+    staffB: { firstName: 'Shang', lastName: 'You' },
+    staffC: { firstName: 'Gideon', lastName: 'Lin' }
   },
   upper:function(e){
     console.log(e);
