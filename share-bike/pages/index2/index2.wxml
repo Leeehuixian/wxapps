@@ -1,0 +1,5 @@
+<!--pages/index2/index2.wxml-->
+<view>
+  <!--map-->
+  <map class="mb-map" longitude="{{longitude}}" latitude="{{latitude}}" scale="14" markers="{{markers}}" controls="{{controls}}" bindcontroltap="controltap"/>
+</view>

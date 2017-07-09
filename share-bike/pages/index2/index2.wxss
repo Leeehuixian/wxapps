@@ -1,0 +1,5 @@
+/* pages/index2/index2.wxss */
+.mb-map{
+  width:100%;
+  height:100%;
+}
