@@ -1,11 +1,59 @@
 // pages/recharge/recharge.js
+var app = getApp()
+var color,sucmoney
+var money = 0
+var b = 0
+var yajinid = 0
 Page({
-
   /**
    * 页面的初始数据
    */
   data: {
-  
+    mymondy:0,
+    disabled:false,
+    curNav:1,
+    curIndex:0,
+    cart:[],
+    cartTotal:0,
+    lockhidden:true,
+    yajinhidden:true,
+    sucmoney:424,
+    color:'limegreen',
+    nocancel:false,
+    yajinmodaltitle:"押金充值",
+    yajinmodaltxt:"去充值",
+    yajinmoney:0,
+    yajintxt:"您是否确定充值押金299元？押金充值后可以在摩拜单车App全额退款",
+    navList:[{
+      id:1,
+      chongzhi:'充￥300',
+      song:'送￥124',
+      money:"424"
+    },
+    {
+        id: 2,
+        chongzhi: '充￥100',
+        song: '送￥50',
+        money: "150"
+      },
+      {
+        id: 3,
+        chongzhi: '充￥50',
+        song: '送￥20',
+        money: "70"
+      },
+      {
+        id: 4,
+        chongzhi: '充￥20',
+        song: '送￥5',
+        money: "25"
+      },
+      {
+        id: 5,
+        chongzhi: '充￥10',
+        song: '',
+        money: "10"
+    }],
   },
 
   /**

@@ -63,7 +63,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    //调用wx.getLocation系统API，获取并设置当前位置经纬度
+    //2.调用wx.getLocation系统API，获取并设置当前位置经纬度
     // wx.getLocation({
     //   type: 'wgs84',
     //   success: (res)=> {//es6箭头函数,可以解绑当前作用域的this指向，使得下面的this可以绑定到Page对象
@@ -73,6 +73,59 @@ Page({
     //     })
     //   }
     // })
+    //3.设置地图控件的位置大小，通过设备宽高定位
+      wx.getSystemInfo({//系统API，获取系统信息，比如设备宽高
+        success: (res) => {
+          this.setData({
+            //定义控件数组，可以在data对象初始化为[],也可以不初始化，取决于是否需要更好的阅读
+            controls: [{
+              //定位我的位置控件
+              id: 0,
+              iconPath: "/images/imgs_main_location@2x.png",
+              position: {
+                left: 20,//单位px
+                top: res.windowHeight - 80, // 根据设备高度设置top值，可以做到在不同设备上效果一致
+                width: 50,
+                height: 50
+              },
+              clickable: true
+            },{
+              //红包控件
+              id: 1,
+              iconPath: '/images/hongbao.png',
+              position: {
+                left: res.windowWidth - 80,
+                top: res.windowHeight - 180,
+                width: 50,
+                height: 50
+              },
+              clickable: true
+            },{
+              //充值控件
+              id: 2,
+              iconPath: '/images/chongzhi.png',
+              position: {
+                left: res.windowWidth - 80,
+                top: res.windowHeight - 120,
+                width: 50,
+                height: 50
+              },
+              clickable: true
+            },{
+              //二维码控件
+              id: 3,
+              iconPath: '/images/lock.png',
+              position: {
+                left: res.windowWidth / 2 - 60,
+                top: res.windowHeight - 80,
+                width: 120,
+                height: 60 
+              },
+              clickable: true
+            }]
+          })
+        },
+      })
   },
   //地图标记点击事件，连接用户位置和点击的单车位置
   bindmarkertap: function(e){
@@ -101,14 +154,62 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    //1、创建地图上下文，移动当前位置到地图中心
-    // this.mapCtx = wx.createMapContext("mbMap");//地图组件的id
-    // this.movetoPosition()
+    // 1.创建地图上下文，移动当前位置到地图中心
+    this.mapCtx = wx.createMapContext("mbMap"); // 地图组件的id
+    this.movetoPosition()
   },
-  //定位函数，移动位置到地图中心
-  // movetoPosition: function(){
-  //   this.mapCtx.moveToLocation();
-  // },
+  /**
+   * 控件处理函数
+   */
+   controltap: function(e){
+    //判断点击的是哪个控件 e.controlId的值是当前点击控件的id
+    switch(e.controlId){//定位
+      case 0: this.mapCtx.moveToLocation();
+        break;
+      case 1: wx.navigateTo({//红包
+        url: '/pages/hongbao/hongbao'
+      });
+        break;
+      case 2: wx.navigateTo({
+        url: '/pages/recharge/recharge'
+      });
+        break;
+      case 3: 
+        wx.scanCode({
+          success: (res) => {
+          },
+          fail: (res) => {
+            this.setData({
+              lockhidden: false
+            });
+          }
+        });
+        break;
+      default: break;
+    }
+   },
+   // 定位函数，移动位置到地图中心
+   movetoPosition: function () {
+     this.mapCtx.moveToLocation();
+   },
+   /**
+    * 扫码开锁弹出层隐藏
+    */
+    confirm: function(){
+      wx.showLoading({
+        title: '正在获取密码'
+      })
+      setTimeout(function(){
+        wx.hideLoading();
+        wx.showToast({
+          title: '获取密码成功',
+        })
+      },1000);    
+      this.setData({
+        lockhidden: true
+      })
+    },
+
   /**
    * 生命周期函数--监听页面隐藏
    */

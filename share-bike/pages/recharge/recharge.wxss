@@ -1,1 +1,33 @@
 /* pages/recharge/recharge.wxss */
+/*车费余额*/
+.balance{
+  width:100%;
+  height:150rpx;
+  background:#fff;
+}
+.balance image{
+  float:left;
+  display:block;
+  width:120rpx;
+  height:120rpx;
+  margin:15rpx 40rpx 15rpx 60rpx;
+}
+.balance .txt{
+  display:flex;
+  flex-direction: column;
+}
+.balance .money{
+  font-size:1.5em;
+  margin-top:15rpx;
+  margin-bottom:10rpx;
+}
+.balance .chinese{
+  color:#808080;
+  text-indent: 10rpx;
+}
+/*充值金额模块*/
+.balance-money{
+  line-height:80rpx;
+  margin-left:60rpx;
+}
+/*充值金额分类*/
