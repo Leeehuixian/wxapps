@@ -55,14 +55,73 @@ Page({
         money: "10"
     }],
   },
+  //充值金额分类渲染模块
+  selectNav(event){
+    let id=event.target.dataset.id,
+    index = parseInt(event.target.dataset.index);
+    b = parseInt(event.target.dataset.money);
+    self = this;
+    this.setData({
+      curNav:id,
+      curIndex:index,
+    })
+  },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-  
+    b = 424;
+    this.setData({
+      myMoney:money,
+    })
   },
-
+  //去充值功能模块
+  gobalance:function(event){
+    money += b;
+    this.setData({
+      lockhidden:false,
+      mymoney:money,
+      sucmoney:b,
+    })
+  },
+  confirm:function(){
+    this.setData({
+      lockhidden:true
+    });
+  },
+  //押金功能模块
+  yajin:function(event){
+    this.setData({
+      yajinhidden:false
+    });
+  },
+  yajincancel:function(event){
+    this.setData({
+      yajinhidden:true
+    });
+  },
+  yajinconfirm:function(event){
+    if(yajinid == 0){
+      yajinid = 1;
+      this.setData({
+        nocancel:true,
+        yajintxt:"您已成功充值押金299元",
+        yajinmodaltitle:'充值成功',
+        yajinmodaltxt:"完成"
+      });
+    } else {
+      yajinid = 0;
+      this.setData({
+        nocancel:false,
+        yajinhidden:true,
+        yajinmoney:299
+      })
+    }
+    this.setData({
+      nocancel:true,
+    });
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */

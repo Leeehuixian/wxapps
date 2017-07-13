@@ -1,11 +1,44 @@
-// pages/honbao/hongbao.js
+// pages/warn/warn.js
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-  
+    itemsValue:[
+      {
+        checked:false,
+        value:"私锁私用"
+      },
+      {
+        checked:false,
+        value:"车牌缺损"
+      },
+      {
+        checked:false,
+        value:"轮胎坏了"
+      },
+      {
+        checked:false,
+        value:"车锁坏了"
+      },
+      {
+        checked:false,
+        value:"违规乱停"
+      },
+      {
+        checked:false,
+        value:"密码不对"
+      },
+      {
+        checked:false,
+        value:"刹车坏了"
+      },
+      {
+        checked:false,
+        value:"其他故障"
+      }
+    ],
   },
 
   /**

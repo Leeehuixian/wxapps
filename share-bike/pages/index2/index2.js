@@ -90,9 +90,9 @@ Page({
               },
               clickable: true
             },{
-              //红包控件
+              //报修控件
               id: 1,
-              iconPath: '/images/hongbao.png',
+              iconPath: '/images/warn.png',
               position: {
                 left: res.windowWidth - 80,
                 top: res.windowHeight - 180,
@@ -166,8 +166,8 @@ Page({
     switch(e.controlId){//定位
       case 0: this.mapCtx.moveToLocation();
         break;
-      case 1: wx.navigateTo({//红包
-        url: '/pages/hongbao/hongbao'
+      case 1: wx.navigateTo({//报修
+        url: '/pages/warn/warn'
       });
         break;
       case 2: wx.navigateTo({

@@ -1,9 +1,9 @@
 {
   "pages":[
-    "pages/recharge/recharge",
+    "pages/warn/warn",
     "pages/index2/index2",
+    "pages/recharge/recharge",
     "pages/index/index",
-    "pages/hongbao/hongbao",
     "pages/service/service"
   ],
   "window":{
