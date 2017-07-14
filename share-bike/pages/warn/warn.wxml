@@ -10,6 +10,18 @@
         </view>
       </block>
     </checkbox-group>
-
+  </view>
+  <!--action-->
+  <view class="action">
+    <view class="block_tit">拍摄单车周围环境,便于维修师傅找车</view>
+    <view class="action-photo">
+      <block wx:for="{{picUrls}}" wx:key="{{item}}" wx:index="{{index}}">
+        <image src="{{item}}"><icon type="cancel" data-index="{{index}}" color="red" size="18" class="del" bindtap="delPic"/></image>
+      </block>
+        <text class="add" bindtap="bindCamera">{{actionText}}</text>
+    </view>
+    <view class="action-submit">
+      <button class="submit-btn" type="default" loading="{{loading}}" bindtap="formSubmit" style="background-color:{{btnBgc}}">提交</button>
+    </view>
   </view>
 </view>

@@ -14,8 +14,8 @@
   <form>
     <block wx:for="{{navList}}">
     <button class="type-nav {{curNav == item.id?'selected':''}}" bindtap="selectNav" data-index="{{index}}" data-id="{{item.id}}" data-money="{{item.money}}">
-      <text class="top type-nav {{curNav == item.id?'selected':''}}" data-index="{{index}}" data-id="{{item.id}}">{{item.chongzhi}}</text>
-      <text class="botton type-nav {{curNav == item.id?'selected':''}}" data-index="{{index}}" data-id="{{item.id}}">{{item.song}}</text>
+      <text class="top type-nav">{{item.chongzhi}}</text>
+      <text class="botton type-nav {{curNav == item.id?'selected':''}}">{{item.song}}</text>
     </button>
     </block>
   </form>

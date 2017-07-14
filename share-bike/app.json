@@ -1,7 +1,7 @@
 {
   "pages":[
-    "pages/warn/warn",
     "pages/index2/index2",
+    "pages/warn/warn",
     "pages/recharge/recharge",
     "pages/index/index",
     "pages/service/service"

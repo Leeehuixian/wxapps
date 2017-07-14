@@ -1,8 +1,9 @@
 {
-  "pages": [
+  "pages": [  
+    "pages/picker/picker",              
+    "pages/demo/demo",
     "pages/classfiy/classfiy",
     "pages/swiper/swiper",
-    "pages/demo/demo",
     "pages/index/index",
     "pages/logs/logs"
   ],
