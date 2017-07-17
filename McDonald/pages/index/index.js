@@ -3,13 +3,32 @@
 var app = getApp()
 Page({
   data: {
-    motto: 'Hello World',
-    userInfo: {}
+    userList:[],
   },
   //事件处理函数
-  bindViewTap: function() {
+  //我要积分页面跳转，这个要做判断是否登录，没有登录跳转其他页面
+  bindViewIntegral:function(event){
+    var that = this;
+    //获得当前的本地登录信息
+    var key = wx.getStorageSync('key');
+    if(key === "login:ok"){
+      wx.switchTab({
+        url:"/pages/qrcode/qrcode"
+      })
+    }else{
+      wx.navigateTo({
+        url:"/pages/qrcodenull/qrcodenull"
+      })
+    }
+  },
+  bindIntegralMall:function(){
     wx.navigateTo({
-      url: '../logs/logs'
+      url:"/pages/integralmall/integralmall"
+    })
+  },
+  bindHappynotice:function(){
+    wx.navigateTo({
+      url:"/pages/happynotice/happynotice"
     })
   },
   onLoad: function () {

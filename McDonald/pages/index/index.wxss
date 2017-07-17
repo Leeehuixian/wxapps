@@ -1,4 +1,3 @@
-/**index.wxss**/
 /*index.wxss*/
 /*page{
   width:100%;
@@ -25,4 +24,36 @@
 .cardText2{
   font-size:31rpx;
 }
+.index-block{
+  width:100%;
+  margin-top:10rpx;
+  display:flex;
+  flex-wrap:wrap;
+  justify-content: space-between;
+}
+.index-item{
+  width:246rpx;
+  height:360rpx;
+  background:#ffc324;
+  margin-top:10rpx;
+}
+.indexflex{
+  width:100%;
+  height:100%;
+  display:flex;
+  flex-wrap:wrap;
+  align-content: center;
+  justify-content: space-around;
+}
+.index-item-img{
+  width:100rpx;
+  height:100rpx;
+}
+.index-item-name{
+  width:100%;
+  height:100rpx;
+  text-align: center;
+  line-height: 100rpx;
+}
+
 

@@ -5,19 +5,19 @@
   <view class="cardText2">红包新玩法，限时5元起</view>
 </view>
 <view class="index-block">
-  <view class="index-item">
+  <view class="index-item" bindtap="bindViewIntegral">
     <view class="indexflex">
       <image class="index-item-img" src="/images/index_wallet.png"></image>
       <view class="index-item-name">我要积分</view>
     </view>
   </view>
-  <view class="index-item">
+  <view class="index-item" bindtap="bindIntegralMall">
     <view class="indexflex">
       <image class="index-item-img" src="/images/index_tag.png"></image>
       <view class="index-item-name">积分商城</view>
     </view>
   </view>
-  <view class="index-item">
+  <view class="index-item" bindtap="bindHappynotice">
     <view class="indexflex">
       <image class="index-item-img" src="/images/index_smile.png"></image>
       <view class="index-item-name">开心通告栏</view>

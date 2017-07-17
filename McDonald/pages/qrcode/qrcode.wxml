@@ -1,0 +1,18 @@
+<!--pages/qrcode/qrcode.wxml-->
+<view class="usercodeinfo-detail">
+  <view class="usercodeinfo-detail-secondline">
+  累计积分<text class="usercodeinfo-detail-secondline-allintegral">{{item.totalintegral}}</text>
+  可用积分<text class="usercodeinfo-detail-secondline-availableintegral">{{item.availableintegral}}</text>
+  <image class="usercodeinfo-detail-questionimg" src="/images/questionicon.png"></image>
+  </view>
+</view>
+<view class="usercodeinfo-qrcode">
+  <image class="usercodeinfo-qrcode-img" src="/images/qrcodeSmall.png"></image>
+</view>
+<view class="userintegral">
+  <view class="userintegral-text1">离下一个圆筒</view>
+  <view class="userintegral-text2">
+  <view class="userintegral-text2-dot1"></view>
+  <text class="userintegral-text2-text"> 还差39点积分</text>
+  </view>
+</view>
