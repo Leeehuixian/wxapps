@@ -1,1 +1,39 @@
 /* pages/qrcode/qrcode.wxss */
+.usercodeinfo{
+  display:flex;
+  justify-content: center;
+  align-items:center; 
+  width:100%;
+  height:100rpx;
+  background:#fff;
+}
+.usercodeinfo-avatar{
+  width:120rpx;
+  height:120rpx;
+  border-radius:50%;
+}
+.usercodeinfo-detail{
+  flex:1;
+  display:flex;
+  flex-flow:column wrap;
+  align-content: center;
+}
+.usercodeinfo-detail-firstline-name{
+  font-size:36rpx;
+  font-weight:400;
+}
+.usercodeinfo-detail-secondline{
+  font-size:23rpx;
+}
+.usercodeinfo-detail-questionimg{
+  width: 25rpx;
+  height: 25rpx;
+}
+.usercodeinfo-qrcode-img {
+  width: 50rpx;
+  height: 50rpx;
+}
+
+
+
+

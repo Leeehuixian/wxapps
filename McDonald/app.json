@@ -1,7 +1,7 @@
 {
   "pages":[
-    "pages/index/index",
     "pages/qrcode/qrcode",
+    "pages/index/index",
     "pages/user/user",
     "pages/happynotice/happynotice",
     "pages/queryintegral/queryintegral",
