@@ -5,14 +5,47 @@ Page({
    * 页面的初始数据
    */
   data: {
-  
+    url:'',
+    description:'',
+    prompt:'',
+    modalHidden:true,
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-  
+    var couponImg = options.url;
+    var couponDescripton = options.description;
+    var couponPrompt = options.prompt;
+    this.setData({
+      url: couponImg,
+      description: couponDescripton,
+      prompt: couponPrompt,
+    })
+  },
+
+  exchangetap:function(){
+    this.setData({
+      modalHidden:false
+    })
+  },
+
+  modalConfirm:function(){
+    this.setData({
+      modalHidden:true
+    })
+    wx.showModal({
+      title:"温馨提示",
+      content:"您的积分不足",
+      showCancel:false,
+    })
+  },
+
+  modalCancel:function(){
+    this.setData({
+      modalHidden:true,
+    })
   },
 
   /**

@@ -5,14 +5,46 @@ Page({
    * 页面的初始数据
    */
   data: {
-  
+    imgs:[],
+    modalHidden:true,
   },
 
+  exchangetap:function(){
+    this.setData({
+      modalHidden:false,
+    })
+  },
+
+  modalconfirm:function(){
+    this.setData({
+      modalHidden:true
+    })
+    wx.showModal({
+      title:'温馨提示',
+      content:'您的积分不足',
+      showCancel:false,
+    })
+  },
+  modalcancel:function(){
+    this.setData({
+      modalHidden:true
+    })
+  },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-  
+    var that = this;
+    wx.request({
+      url:"https://www.easy-mock.com/mock/595f3f139adc231f357b0615/McDonald/list",
+      method:'GET',
+      success:function(res){
+        console.log(res);
+        that.setData({
+          imgs:res.data.image,
+        })
+      }
+    })
   },
 
   /**

@@ -1,12 +1,12 @@
 {
   "pages":[
-    "pages/qrcode/qrcode",
     "pages/index/index",
+    "pages/integraldetail/integraldetail",
+    "pages/integralmall/integralmall",
+    "pages/qrcode/qrcode",
     "pages/user/user",
     "pages/happynotice/happynotice",
     "pages/queryintegral/queryintegral",
-    "pages/integralmall/integralmall",
-    "pages/integraldetail/integraldetail",
     "pages/qrcodenull/qrcodenull",
     "pages/register/register",
     "pages/logs/logs"
