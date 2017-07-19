@@ -5,7 +5,9 @@ Page({
    * 页面的初始数据
    */
   data: {
-  
+    userList:[],
+    name:'',
+    url:""
   },
 
   /**
@@ -35,12 +37,36 @@ Page({
   onHide: function () {
   
   },
+  bindtointegral:function(){
+    wx.navigateTo({
+      url: '/pages/integralmall/integralmall',
+    })
+  },
+  querytap:function(){
+    wx.navigateTo({
+      url: '/pages/queryintegral/queryintegral',
+    })
+  },
 
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload: function () {
-  
+  onUnload: function (options) {
+    var that = this;
+    that.setData({
+      name:wx.getStorageSync('name'),
+      url:wx.getStorageSync('url')
+    });
+    wx.request({
+      url: "https://www.easy-mock.com/mock/595f3f139adc231f357b0615/McDonald/list",
+      method:'Get',
+      success:function(res){
+        console.log(res);
+        that.setData({
+          userList:res.data.data
+        })
+      }
+    })
   },
 
   /**

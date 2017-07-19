@@ -26,8 +26,8 @@
       <view class="userintegral-text2-dot2"></view>
     </view>
     <view class="userintegral-show">
-      <text class="userintegral-show-text3">柜台手机支付前出示会员码</text>
-      <text bindtap="querytap" class="userintegral-show-query">查询积分>></text>
+      <text class="userintegral-show-text3">柜台手机支付前出示会员码 1元积1分</text>
+      <text bindtap="querytap" class="userintegral-show-query">查询积分 >></text>
     </view>
     <view class="userintegral-qrcode">
       <image src="/images/qrcode.png" class="userintegral-qrcode-img"></image>
