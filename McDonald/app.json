@@ -1,5 +1,7 @@
 {
   "pages":[
+    "pages/qrcodenull/qrcodenull",
+    "pages/qrcode/qrcode",
     "pages/index/index",
     "pages/integraldetail/integraldetail",
     "pages/integralmall/integralmall",
@@ -7,7 +9,6 @@
     "pages/user/user",
     "pages/happynotice/happynotice",
     "pages/queryintegral/queryintegral",
-    "pages/qrcodenull/qrcodenull",
     "pages/register/register",
     "pages/logs/logs"
   ],
