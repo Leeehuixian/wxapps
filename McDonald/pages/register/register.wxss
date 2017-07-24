@@ -1,1 +1,19 @@
 /* pages/register/register.wxss */
+
+.page {
+  padding: 40rpx;
+  width: 670rpx;
+  height: 100%;
+}
+.head-box {
+  color: #6c6c6c;
+}
+.head-box-text {
+  font-size: 29rpx;
+}
+.head-box image {
+    width: 650rpx;
+    height: 380rpx;
+    margin-left: 10rpx;
+    margin-bottom: 20rpx;
+}

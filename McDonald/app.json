@@ -1,5 +1,6 @@
 {
   "pages":[
+    "pages/register/register",
     "pages/qrcodenull/qrcodenull",
     "pages/qrcode/qrcode",
     "pages/index/index",
@@ -9,7 +10,6 @@
     "pages/user/user",
     "pages/happynotice/happynotice",
     "pages/queryintegral/queryintegral",
-    "pages/register/register",
     "pages/logs/logs"
   ],
   "window":{
