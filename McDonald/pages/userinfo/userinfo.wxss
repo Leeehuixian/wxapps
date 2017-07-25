@@ -43,15 +43,7 @@ page {
   padding: 30rpx 30rpx;
 }
 /*间隔线*/
-/*.userdata-symbol:after {
-  content: "";
-  display: inline-block;
-  width: 40rpx;
-  height: 40rpx;
-  margin: 15rpx 0rpx 10rpx 0rpx;
-  border-left: 1rpx solid #6c6c6c;
-}*/
-.userdata-input:before{
+.userdata-symbol:after {
   content: "";
   display: inline-block;
   width: 40rpx;
@@ -59,9 +51,13 @@ page {
   margin: 15rpx 0rpx 10rpx 0rpx;
   border-left: 1rpx solid #6c6c6c;
 }
+
 /*后面三个箭头*/
 .userdata-input {
-  width: 300rpx;
+  width:300rpx;
+  height:100%;
+  padding:20rpx 0;
+  flex:1;
 }
 
 .righthead:after {
@@ -74,7 +70,7 @@ page {
   border-bottom: none;
   border-left: none;
   transform: rotate(45deg);
-  margin-left: 160rpx;
+  margin-left: -60rpx;
 }
 /*保存按键*/
 .userbutton {
