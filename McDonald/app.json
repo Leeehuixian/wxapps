@@ -1,5 +1,6 @@
 {
   "pages":[
+    "pages/userinfo/userinfo",
     "pages/register/register",
     "pages/qrcodenull/qrcodenull",
     "pages/qrcode/qrcode",
