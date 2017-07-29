@@ -1,5 +1,6 @@
 {
   "pages": [  
+    "pages/fontrun/fontrun",
     "pages/picker/picker",              
     "pages/demo/demo",
     "pages/classfiy/classfiy",
