@@ -1,66 +1,50 @@
 // page/component/index.js
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
-  
-  },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
-  
-  },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-  
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-  
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-  
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-  
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-  
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-  
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-  
+    imgUrls: [
+      '/image/b1.jpg',
+      '/image/b2.jpg',
+      '/image/b3.jpg'
+    ],
+    interval: 3000,
+    duration: 800,
+    newstList:[
+      {
+        url:'/image/s4.png',
+        name:'瓜子',
+        specification:'100g',
+        price:'￥1.00'
+      },
+      {
+        url: '/image/s5.png',
+        name: '西芹',
+        specification: '半斤',
+        price: '￥3.50'
+      },
+      {
+        url: '/image/s6.png',
+        name: '素米',
+        specification: '500g',
+        price: '￥10.00'
+      },
+      {
+        url: '/image/s4.png',
+        name: '瓜子',
+        specification: '100g',
+        price: '￥1.00'
+      },
+      {
+        url: '/image/s5.png',
+        name: '西芹',
+        specification: '半斤',
+        price: '￥3.50'
+      },
+      {
+        url: '/image/s6.png',
+        name: '素米',
+        specification: '500g',
+        price: '￥10.00'
+      }
+    ]
   }
 })
