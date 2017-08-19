@@ -1,66 +1,55 @@
-// page/component/address/address.js
+// page/component/new-pages/user/address/address.js
 Page({
-
-  /**
-   * 页面的初始数据
-   */
-  data: {
-  
+  data:{
+    address:{
+      name:'',
+      phone:'',
+      detail:''
+    }
   },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
-  
+  onLoad(){
+    var self = this;
+    
+    wx.getStorage({
+      key: 'address',
+      success: function(res){
+        self.setData({
+          address : res.data
+        })
+      }
+    })
   },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-  
+  formSubmit(){
+    var self = this;
+    if(self.data.address.name && self.data.address.phone && self.data.address.detail){
+      wx.setStorage({
+        key: 'address',
+        data: self.data.address,
+        success(){
+          wx.navigateBack();
+        }
+      })
+    }else{
+      wx.showModal({
+        title:'提示',
+        content:'请填写完整资料',
+        showCancel:false
+      })
+    }
   },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-  
+  bindName(e){
+    this.setData({
+      'address.name' : e.detail.value
+    })
   },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-  
+  bindPhone(e){
+    this.setData({
+      'address.phone' : e.detail.value
+    })
   },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-  
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-  
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-  
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-  
+  bindDetail(e){
+    this.setData({
+      'address.detail' : e.detail.value
+    })
   }
 })

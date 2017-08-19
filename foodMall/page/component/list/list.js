@@ -1,66 +1,40 @@
 // page/component/list/list.js
 Page({
-
-  /**
-   * 页面的初始数据
-   */
-  data: {
-  
+  data:{
+    foodList:[
+      {
+        url:'/image/s4.png',
+        name:'瓜子',
+        specification:'100g',
+        price:'1.00'
+      },
+      {
+        url: '/image/s5.png',
+        name: '西芹',
+        specification: '半斤',
+        price: '3.50'
+      },
+      {
+        url: '/image/s6.png',
+        name: '素米',
+        specification: '500g',
+        price: '10.00'
+      }
+    ]
   },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
-  
+  onload:function(options){
+    //页面初始化options为页面跳转所带来的参数
   },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-  
+  onReady:function(){
+    //页面渲染完成
   },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-  
+  onShow:function(){
+    //页面显示
   },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-  
+  onHide:function(){
+    //页面隐藏
   },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-  
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-  
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-  
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-  
+  onUnload:function(){
+    //页面关闭
   }
 })

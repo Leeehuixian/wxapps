@@ -30,7 +30,7 @@
     <view class="newest">
         <view class="newest-title"><text>最近新品</text></view>
         <view class="newest-box">
-          <block wx:for="{{newstList}}">
+          <block wx:for="{{newstList}}" wx:key="{{index}}">
               <view class="newest-list">
                   <navigator url="details/details">
                       <image src="{{item.url}}"></image>
