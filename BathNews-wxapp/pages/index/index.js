@@ -77,5 +77,12 @@ Page({
         loading: true
       })
     },500);
+  },
+  //查看文章详情
+  onTapArticle(){
+    wx.navigateTo({
+      url: '../detail/detail'
+    })
   }
+  
 })
