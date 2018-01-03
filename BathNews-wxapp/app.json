@@ -1,0 +1,13 @@
+{
+  "pages":[
+    "pages/index/index",
+    "pages/detail/detail",
+    "pages/mine/mine"
+  ],
+  "window":{
+    "backgroundTextStyle":"light",
+    "navigationBarBackgroundColor": "#d75b5d",
+    "navigationBarTitleText": "沐浴头条",
+    "navigationBarTextStyle":"white"
+  }
+}
