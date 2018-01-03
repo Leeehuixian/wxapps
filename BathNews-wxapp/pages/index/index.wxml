@@ -21,7 +21,7 @@
     <!-- <block wx:for="{{selData}}"> -->
       <view class="subView index">
         <block wx:for="{{detaildata}}">
-          <view class="detailCell" catchtap="onTapArticle">
+          <view class="detailCell" catchtap="onTapArticle" data-id="{{item.id}}">
             <text class="cellTitle">{{item.title}}</text>
             <view class="imageContainer" hidden="{{!item.has_image}}">
               <image class="imageshow" src="{{item.image_list[0].url}}"></image>

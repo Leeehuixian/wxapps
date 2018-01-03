@@ -79,9 +79,10 @@ Page({
     },500);
   },
   //查看文章详情
-  onTapArticle(){
+  onTapArticle(e){
+    var articleId = e.currentTarget.dataset.id;
     wx.navigateTo({
-      url: '../detail/detail'
+      url: '../detail/detail?id=' + articleId
     })
   }
   
