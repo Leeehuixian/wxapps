@@ -22,7 +22,8 @@ Page({
       }
     ],
     detaildata:[],
-    listData:[]
+    listData:[],
+    isSkip:true
   },
   //事件处理函数
   bindViewTap: function() {
@@ -60,8 +61,11 @@ Page({
     var that = this
     var idx = e.target.id;
     var listData = this.data.listData;
-    console.log(idx);
-    console.log(listData);
+    if (idx == 1 || idx == "1"){
+      this.data.isSkip = false;
+    }else{
+      this.data.isSkip = true;
+    }
     var categoryLength = this.data.categoryData.length;
     for (var i = 0; i < categoryLength; i++){
       if(i == e.target.id){
@@ -80,10 +84,12 @@ Page({
   },
   //查看文章详情
   onTapArticle(e){
-    var articleId = e.currentTarget.dataset.id;
-    wx.navigateTo({
-      url: '../detail/detail?id=' + articleId
-    })
+    if (this.data.isSkip){
+      var articleId = e.currentTarget.dataset.id;
+      wx.navigateTo({
+        url: '../detail/detail?id=' + articleId
+      })
+    }
   }
   
 })

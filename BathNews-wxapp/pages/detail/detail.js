@@ -1,11 +1,13 @@
 // pages/detail/detail.js
+var network = require("../../utils/util.js")
+import { index_newsList } from '../../url.js'
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-  
+    detaildata:{}
   },
 
   /**
@@ -13,8 +15,20 @@ Page({
    */
   onLoad: function (options) {
     var articleId = options.id;
-    wx.request({
-      url: '',
+    var that = this;
+    network.requestLoading(index_newsList, '', '正在加载数据', function (res) {
+      console.log(res)
+      var detailsData = res.data[0];
+      var detaildata = detailsData[articleId];
+      console.log(detaildata);
+      that.setData({
+        detaildata:detaildata
+      })
+
+    }, function () {
+      wx.showToast({
+        title: '加载数据失败',
+      })
     })
   },
 
