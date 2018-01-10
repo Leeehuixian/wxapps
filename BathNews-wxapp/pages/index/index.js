@@ -51,7 +51,9 @@ Page({
       wx.showToast({
         title:'加载数据失败',
       })
-    })
+    }),
+    //getshareInfo
+    wx.getShareInfo()
   },
   //tab切换
   navClick(e){
@@ -81,6 +83,7 @@ Page({
         loading: true
       })
     },500);
+    
   },
   //查看文章详情
   onTapArticle(e){
@@ -91,5 +94,7 @@ Page({
       })
     }
   }
+
+  
   
 })

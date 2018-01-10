@@ -32,6 +32,12 @@
   border-radius:50%;
 }
 
+.share_btn{
+  width:64rpx;
+  height:64rpx;
+  margin-left:450rpx;
+}
+
 .author-name{
   display: flex;
   flex-flow: column wrap;

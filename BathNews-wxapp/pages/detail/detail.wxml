@@ -1,6 +1,6 @@
 <!--pages/detail/detail.wxml-->
 <view class="detail-container">
-<view class="title-autor">
+  <view class="title-autor">
     <text class="title">{{detaildata.title}}</text>
     <view class="author-msg">
       <image class="author-img" src="{{detaildata.authorImg}}"></image>
@@ -8,6 +8,7 @@
         <text class="name-text">{{detaildata.author}}</text>
         <text>{{detaildata.publish_time}}</text>
       </view>
+      <image class="share_btn" src="/images/share_icon.png"/>
     </view>
   </view>
   <view class="banner">
