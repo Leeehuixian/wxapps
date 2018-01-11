@@ -7,7 +7,8 @@ Page({
    * 页面的初始数据
    */
   data: {
-    detaildata:{}
+    detaildata:{},
+    showView:false
   },
 
   /**
@@ -29,7 +30,8 @@ Page({
       wx.showToast({
         title: '加载数据失败',
       })
-    })
+    });
+    showView: (options.showView == "true" ? true : false);
   },
  
   /**
@@ -53,5 +55,17 @@ Page({
         // 转发失败
       }
     }
+  },
+
+  /*生成分享朋友圈图片*/
+  onSharetap:function(){
+    var ctx = wx.createCanvasContext('myCanvas2');
+    ctx.drawImage("/images/authorimg.jpg", 0, 0, 400, 400);
+    ctx.draw();
+    var that = this;
+    that.setData({
+      showView: (!that.data.showView)
+    }); 
+    console.log(that.data.showView);
   }
 })

@@ -59,3 +59,28 @@
   color:#000;
   line-height:1.5;
 }
+
+/*图片预览窗口*/
+.preview-img{
+  position:fixed;
+  top:0;
+  left:0;
+  z-index:10;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,.5);
+   display:none; 
+}
+
+.showCanvas{
+  display:block;
+}
+
+.hideCanvas{
+  display:none;
+}
+
+#myCanvas2{
+  background:url(../images/authorImg.jpg) no-repeat;
+  background-size:100%;
+}
