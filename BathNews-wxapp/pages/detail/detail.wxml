@@ -20,5 +20,5 @@
   <view class="preview-img">
     <canvas canvas-id="myCanvas" style="width:700rpx;height:900rpx;display:none;"/>
   </view>
-  <canvas canvas-id="myCanvas2" style="width:700rpx;height:800rpx;" class="{{showView?showCanvas:hideCanvas}}"/>
+  <canvas id="myCanvas2" canvas-id="myCanvas2" style="width:700rpx;height:800rpx;" class="{{showView?showCanvas:hideCanvas}}"/>
 </view>

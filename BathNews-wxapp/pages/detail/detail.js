@@ -32,6 +32,7 @@ Page({
       })
     });
     showView: (options.showView == "true" ? true : false);
+    console.log(that.data.showView);
   },
  
   /**
@@ -67,5 +68,33 @@ Page({
       showView: (!that.data.showView)
     }); 
     console.log(that.data.showView);
+    //生成临时文件
+    wx.canvasToTempFilePath({
+      destWidth: 200,
+      destHeight: 200,
+      canvasId: 'myCanvas2',
+      success: function (res) {
+        console.log(res.tempFilePath);
+        wx.saveImageToPhotosAlbum({
+          filePath: res.tempFilePath,
+          success(res) {
+            wx.showToast({
+              title: '图片保存成功',
+              icon: 'success',
+              duration: 2000
+            });
+            console.log("图片保存成功");
+          },
+          fail(res){
+            wx.showToast({
+              title: '图片保存失败',
+              icon: 'fail',
+              duration: 2000
+            });
+            console.log("图片保存失败");
+          }
+        })
+      }
+    })
   }
 })
