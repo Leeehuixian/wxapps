@@ -1,13 +1,11 @@
 {
   "pages":[
     "pages/index/index",
-    "pages/test/test",
-    "pages/detail/detail",
-    "pages/mine/mine"
+    "pages/logs/logs"
   ],
   "window":{
     "backgroundTextStyle":"light",
-    "navigationBarBackgroundColor": "#d75b5d",
+    "navigationBarBackgroundColor": "#f32a43",
     "navigationBarTitleText": "沐浴头条",
     "navigationBarTextStyle":"white"
   }

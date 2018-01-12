@@ -1,0 +1,95 @@
+/*顶部导航栏*/
+.nav-list{
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  width:100%;
+  height:100rpx;
+  border-bottom:1px solid #e6e6e6;
+  font-size:19px;
+  text-align: center;
+}
+
+.nav-list text{
+  width:140rpx;
+  height:100%;
+  box-sizing: border-box;
+  line-height: 100rpx;
+}
+
+.nav-list .item-on{
+  color:#f32a43;
+  border-bottom:6rpx solid #f32a43;
+}
+
+/*信息列表*/
+.article-list{
+  width:100%;
+}
+
+.list-item{
+  width:100%;
+  box-sizing: border-box;
+  padding:20px 10px;
+  border-bottom:1px solid #e6e6e6;
+}
+
+.first-line{
+  display:flex;
+  justify-content: space-between;
+}
+
+.first-line .article-img{
+  width:226rpx;
+  height:150rpx;
+  margin-right:15px;
+}
+
+.article-img image{
+  width:226rpx;
+  height:150rpx;
+}
+
+.article-title{
+  font-size:17px;
+  line-height: 1.5;
+}
+
+.last-line{
+  display: flex;
+  justify-content: space-between;
+  width:100%;
+  font-size:12px;
+  line-height:2;
+}
+
+.flag-icon{
+  width:32rpx;
+  height:36rpx;
+}
+
+.issue-info{
+  color:#969696;
+}
+
+.article-video{
+  width:100%;
+  height:280rpx;
+  margin-top:10px;
+}
+
+.read-num{
+  color:#646464;
+}
+
+.read-icon{
+  width:39rpx;
+  height:22rpx;
+  margin-right:5px;
+}
+
+
+
+
+
+

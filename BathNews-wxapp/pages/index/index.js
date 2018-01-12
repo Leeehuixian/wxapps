@@ -90,7 +90,7 @@ Page({
     if (this.data.isSkip){
       var articleId = e.currentTarget.dataset.id;
       wx.navigateTo({
-        url: '../detail/detail?id=' + articleId
+        url: '../detail/detail?id=' + articleId 
       })
     }
   }
