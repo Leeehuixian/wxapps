@@ -1,29 +1,46 @@
 <!--index.wxml-->
 <view class="container">
   <view class="nav-list">
-    <text class="item-on">推荐</text>
-    <text>视频</text>
-    <text>本地</text>
+    <text class="tab-item {{currentTab==0?'active':''}}"  data-current="0" bindtap="swichNav">推荐</text>
+    <text class="tab-item {{currentTab==1?'active':''}}" data-current="1" bindtap="swichNav">视频</text>
+    <text class="tab-item {{currentTab==2?'active':''}}" data-current="2" bindtap="swichNav">本地</text>
   </view>
-  <view class="article-list">
-    <view class="list-item">
-      <view class="first-line">
-        <view wx:if="{{hasImg}}" class="article-img">
-          <image src="/images/program1.png" lazy-load="true" />
-        </view>
-        <view class="article-title">匆忙的步伐因你而变得轻松，生活也因此而多姿多彩</view>
+  <swiper class="article-list" current="{{currentTab}}" duration="300" bindchange="switchTab" style="height:{{winHeight}}rpx" hidden="{{ articlesHide }}">
+    <swiper-item wx:for="{{[0,1,2]}}">
+      <!-- <scroll-view scroll-y="true" class="scoll-h"> -->
+      <!-- <view> -->
+        <block wx:for="{{listData}}" wx:key="*this">
+          <view class="list-item">
+            <view class="first-line">
+              <view wx:if="{{item.has_image}}" class="article-img">
+                <image src="{{item.image_url}}" lazy-load="true" />
+              </view>
+              <view class="article-title">{{item.title}}</view>
+            </view>
+            <video wx:if="{{item.has_video}}" class="article-video" src="{{item.video_url}}"
+            />
+            <view class="last-line">
+              <view class="issue-info">
+                <image wx:if="{{item.has_flag}}" class="flag-icon" src="{{item.flag_icon_url}}"/>
+                <text>{{item.author}} {{item.publish_time}}</text>
+              </view>
+              <view class="read-num">
+                <image class="read-icon" src="/images/read-icon.png" />
+                <text>{{item.view_num}}</text>
+              </view>
+            </view>
+          </view>
+        </block>
+      <!-- </scroll-view> -->
+      <!-- </view> -->
+    </swiper-item>
+  </swiper>
+  <view class="loading-modal" hidden="{{ loadingModalHide }}">
+      <view class="loading-text-wrap">
+          <text class="loading-text">休闲娱乐\n尽在沐浴头条</text>
       </view>
-      <video  wx:if="{{hasVideo}}" class="article-video" src="http://wxsnsdy.tc.qq.com/105/20210/snsdyvideodownload?filekey=30280201010421301f0201690402534804102ca905ce620b1241b726bc41dcff44e00204012882540400&bizid=1023&hy=SH&fileparam=302c020101042530230204136ffd93020457e3c4ff02024ef202031e8d7f02030f42400204045a320a0201000400"/>
-      <view class="last-line">
-        <view class="issue-info">
-          <image wx:if="{{hasFlag}}" class="flag-icon" />
-          <text>人民网 2018-01-01 09:32</text>
-        </view>
-        <view class="read-num">
-          <image class="read-icon" src="/images/read-icon.png" />
-          <text>127</text>
-        </view>
-      </view>
-    </view>
+  </view>
+  <view id="refresh" bindtap="onRefresh">
+    <image src="../../images/refresh_icon.png" />
   </view>
 </view>

@@ -17,7 +17,7 @@
   line-height: 100rpx;
 }
 
-.nav-list .item-on{
+.nav-list .active{
   color:#f32a43;
   border-bottom:6rpx solid #f32a43;
 }
@@ -66,6 +66,9 @@
 .flag-icon{
   width:32rpx;
   height:36rpx;
+  vertical-align:middle;
+  margin-right:5px;
+
 }
 
 .issue-info{
@@ -88,7 +91,41 @@
   margin-right:5px;
 }
 
+/*加載過度狀態*/
+.loading-modal {
+    display: flex;
+    position: fixed;
+    z-index: 3;
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+.loading-text-wrap {
+    padding-bottom: 200rpx;
+}
+.loading-text {
+  font-style:italic;
+    font-size: 30px;
+    color: #cfcfcf;
+}
 
+/*刷新按钮*/
+#refresh{
+  position:fixed;
+  right:20px;
+  bottom:50px;
+  z-index:100;
+  width:130rpx;
+  height:130rpx;
+}
+
+#refresh image{
+  width:130rpx;
+  height:130rpx;
+}
 
 
 
