@@ -5,12 +5,12 @@
     <text class="tab-item {{currentTab==1?'active':''}}" data-current="1" bindtap="swichNav">视频</text>
     <text class="tab-item {{currentTab==2?'active':''}}" data-current="2" bindtap="swichNav">本地</text>
   </view>
-  <swiper class="article-list" current="{{currentTab}}" duration="300" bindchange="switchTab" style="height:{{winHeight}}rpx" hidden="{{ articlesHide }}">
+  <swiper class="article-list" current="{{currentTab}}" duration="300" bindchange="switchTab" style="height:{{winHeight}}rpx;" hidden="{{ articlesHide }}">
     <swiper-item wx:for="{{[0,1,2]}}">
       <!-- <scroll-view scroll-y="true" class="scoll-h"> -->
       <!-- <view> -->
         <block wx:for="{{listData}}" wx:key="*this">
-          <view class="list-item">
+          <view class="list-item" catchtap="onArticleTap" data-articleId="0">
             <view class="first-line">
               <view wx:if="{{item.has_image}}" class="article-img">
                 <image src="{{item.image_url}}" lazy-load="true" />

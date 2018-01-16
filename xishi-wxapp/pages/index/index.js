@@ -11,7 +11,8 @@ Page({
     articlesHide:false,
     loadingModalHide:true,
     pageIndex: 0,
-    calcHeight:0,
+    pageSize:10,
+    calcHeight:260,
     // isEmpty: true,
   },
   
@@ -26,8 +27,7 @@ Page({
         var calc = clientHeight * rpxR;
         console.log(calc)
         that.setData({
-          winHeight: calc,
-          calcHeight: calc
+          winHeight: calc
         });
       }
     });
@@ -65,8 +65,9 @@ Page({
   //加載數據
   getListData: function (currentTab){
     var that = this;
+    var resDataLen = 0;
     network.requestLoading(index_newsList, '', '正在加载数据', function (res) {
-      console.log(res)
+      console.log(res);
       var listType = '';
       var resData = {};
       switch (currentTab) {
@@ -74,31 +75,36 @@ Page({
           resData = that.data.listData.concat(res.data.recommendList);
           that.setData({
             listData: resData
-          })
+          });
+          resDataLen = (res.data.recommendList).length;
           break;
         case 1:
           resData = that.data.listData.concat(res.data.videoList);
           that.setData({
             listData: resData
-          })
+          });
+          resDataLen = (res.data.videoList).length;
           break;
         case 2:
           resData = that.data.listData.concat(res.data.localList);
           that.setData({
             listData: resData
-          })
+          });
+          resDataLen = (res.data.localList).length;
           break;
 
       };
       var pageIndex = that.data.pageIndex += 1;
-      var calcHeight = that.data.calcHeight * pageIndex;
+      var calcHeight = that.data.calcHeight * pageIndex * resDataLen;
+      if (calcHeight < that.data.winHeight){
+        calcHeight = that.data.winHeight;
+      };
       that.setData({
         articlesHide: false,
         loadingModalHide: true,
         pageIndex: pageIndex,
         winHeight: calcHeight
-      })
-      console.log(that.data.pageIndex);
+      });
     }, function () {
       wx.showToast({
         title: '加载数据失败',
@@ -108,7 +114,6 @@ Page({
 
   //上拉加载
   onReachBottom:function () {
-    console.log("上拉");
     this.getListData(this.data.currentTab);
   }, 
 
@@ -124,7 +129,12 @@ Page({
     wx.showNavigationBarLoading();
   },
 
-  
-
+  //查看文章详情
+  onArticleTap: function (event) {
+    var articleid = event.currentTarget.dataset.articleid;
+    wx.navigateTo({
+      url: '../detail/detail?id=' + articleid
+    });
+  }
 
 })
