@@ -1,6 +1,7 @@
 // pages/detail/detail.js
-var network = require("../../utils/util.js")
-import { index_newsList } from '../../url.js'
+var utils = require("../../utils/util.js");
+var drawText = utils.drawText;
+import { index_newsList } from '../../url.js';
 Page({
 
   /**
@@ -11,8 +12,9 @@ Page({
     showView:true,
     inputValue: '',
     placeholderTxt:"写评论...",
-    commentNum:100,
+    commentNum:2,
     toView:'',
+    hideModalBg:true,
   },
 
   /**
@@ -20,21 +22,48 @@ Page({
    */
   onLoad: function (options) {
     var articleId = options.id;
+    var articleType = options.type;
     var that = this;
-    network.requestLoading(index_newsList, '', '正在加载数据', function (res) {
-      console.log(res)
-      // var detailsData = res.data[0];
-      // var detaildata = detailsData[articleId];
-      // console.log(detaildata);
-      // that.setData({
-      //   detaildata:detaildata
-      // })
-
+    utils.requestLoading(index_newsList, '', '正在加载数据', function (res) {
+      var detailsData = [];
+      var detaildata = {};
+      switch (articleType) {
+        case "0":
+          detailsData = res.data.recommendList;
+          detaildata = detailsData[articleId];
+          break;
+        case "1":
+          detailsData = res.data.videoList;
+          detaildata = detailsData[articleId];
+          break;
+        case "2":
+          detailsData = res.data.localList;
+          detaildata = detailsData[articleId];
+          break;
+      };     
+      that.setData({
+        detaildata:detaildata
+      });
     }, function () {
       wx.showToast({
         title: '加载数据失败',
       })
     });
+  },
+
+  //删除评论
+  bindDeleteTap:function(){
+    wx.showModal({
+      title: '提示',
+      content: '确定要删除这条评论吗？',
+      success: function (res) {
+        if (res.confirm) {
+          console.log('用户点击确定')
+        } else if (res.cancel) {
+          console.log('用户点击取消')
+        }
+      }
+    })
   },
 
   bindKeyInput: function (e) {
@@ -80,47 +109,28 @@ Page({
   },
 
   /*生成分享朋友圈图片*/
-  onSharetap:function(){
+  bindShareTap:function(){
+    console.log("生成分享朋友圈图片");
     var that = this;
-    // that.setData({
-    //   showView: (!that.data.showView)
-    // });
-    console.log(that.data.showView);
-    var ctx = wx.createCanvasContext('myCanvas2');
-    ctx.setFillStyle('red');
-    ctx.fillRect(10, 10, 150, 75);
+    that.setData({
+      hideModalBg: false
+    });
+    var ctx = wx.createCanvasContext('myCanvas');
+    ctx.setFontSize(15);
+    ctx.save(); 
+    drawText(that.data.detaildata.title.substr(0, 30) + "...", 0, 0, 15, ctx);
+    var publishInfo = that.data.detaildata.author + that.data.detaildata.publish_time;
+    ctx.setFontSize(12);
+    ctx.setStrokeStyle('#969696');
+    drawText(publishInfo, 0, 40, 24, ctx);
+    ctx.restore();
+    drawText(that.data.detaildata.content.substr(0,50)+"...", 0, 60, 15, ctx);   
     wx.getImageInfo({
       src: 'http://is5.mzstatic.com/image/thumb/Purple128/v4/75/3b/90/753b907c-b7fb-5877-215a-759bd73691a4/source/50x50bb.jpg',
       success: function (res) {
         console.log(res.path);
-        ctx.drawImage(res.path, 0, 0, 25, 25);
+        // ctx.drawImage(res.path, 0, 0, 25, 25);
         ctx.draw(true);
-        //生成临时文件
-        wx.canvasToTempFilePath({
-          canvasId: 'myCanvas2',
-          success: function (res) {
-            console.log(res.tempFilePath);
-            wx.saveImageToPhotosAlbum({
-              filePath: res.tempFilePath,
-              success(res) {
-                wx.showToast({
-                  title: '图片保存成功',
-                  icon: 'success',
-                  duration: 2000
-                });
-                console.log("图片保存成功");
-              },
-              fail(res) {
-                wx.showToast({
-                  title: '图片保存失败',
-                  icon: 'fail',
-                  duration: 2000
-                });
-                console.log("图片保存失败");
-              }
-            })
-          }
-        })
       }
     });
     // wx.downloadFile({
@@ -130,9 +140,37 @@ Page({
         
     //   }
     // })
-    
-    
-    
-    
+  },
+
+  //生成临时文件
+  bindSaveImageTap:function(){
+    wx.canvasToTempFilePath({
+      canvasId: 'myCanvas',
+      success: function (res) {
+        console.log(res.tempFilePath);
+        wx.saveImageToPhotosAlbum({
+          filePath: res.tempFilePath,
+          success(res) {
+            wx.showModal({
+              title: '成功保存图片',
+              showCancel:false,
+              content: '已成功为你保存图片到手机相册，请自行前往朋友圈分享',
+              success: function (res) {}
+            })
+          },
+          fail(res) {
+            console.log("图片保存失败");
+          }
+        })
+      }
+    })
+  },
+
+  //收起模态窗口
+  bindModalTap:function(){
+    this.setData({
+      hideModalBg: true
+    });
   }
+  
 })

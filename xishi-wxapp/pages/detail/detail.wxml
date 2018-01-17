@@ -1,23 +1,23 @@
 <!--pages/detail/detail.wxml-->
 <scroll-view class="detail-container"  scroll-y="true" scroll-into-view="{{toView}}" enable-back-to-top="true">
   <view class="title-autor">
-    <text class="title">冬季恋歌——从邂逅北海道登别温泉开始</text>
-    <view class="last-line">
+    <text class="title">{{detaildata.title}}</text>
+    <view class="second-line">
       <view class="issue-info">
-        <image wx:if="true" class="flag-icon" src="../../images/flag_icon1.png"/>
-        <text>果仁儿 2018-01-13 13:00</text>
+        <image wx:if="{{detaildata.has_flag}}" class="flag-icon" src="{{detaildata.flag_icon_url}}"/>
+        <text>{{detaildata.author}} {{detaildata.publish_time}}</text>
       </view>
       <view class="read-num">
         <image class="read-icon" src="/images/read-icon.png" />
-        <text>125</text>
+        <text>{{detaildata.view_num}}</text>
       </view>
     </view>
   </view>
   <view class="banner">
-    <image src="../../images/banner2.jpg" mode="aspectFill"></image>
+    <image src="{{detaildata.bannerUrl}}" mode="aspectFill"></image>
   </view>
   <view class="content">
-    <text class="content-text">作为北海道最大、最具代表性的温泉——登别温泉已被列为世界珍稀温泉之一。它海拔200米左右，是原始森林环抱的温泉疗养地，这里有硫磺泉、芒硝泉、食盐泉、明矾泉、绿矾泉等多达9种的温泉类型，堪称北海道的温泉博物馆，素有“北海道第一温泉名乡”的美称，又有“温泉的百货公司”的称号。</text>
+    <text class="content-text">{{detaildata.content}}</text>
   </view>
   <view id="comment-section" class="comment-section">
     <view class="comment-wrapper">
@@ -42,7 +42,32 @@
             <view class="comment-content">
               <text>最新看了开头就倒了胃了！！堂堂大唐皇帝患病，却要找日本的和尚来给医治！！且不说当时两国之间的差距，就论佛法当时日本只是在鉴真东渡之后才接触到真正的正规的佛法！</text>
             </view>
-            <text class="issue-time">01-01 09:32</text>
+            <view class="last-line">
+              <text class="issue-time">01-01 09:32</text>
+              <text class="delete-comment" bindtap="bindDeleteTap">删除</text>
+            </view>
+          </view>
+        </view>
+        <view class="comment-item">
+          <view class="comment-avatar">
+            <image mode="aspectFill" src="../../images/authorImg.jpg"></image>
+          </view>
+          <view class="comment-content-wrapper">
+            <view class="first-line">
+              <text class="comment-nickname">用户微信昵称</text>
+              <view class="like-num">
+                <image wx:if="false" src="../../images/notlike_icon.png" mode="aspectFill"></image>
+                <image wx:else src="../../images/like_icon.png" mode="aspectFill"></image>
+                <text>13</text>
+              </view>
+            </view>
+            <view class="comment-content">
+              <text>杨贵妃是个外国人，这也是太扯了！</text>
+            </view>
+            <view class="last-line">
+              <text class="issue-time">01-01 09:32</text>
+              <text hidden="true" class="delete-comment">删除</text>
+            </view>
           </view>
         </view>
       </view>
@@ -57,9 +82,14 @@
     <text class="comment-num">{{commentNum}}</text>
     <image src="../../images/comment_icon.png"></image>
   </view>
-  <button open-type="share" class="share-btn"></button> 
-   <!-- <image class="send-others" src="../../images/share_icon.png"></image>  -->
-  <image class="share-to-friends" src="../../images/firends_circle_icon.png"></image>
+  <button open-type="share" class="share-btn"></button>   
+  <image class="share-to-friends" src="../../images/firends_circle_icon.png" bindtap="bindShareTap"></image>
 </view> 
+<view class="modal-bg" hidden="{{hideModalBg}}" catchtap="bindModalTap">
+  <view class="canvas-view">
+    <canvas class="my-canvas" canvas-id="myCanvas" />
+  </view>
+  <text class="save-image" bindtap="bindSaveImageTap">保存图片立即分享</text>
+</view>
 
 

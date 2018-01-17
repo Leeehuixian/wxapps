@@ -16,7 +16,7 @@ page{
   margin:50rpx 0;
 }
 
-.last-line{
+.second-line{
   display: flex;
   justify-content: space-between;
   width:100%;
@@ -156,6 +156,18 @@ page{
   line-height: 1.5;
 }
 
+.last-line{
+  display:flex;
+  justify-content: space-between;
+  align-items:center;
+}
+
+.delete-comment{
+  font-size:14px;
+  color:#38b2ff;
+  text-decoration: underline;
+}
+
 .issue-time{
   font-size:12px;
   color:#969696;
@@ -239,9 +251,65 @@ page{
 }
 
 .share-btn::after{
+  content:" ";
+  width:0;
+  height:0;
+  position:unset;
+  top:0;
+  left:0;
+  -webkit-transform:none;
+  transform:none;
+  -webkit-transform-origin:unset;
+  transform-origin:unset;
+  box-sizing:unset;
+  border-radius:unset;
   border:unset;
 }
 
+.modal-bg{
+  position:fixed;
+  left:0;
+  top:0;
+  z-index:200;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,.5);
+}
+
+.canvas-view{
+  position: fixed;
+  left:50%;
+  top:100px;
+  z-index:201;
+  width:265px;
+  height:376px;
+  margin-left:-133px;
+  border-radius: 10px;
+  background:#fff;
+}
+
+.my-canvas{
+  width:90%;
+  height:90%;
+  border:none;
+  margin:10px auto;
+}
+
+.save-image{
+  position: fixed;
+  bottom:120px;
+  left:50%;
+  z-index:201;
+  width:320rpx;
+  height:80rpx;
+  margin-left:-160rpx;
+  text-align: center;
+  line-height: 80rpx;
+  background:#f32a43;
+  color:#fff;
+  font-size:32rpx;
+  border-radius: 20px;
+}
 
 
 

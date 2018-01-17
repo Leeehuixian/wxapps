@@ -62,8 +62,24 @@ function requestLoading(url,params,message,success,fail){
   })
 }
 
+/****绘制自动换行的字符串****/
+function drawText(t, x, y, w, ctx) {
+  var row = [];
+  var maxRow = Math.ceil(t.length / w);
+  ctx.setTextBaseline = "middle";
+
+  for (var a = 0; a < maxRow; a++) {   
+    row.push(t.substr(w * a, w));
+  }
+
+  for (var b = 0; b < row.length; b++) {
+    ctx.fillText(row[b], x, y + (b + 1) * 20);
+  }
+}
+
 module.exports = {
   formatTime: formatTime,
   request:request,
-  requestLoading:requestLoading
+  requestLoading:requestLoading,
+  drawText: drawText
 }

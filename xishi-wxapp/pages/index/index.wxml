@@ -10,7 +10,7 @@
       <!-- <scroll-view scroll-y="true" class="scoll-h"> -->
       <!-- <view> -->
         <block wx:for="{{listData}}" wx:key="*this">
-          <view class="list-item" catchtap="onArticleTap" data-articleId="0">
+          <view class="list-item" catchtap="onArticleTap" data-articleId="{{item.id}}" data-articleType="{{currentTab}}">
             <view class="first-line">
               <view wx:if="{{item.has_image}}" class="article-img">
                 <image src="{{item.image_url}}" lazy-load="true" />

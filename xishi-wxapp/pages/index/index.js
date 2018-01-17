@@ -132,8 +132,9 @@ Page({
   //查看文章详情
   onArticleTap: function (event) {
     var articleid = event.currentTarget.dataset.articleid;
+    var articleType = event.currentTarget.dataset.articletype;
     wx.navigateTo({
-      url: '../detail/detail?id=' + articleid
+      url: '../detail/detail?id=' + articleid + "&type=" + articleType
     });
   }
 
