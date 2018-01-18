@@ -3,11 +3,16 @@ page{
 }
 /*顶部导航栏*/
 .nav-list{
+  position:fixed;
+  left:0;
+  top:0;
+  z-index:10;
   display:flex;
   justify-content: center;
   align-items: center;
   width:100%;
   height:100rpx;
+  background:#fff;
   border-bottom:1px solid #e6e6e6;
   font-size:19px;
   text-align: center;
@@ -27,6 +32,7 @@ page{
 
 /*信息列表*/
 .article-list{
+  margin-top:100rpx;
   width:100%;
   min-height: 100%;
 }
@@ -95,7 +101,7 @@ page{
   margin-right:5px;
 }
 
-/*加載過度狀態*/
+/*加载过渡状态*/
 .loading-modal {
     display: flex;
     position: fixed;
@@ -116,12 +122,22 @@ page{
     color: #cfcfcf;
 }
 
+/*加载中提示*/
+.loading-tips{
+  width:100%;
+  height:100rpx;
+  line-height: 100rpx;
+  text-align: center;
+  font-size:14px;
+  color:#646464;
+}
+
 /*刷新按钮*/
 #refresh{
   position:fixed;
   right:20px;
   bottom:50px;
-  z-index:100;
+  z-index:200;
   width:130rpx;
   height:130rpx;
 }

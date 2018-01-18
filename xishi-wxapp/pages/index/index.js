@@ -8,11 +8,14 @@ Page({
     winHeight: "",//窗口高度
     currentTab: 0, //预设当前项的值
     flag_icon_url:'',
-    articlesHide:false,
-    loadingModalHide:true,
+    articlesHide:true,
+    loadingModalHide:false,
+    loadingTipHide:true,
     pageIndex: 0,
     pageSize:10,
     calcHeight:260,
+    initHeight:0,
+    animationData: {}
     // isEmpty: true,
   },
   
@@ -24,15 +27,29 @@ Page({
         var clientHeight = res.windowHeight,
           clientWidth = res.windowWidth,
           rpxR = 750 / clientWidth;
-        var calc = clientHeight * rpxR;
-        console.log(calc)
+        var calc = clientHeight * rpxR + 100;
         that.setData({
-          winHeight: calc
+          winHeight: calc,
+          initHeight:calc
         });
       }
     });
-    //初始化默認加載“推薦”數據
+    //初始化默认加载“推荐”数据
     that.getListData(0);
+  },
+
+  onShow:function(){
+    var animation = wx.createAnimation({
+      transformOrigin: "50% 50%",
+      duration: 2000,
+      timingFunction: "ease",
+      delay: 0
+    });
+    this.animation = animation;
+    animation.rotate(360).step()
+    this.setData({
+      animationData: animation.export()
+    })
   },
 
   // 滚动切换标签样式
@@ -43,6 +60,7 @@ Page({
       loadingModalHide: false,
       listData: [],
       pageIndex: 0,
+      winHeight:this.data.initHeight
     });
     this.getListData(this.data.currentTab);
   },
@@ -57,43 +75,19 @@ Page({
         currentTab: cur,
         articlesHide: true,
         loadingModalHide: false,
+        winHeight: this.data.initHeight
       });
       this.getListData(this.data.currentTab);
     };
   },
 
-  //加載數據
+  //加载数据
   getListData: function (currentTab){
     var that = this;
-    var resDataLen = 0;
-    network.requestLoading(index_newsList, '', '正在加载数据', function (res) {
+    network.requestLoading(index_newsList, '', '', function (res) {
       console.log(res);
-      var listType = '';
-      var resData = {};
-      switch (currentTab) {
-        case 0:
-          resData = that.data.listData.concat(res.data.recommendList);
-          that.setData({
-            listData: resData
-          });
-          resDataLen = (res.data.recommendList).length;
-          break;
-        case 1:
-          resData = that.data.listData.concat(res.data.videoList);
-          that.setData({
-            listData: resData
-          });
-          resDataLen = (res.data.videoList).length;
-          break;
-        case 2:
-          resData = that.data.listData.concat(res.data.localList);
-          that.setData({
-            listData: resData
-          });
-          resDataLen = (res.data.localList).length;
-          break;
-
-      };
+      var resData = that.data.listData.concat(res[currentTab]);
+      var resDataLen = (res[currentTab]).length;
       var pageIndex = that.data.pageIndex += 1;
       var calcHeight = that.data.calcHeight * pageIndex * resDataLen;
       if (calcHeight < that.data.winHeight){
@@ -102,8 +96,10 @@ Page({
       that.setData({
         articlesHide: false,
         loadingModalHide: true,
+        loadingTipHide: true,
         pageIndex: pageIndex,
-        winHeight: calcHeight
+        winHeight: calcHeight,
+        listData: resData
       });
     }, function () {
       wx.showToast({
@@ -114,6 +110,10 @@ Page({
 
   //上拉加载
   onReachBottom:function () {
+    this.setData({
+      // isEmpty:(!this.data.isEmpty)
+      loadingTipHide: false
+    });
     this.getListData(this.data.currentTab);
   }, 
 
@@ -127,6 +127,11 @@ Page({
     });
     this.getListData(this.data.currentTab);
     wx.showNavigationBarLoading();
+    // 动画效果
+    this.animation.rotate(360).step()
+    this.setData({
+      animationData: this.animation.export()
+    })
   },
 
   //查看文章详情

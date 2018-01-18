@@ -21,26 +21,12 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    var articleId = options.id;
-    var articleType = options.type;
+    var articleId = Number(options.id);
+    var articleType = Number(options.type);
     var that = this;
     utils.requestLoading(index_newsList, '', '正在加载数据', function (res) {
-      var detailsData = [];
-      var detaildata = {};
-      switch (articleType) {
-        case "0":
-          detailsData = res.data.recommendList;
-          detaildata = detailsData[articleId];
-          break;
-        case "1":
-          detailsData = res.data.videoList;
-          detaildata = detailsData[articleId];
-          break;
-        case "2":
-          detailsData = res.data.localList;
-          detaildata = detailsData[articleId];
-          break;
-      };     
+      var detailsData = res[articleType];
+      var detaildata = detailsData[articleId];
       that.setData({
         detaildata:detaildata
       });
@@ -118,13 +104,13 @@ Page({
     var ctx = wx.createCanvasContext('myCanvas');
     ctx.setFontSize(15);
     ctx.save(); 
-    drawText(that.data.detaildata.title.substr(0, 30) + "...", 0, 0, 15, ctx);
+    drawText(that.data.detaildata.title.substr(0, 30) + "...", 10, 10, 14, ctx);
     var publishInfo = that.data.detaildata.author + that.data.detaildata.publish_time;
     ctx.setFontSize(12);
-    ctx.setStrokeStyle('#969696');
-    drawText(publishInfo, 0, 40, 24, ctx);
+    ctx.setFillStyle('#969696');
+    drawText(publishInfo, 10, 50, 24, ctx);
     ctx.restore();
-    drawText(that.data.detaildata.content.substr(0,50)+"...", 0, 60, 15, ctx);   
+    drawText(that.data.detaildata.content.substr(0,50)+"...", 10, 75, 14, ctx);   
     wx.getImageInfo({
       src: 'http://is5.mzstatic.com/image/thumb/Purple128/v4/75/3b/90/753b907c-b7fb-5877-215a-759bd73691a4/source/50x50bb.jpg',
       success: function (res) {
@@ -146,6 +132,8 @@ Page({
   bindSaveImageTap:function(){
     wx.canvasToTempFilePath({
       canvasId: 'myCanvas',
+      destWidth:265,
+      destHeight:376,
       success: function (res) {
         console.log(res.tempFilePath);
         wx.saveImageToPhotosAlbum({

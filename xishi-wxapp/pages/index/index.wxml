@@ -6,7 +6,7 @@
     <text class="tab-item {{currentTab==2?'active':''}}" data-current="2" bindtap="swichNav">本地</text>
   </view>
   <swiper class="article-list" current="{{currentTab}}" duration="300" bindchange="switchTab" style="height:{{winHeight}}rpx;" hidden="{{ articlesHide }}">
-    <swiper-item wx:for="{{[0,1,2]}}">
+    <swiper-item wx:for="{{[0,1,2]}}" hidden="{{currentTab == index?false:true}}">
       <!-- <scroll-view scroll-y="true" class="scoll-h"> -->
       <!-- <view> -->
         <block wx:for="{{listData}}" wx:key="*this">
@@ -35,12 +35,15 @@
       <!-- </view> -->
     </swiper-item>
   </swiper>
+  <view class="loading-tips" hidden="{{ loadingTipHide }}">
+    <text class="loading-tips-text">加载中...</text>
+  </view>
   <view class="loading-modal" hidden="{{ loadingModalHide }}">
       <view class="loading-text-wrap">
           <text class="loading-text">休闲娱乐\n尽在沐浴头条</text>
       </view>
   </view>
-  <view id="refresh" bindtap="onRefresh">
+  <view id="refresh" bindtap="onRefresh" animation="{{animationData}}">
     <image src="../../images/refresh_icon.png" />
   </view>
 </view>
