@@ -102,24 +102,18 @@ page{
 }
 
 /*加载过渡状态*/
-.loading-modal {
-    display: flex;
-    position: fixed;
-    z-index: 3;
-    width: 100%;
-    height: 100%;
-    background-color: #fff;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
+.loading-text-wrap{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100rpx;
+  margin-top:400rpx;
 }
-.loading-text-wrap {
-    padding-bottom: 200rpx;
-}
-.loading-text {
-  font-style:italic;
-    font-size: 30px;
-    color: #cfcfcf;
+
+.loading-text-wrap image{
+  width:366rpx;
+  height:94rpx;
 }
 
 /*加载中提示*/

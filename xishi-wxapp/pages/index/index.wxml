@@ -5,10 +5,8 @@
     <text class="tab-item {{currentTab==1?'active':''}}" data-current="1" bindtap="swichNav">视频</text>
     <text class="tab-item {{currentTab==2?'active':''}}" data-current="2" bindtap="swichNav">本地</text>
   </view>
-  <swiper class="article-list" current="{{currentTab}}" duration="300" bindchange="switchTab" style="height:{{winHeight}}rpx;" hidden="{{ articlesHide }}">
-    <swiper-item wx:for="{{[0,1,2]}}" hidden="{{currentTab == index?false:true}}">
-      <!-- <scroll-view scroll-y="true" class="scoll-h"> -->
-      <!-- <view> -->
+  <swiper class="article-list" current="{{currentTab}}" duration="300" bindchange="switchTab" style="height:{{winHeight}}rpx;"> 
+    <swiper-item wx:for="{{[0,1,2]}}" wx:key="{{index}}" hidden="{{currentTab == index?false:true}}">
         <block wx:for="{{listData}}" wx:key="*this">
           <view class="list-item" catchtap="onArticleTap" data-articleId="{{item.id}}" data-articleType="{{currentTab}}">
             <view class="first-line">
@@ -31,17 +29,13 @@
             </view>
           </view>
         </block>
-      <!-- </scroll-view> -->
-      <!-- </view> -->
+        <view class="loading-text-wrap"  hidden="{{ loadingModalHide }}">
+            <image src="../../images/loading-text-img.png" mode="aspectFill"></image>
+        </view>
     </swiper-item>
   </swiper>
   <view class="loading-tips" hidden="{{ loadingTipHide }}">
     <text class="loading-tips-text">加载中...</text>
-  </view>
-  <view class="loading-modal" hidden="{{ loadingModalHide }}">
-      <view class="loading-text-wrap">
-          <text class="loading-text">休闲娱乐\n尽在沐浴头条</text>
-      </view>
   </view>
   <view id="refresh" bindtap="onRefresh" animation="{{animationData}}">
     <image src="../../images/refresh_icon.png" />

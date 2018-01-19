@@ -35,6 +35,8 @@ Page({
         title: '加载数据失败',
       })
     });
+
+    this.getCommentData();
   },
 
   //删除评论
@@ -159,6 +161,21 @@ Page({
     this.setData({
       hideModalBg: true
     });
+  },
+
+  //获取评论
+  getCommentData:function(){
+    wx.request({
+      url: 'http://www.xinwangai.com.cn/wx.toutiao.web/api/ApiMessage/list', //仅为示例，并非真实的接口地址
+      data: {
+        ArticleID:'20180119'
+      },
+      method:"post",
+      success: function (res) {
+        console.log(res.data)
+      }
+    })
   }
+
   
 })

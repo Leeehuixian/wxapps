@@ -1,9 +1,9 @@
 {
   "pages":[
     "pages/index/index",
-    "pages/test/test",
+    "pages/redPacket-detail/redPacket-detail",
     "pages/detail/detail",
-    "pages/logs/logs"
+    "pages/test/test"
   ],
   "window":{
     "backgroundTextStyle":"light",

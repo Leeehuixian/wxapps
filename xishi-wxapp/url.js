@@ -1,2 +1,3 @@
-let index_newsList = "https://www.easy-mock.com/mock/5a5c104c5af72a3a798dd0ea/data/index/newsList"
-export { index_newsList }
+const api_host = "http://www.xinwangai.com.cn:8080/api/";
+let article_list = api_host +  "ApiArticle/list";
+export { article_list }

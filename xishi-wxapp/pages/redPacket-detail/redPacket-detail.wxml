@@ -1,0 +1,40 @@
+<view class="container">
+  <view class="sender-info">
+    <image class="avatar" src="../../images/avatarImg.jpg" />
+    <text class="nickname">昵称</text>
+  </view>
+  <view class="money">
+    <text>12.50元</text>
+  </view>
+  <view class="function-entrys">
+    <view class="withdraw">
+      <image></image>
+      <text>提现</text>
+    </view>
+    <view class="to-send">
+      <image></image>
+      <text>我也发一个</text>
+    </view>
+    <view class="to-transmit">
+      <image></image>
+      <text>去转发</text>
+    </view>
+  </view>
+  <view class="redPacket-info">
+    <text>共100.00元，已领取11/13个</text>
+  </view>
+  <view class="receive-list">
+    <view class="receive-item">
+      <image class="recipient-avatar" src="../../images/avatarImg.jpg"></image>
+      <view class="recipient-info">
+        <view class="first-line">
+          <text>昵称</text>
+          <text>0.26元</text>
+        </view>
+        <view class="second-line">
+          <text>2018-01-02 22:28</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

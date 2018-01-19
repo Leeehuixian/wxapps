@@ -1,5 +1,5 @@
 var network = require("../../utils/util.js")
-import { index_newsList } from '../../url.js'
+import { article_list } from '../../url.js'
 const app = getApp()
 
 Page({
@@ -8,15 +8,13 @@ Page({
     winHeight: "",//窗口高度
     currentTab: 0, //预设当前项的值
     flag_icon_url:'',
-    articlesHide:true,
     loadingModalHide:false,
     loadingTipHide:true,
     pageIndex: 0,
-    pageSize:10,
     calcHeight:260,
     initHeight:0,
-    animationData: {}
-    // isEmpty: true,
+    animationData: {},
+    hasMore:true
   },
   
   onLoad: function () {
@@ -55,25 +53,25 @@ Page({
   // 滚动切换标签样式
   switchTab: function (e) {
     this.setData({
-      currentTab: e.detail.current,
-      articlesHide: true,
-      loadingModalHide: false,
       listData: [],
+      hasMore:true,
+      currentTab: e.detail.current,
       pageIndex: 0,
+      loadingModalHide: false,
       winHeight:this.data.initHeight
     });
     this.getListData(this.data.currentTab);
   },
   // 点击标题切换当前页时改变样式
   swichNav: function (e) {
-    var cur = e.target.dataset.current;
+    let cur = e.target.dataset.current;
     if (this.data.currentTab == cur) { return false; }
     else {
       this.setData({
         listData: [],
-        pageIndex: 0,
+        hasMore: true,
         currentTab: cur,
-        articlesHide: true,
+        pageIndex: 0,
         loadingModalHide: false,
         winHeight: this.data.initHeight
       });
@@ -84,45 +82,63 @@ Page({
   //加载数据
   getListData: function (currentTab){
     var that = this;
-    network.requestLoading(index_newsList, '', '', function (res) {
+    var pageIndex = that.data.pageIndex;
+    network.requestLoading(article_list, 'post', 
+      JSON.stringify({ "AppNavigation": Number(currentTab) + 2, Pager: { PageIndex: pageIndex, PageSize: 10 }}), '', 
+    function (res) {
       console.log(res);
-      var resData = that.data.listData.concat(res[currentTab]);
-      var resDataLen = (res[currentTab]).length;
-      var pageIndex = that.data.pageIndex += 1;
-      var calcHeight = that.data.calcHeight * pageIndex * resDataLen;
-      if (calcHeight < that.data.winHeight){
-        calcHeight = that.data.winHeight;
-      };
+      var resData = that.data.listData.concat(res);
+      if(res.length == 0){
+        if (pageIndex == 0){
+          that.setData({
+            loadingModalHide: false,
+          });
+        };
+        that.setData({
+          hasMore: false
+        });       
+      }else{
+        pageIndex++;
+        var calcHeight = that.data.calcHeight * pageIndex * res.length;
+        if (calcHeight < that.data.winHeight) {
+          calcHeight = that.data.winHeight;
+        };
+        that.setData({
+          loadingModalHide: true,
+          winHeight: calcHeight
+        });
+      }      
       that.setData({
-        articlesHide: false,
-        loadingModalHide: true,
         loadingTipHide: true,
-        pageIndex: pageIndex,
-        winHeight: calcHeight,
+        pageIndex: pageIndex,       
         listData: resData
       });
     }, function () {
       wx.showToast({
         title: '加载数据失败',
-      })
+      });
+      that.setData({
+        hasMore: false
+      });
     });
   },
 
   //上拉加载
-  onReachBottom:function () {
-    this.setData({
-      // isEmpty:(!this.data.isEmpty)
-      loadingTipHide: false
-    });
-    this.getListData(this.data.currentTab);
+  onReachBottom:function () {    
+    if(this.data.hasMore){
+      this.getListData(this.data.currentTab);
+      this.setData({
+        loadingTipHide: false
+      });
+    }
   }, 
 
   //刷新
   onRefresh: function (event) {
     this.setData({
       listData: [],
+      hasMore: true,
       pageIndex: 0,
-      articlesHide: true,
       loadingModalHide: false,
     });
     this.getListData(this.data.currentTab);

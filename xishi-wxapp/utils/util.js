@@ -16,15 +16,15 @@ function formatNumber(n) {
   return n[1] ? n : '0' + n
 }
 
-function request(url,params,success,fail){
-  this.requestLoading(url,params,'',success,fail)
+function request(url, method, params, success, fail){
+  this.requestLoading(url, method, params,'',success, fail)
 }
 //url：网络请求的url
 //params:请求参数
 //message:进度条的提示信息
 //success:成功的回调函数
 //fail:失败的回调
-function requestLoading(url,params,message,success,fail){
+function requestLoading(url, method, params,message,success,fail){
   wx.showNavigationBarLoading()
   if(message != ""){
     wx.showLoading({
@@ -37,7 +37,7 @@ function requestLoading(url,params,message,success,fail){
     header:{
       'content-type':'application/json'
     },
-    method:'get',
+    method: method,
     success:function(res){
       wx.hideNavigationBarLoading()
       if(message != ""){
