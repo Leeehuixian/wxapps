@@ -1,3 +1,4 @@
+@import "/wxParse/wxParse.wxss";
 page{
   height: 100%;
   position:relative;
@@ -217,9 +218,9 @@ page{
 }
 
 .comment-num{
-  position:absolute;
-  top:-10rpx;
-  left:50%;
+  position:fixed;
+  bottom:60rpx;
+  left:62%;
   z-index:101;
   width:50rpx;
   height:30rpx;

@@ -1,5 +1,10 @@
 <!--pages/detail/detail.wxml-->
+<import src="../../wxParse/wxParse.wxml"/>
 <scroll-view class="detail-container"  scroll-y="true" scroll-into-view="{{toView}}" enable-back-to-top="true">
+  <view>
+    <template is="wxParse" data="{{wxParseData:detaildata.nodes}}" />
+  </view>
+  <video src="https://v.qq.com/iframe/preview.html?vid=g018827s68n&amp;width=500&amp;height=375&amp;auto=0"></video>
   <view class="title-autor">
     <text class="title">{{detaildata.title}}</text>
     <view class="second-line">

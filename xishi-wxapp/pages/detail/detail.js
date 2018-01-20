@@ -1,14 +1,15 @@
 // pages/detail/detail.js
 var utils = require("../../utils/util.js");
+var WxParse = require('../../wxParse/wxParse.js');
 var drawText = utils.drawText;
-import { index_newsList } from '../../url.js';
+import { article_detail } from '../../url.js';
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    detaildata:{},
+    detaildata:"",
     showView:true,
     inputValue: '',
     placeholderTxt:"写评论...",
@@ -21,14 +22,28 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    // var article = '<div>我是HTML代码</div>';
+    /**
+    * WxParse.wxParse(bindName , type, data, target,imagePadding)
+    * 1.bindName绑定的数据名(必填)
+    * 2.type可以为html或者md(必填)
+    * 3.data为传入的具体数据(必填)
+    * 4.target为Page对象,一般为this(必填)
+    * 5.imagePadding为当图片自适应是左右的单一padding(默认为0,可选)
+    */
+    // var that = this;
+    // WxParse.wxParse('article', 'html', article, that, 5);
+
+
     var articleId = Number(options.id);
-    var articleType = Number(options.type);
+    // var articleType = Number(options.type);
     var that = this;
-    utils.requestLoading(index_newsList, '', '正在加载数据', function (res) {
-      var detailsData = res[articleType];
-      var detaildata = detailsData[articleId];
+    utils.requestLoading(article_detail +"?id="+articleId,'get', '', '正在加载数据', function (res) {
+      // var detailsData = res[articleType];
+      console.log(res);
+      // var detaildata = res[articleId];
       that.setData({
-        detaildata:detaildata
+        detaildata: WxParse.wxParse('detaildata', 'html', res, that, 5)
       });
     }, function () {
       wx.showToast({
@@ -165,16 +180,16 @@ Page({
 
   //获取评论
   getCommentData:function(){
-    wx.request({
-      url: 'http://www.xinwangai.com.cn/wx.toutiao.web/api/ApiMessage/list', //仅为示例，并非真实的接口地址
-      data: {
-        ArticleID:'20180119'
-      },
-      method:"post",
-      success: function (res) {
-        console.log(res.data)
-      }
-    })
+    // wx.request({
+    //   url: 'http://www.xinwangai.com.cn/wx.toutiao.web/api/ApiMessage/list', //仅为示例，并非真实的接口地址
+    //   data: {
+    //     ArticleID:'20180119'
+    //   },
+    //   method:"post",
+    //   success: function (res) {
+    //     console.log(res.data)
+    //   }
+    // })
   }
 
   
