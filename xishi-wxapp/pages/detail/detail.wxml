@@ -4,7 +4,6 @@
   <view>
     <template is="wxParse" data="{{wxParseData:detaildata.nodes}}" />
   </view>
-  <video src="https://v.qq.com/iframe/preview.html?vid=g018827s68n&amp;width=500&amp;height=375&amp;auto=0"></video>
   <view class="title-autor">
     <text class="title">{{detaildata.title}}</text>
     <view class="second-line">
@@ -18,63 +17,42 @@
       </view>
     </view>
   </view>
-  <view class="banner">
+  <!-- <view class="banner">
     <image src="{{detaildata.bannerUrl}}" mode="aspectFill"></image>
-  </view>
-  <view class="content">
+  </view> -->
+  <!-- <view class="content">
     <text class="content-text">{{detaildata.content}}</text>
-  </view>
+  </view> -->
   <view id="comment-section" class="comment-section">
-    <view class="comment-wrapper">
+    <view class="comment-wrapper" hidden="{{commentList.length <= 0}}">
       <view class="section-title">
         <text>热门评论</text>
-      </view>
-      <!-- <block wx:for="{{}}"></block> -->
+      </view>     
       <view class="comment-list">
-        <view class="comment-item">
-          <view class="comment-avatar">
-            <image mode="aspectFill" src="../../images/authorImg.jpg"></image>
-          </view>
-          <view class="comment-content-wrapper">
-            <view class="first-line">
-              <text class="comment-nickname">用户微信昵称</text>
-              <view class="like-num">
-                <image wx:if="{{isMylike}}" src="../../images/notlike_icon.png" mode="aspectFill"></image>
-                <image wx:else src="../../images/like_icon.png" mode="aspectFill"></image>
-                <text>235</text>
+        <block wx:for="{{commentList}}">
+          <view class="comment-item">
+            <view class="comment-avatar">
+              <image mode="aspectFill" src="../../images/authorImg.jpg"></image>
+            </view>
+            <view class="comment-content-wrapper">
+              <view class="first-line">
+                <text class="comment-nickname">{{item.CreatebyName}}</text>
+                <view class="like-num">
+                  <image wx:if="{{isMylike}}" src="../../images/notlike_icon.png" mode="aspectFill"></image>
+                  <image wx:else src="../../images/like_icon.png" mode="aspectFill"></image>
+                  <text>235</text>
+                </view>
+              </view>
+              <view class="comment-content">
+                <text>{{item.PostMessage}}</text>
+              </view>
+              <view class="last-line">
+                <text class="issue-time">01-01 09:32</text>
+                <text class="delete-comment" hidden="{{item.IsDel}}" bindtap="bindDeleteTap" data-commentId="{{item.ID}}">删除</text>
               </view>
             </view>
-            <view class="comment-content">
-              <text>最新看了开头就倒了胃了！！堂堂大唐皇帝患病，却要找日本的和尚来给医治！！且不说当时两国之间的差距，就论佛法当时日本只是在鉴真东渡之后才接触到真正的正规的佛法！</text>
-            </view>
-            <view class="last-line">
-              <text class="issue-time">01-01 09:32</text>
-              <text class="delete-comment" bindtap="bindDeleteTap">删除</text>
-            </view>
           </view>
-        </view>
-        <view class="comment-item">
-          <view class="comment-avatar">
-            <image mode="aspectFill" src="../../images/authorImg.jpg"></image>
-          </view>
-          <view class="comment-content-wrapper">
-            <view class="first-line">
-              <text class="comment-nickname">用户微信昵称</text>
-              <view class="like-num">
-                <image wx:if="false" src="../../images/notlike_icon.png" mode="aspectFill"></image>
-                <image wx:else src="../../images/like_icon.png" mode="aspectFill"></image>
-                <text>13</text>
-              </view>
-            </view>
-            <view class="comment-content">
-              <text>杨贵妃是个外国人，这也是太扯了！</text>
-            </view>
-            <view class="last-line">
-              <text class="issue-time">01-01 09:32</text>
-              <text hidden="true" class="delete-comment">删除</text>
-            </view>
-          </view>
-        </view>
+        </block> 
       </view>
     </view>
   </view>

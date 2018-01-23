@@ -2,12 +2,9 @@
 var utils = require("../../utils/util.js");
 var WxParse = require('../../wxParse/wxParse.js');
 var drawText = utils.drawText;
-import { article_detail } from '../../url.js';
+import { article_detail, comment_list, comment_creat, comment_delete } from '../../url.js';
+const app = getApp();
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
     detaildata:"",
     showView:true,
@@ -16,52 +13,62 @@ Page({
     commentNum:2,
     toView:'',
     hideModalBg:true,
+    articleId:'',
+    commentList:[]
   },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
   onLoad: function (options) {
-    // var article = '<div>我是HTML代码</div>';
-    /**
-    * WxParse.wxParse(bindName , type, data, target,imagePadding)
-    * 1.bindName绑定的数据名(必填)
-    * 2.type可以为html或者md(必填)
-    * 3.data为传入的具体数据(必填)
-    * 4.target为Page对象,一般为this(必填)
-    * 5.imagePadding为当图片自适应是左右的单一padding(默认为0,可选)
-    */
-    // var that = this;
-    // WxParse.wxParse('article', 'html', article, that, 5);
-
-
     var articleId = Number(options.id);
-    // var articleType = Number(options.type);
     var that = this;
+    that.setData({
+      articleId: articleId
+    });
+    //获取文章详情
     utils.requestLoading(article_detail +"?id="+articleId,'get', '', '正在加载数据', function (res) {
-      // var detailsData = res[articleType];
-      console.log(res);
-      // var detaildata = res[articleId];
       that.setData({
         detaildata: WxParse.wxParse('detaildata', 'html', res, that, 5)
       });
     }, function () {
       wx.showToast({
+        icon:none,
         title: '加载数据失败',
       })
     });
 
-    this.getCommentData();
+    //获取文章评论
+    utils.requestLoading(comment_list, 'post', JSON.stringify({ ArticleID : articleId}), '正在加载数据', function (res) {
+      console.log(res);
+      that.setData({
+        commentList:res
+      })
+    }, function () {
+      wx.showToast({
+        icon:none,
+        title: '加载数据失败',
+      })
+    });
   },
 
   //删除评论
-  bindDeleteTap:function(){
+  bindDeleteTap:function(e){
     wx.showModal({
       title: '提示',
       content: '确定要删除这条评论吗？',
       success: function (res) {
         if (res.confirm) {
-          console.log('用户点击确定')
+          utils.requestLoading(comment_delete, 'post', JSON.stringify({ commentid:e.currentTarget.dataset.commentid }), '数据传输中...', function (res) {
+            if (res.Message) {
+              wx.showToast({
+                icon: "none",
+                title: res.Message,
+              })
+            }
+          }, function () {
+            wx.showToast({
+              icon: "none",
+              title: '删除失败',
+            })
+          });
+
         } else if (res.cancel) {
           console.log('用户点击取消')
         }
@@ -81,12 +88,27 @@ Page({
     })
   },
 
+  //发表评论
   bindKeyConfirm: function(e){
-    
+    this.setData({
+      toView: "comment-section"
+    });
+    utils.requestLoading(comment_creat, 'post', JSON.stringify({ PostMessage: e.detail.value, CreateBy: app.globalData.openId, CreatebyName: app.globalData.userInfo.nickName, ArticleID: this.data.articleId}), '数据传输中...', function (res) {
+      if (res.Message){
+        wx.showToast({
+          icon: "none",
+          title: res.Message,
+        })
+      }
+    }, function () {
+      wx.showToast({
+        icon:"none",
+        title: '发表失败',
+      })
+    });
   },
 
   bindReadComment:function(){
-    console.log(1);
     this.setData({
       toView: "comment-section"
     })
@@ -176,21 +198,6 @@ Page({
     this.setData({
       hideModalBg: true
     });
-  },
-
-  //获取评论
-  getCommentData:function(){
-    // wx.request({
-    //   url: 'http://www.xinwangai.com.cn/wx.toutiao.web/api/ApiMessage/list', //仅为示例，并非真实的接口地址
-    //   data: {
-    //     ArticleID:'20180119'
-    //   },
-    //   method:"post",
-    //   success: function (res) {
-    //     console.log(res.data)
-    //   }
-    // })
   }
 
-  
 })
