@@ -7,6 +7,7 @@ const app = getApp();
 Page({
   data: {
     detaildata:"",
+    articleContent:"",
     showView:true,
     inputValue: '',
     placeholderTxt:"写评论...",
@@ -14,7 +15,9 @@ Page({
     toView:'',
     hideModalBg:true,
     articleId:'',
-    commentList:[]
+    commentList:[],
+    scroll_top:0,
+    loadingModalHide:false
   },
   onLoad: function (options) {
     var articleId = Number(options.id);
@@ -24,8 +27,11 @@ Page({
     });
     //获取文章详情
     utils.requestLoading(article_detail +"?id="+articleId,'get', '', '正在加载数据', function (res) {
+      console.log(res);
       that.setData({
-        detaildata: WxParse.wxParse('detaildata', 'html', res, that, 5)
+        detaildata:res,
+        articleContent: WxParse.wxParse('articleContent', 'html', res.articlecontent, that, 5),
+        loadingModalHide:true
       });
     }, function () {
       wx.showToast({
@@ -34,22 +40,27 @@ Page({
       })
     });
 
-    //获取文章评论
-    utils.requestLoading(comment_list, 'post', JSON.stringify({ ArticleID : articleId}), '正在加载数据', function (res) {
-      console.log(res);
+    that.getComment_list(that.data.articleId);
+  },
+
+  //获取文章评论
+  getComment_list: function (articleId){
+    var that = this;
+    utils.requestLoading(comment_list, 'post', JSON.stringify({ ArticleID: articleId }), '正在加载数据', function (res) {
       that.setData({
-        commentList:res
+        commentList: res
       })
     }, function () {
       wx.showToast({
-        icon:none,
+        icon: none,
         title: '加载数据失败',
       })
-    });
+    })
   },
-
+  
   //删除评论
   bindDeleteTap:function(e){
+    var that = this;
     wx.showModal({
       title: '提示',
       content: '确定要删除这条评论吗？',
@@ -60,7 +71,8 @@ Page({
               wx.showToast({
                 icon: "none",
                 title: res.Message,
-              })
+              });
+              that.getComment_list(that.data.articleId);
             }
           }, function () {
             wx.showToast({
@@ -90,6 +102,7 @@ Page({
 
   //发表评论
   bindKeyConfirm: function(e){
+    var that = this;
     this.setData({
       toView: "comment-section"
     });
@@ -99,6 +112,7 @@ Page({
           icon: "none",
           title: res.Message,
         })
+        that.getComment_list(that.data.articleId);
       }
     }, function () {
       wx.showToast({
@@ -116,12 +130,11 @@ Page({
  
   /*发送好友或群*/
   onShareAppMessage: function (res) {
+    this.goTopFun();
     if (res.from === 'button') {
-      console.log(res.target)
+      // console.log(res.target)
     }
     return {
-      title: '冬季恋歌',
-      path: '/pages/index/index?id=123',
       success: function (res) {
         wx.showShareMenu({
           withShareTicket: true
@@ -147,32 +160,37 @@ Page({
     var publishInfo = that.data.detaildata.author + that.data.detaildata.publish_time;
     ctx.setFontSize(12);
     ctx.setFillStyle('#969696');
-    drawText(publishInfo, 10, 50, 24, ctx);
+    drawText(publishInfo.substr(0,24), 10, 50, 24, ctx);
     ctx.restore();
-    drawText(that.data.detaildata.content.substr(0,50)+"...", 10, 75, 14, ctx);   
+    ctx.setFillStyle('#000000');
+    drawText(that.data.detaildata.summary.substr(0,50)+"...", 10, 75, 14, ctx);  
     wx.getImageInfo({
-      src: 'http://is5.mzstatic.com/image/thumb/Purple128/v4/75/3b/90/753b907c-b7fb-5877-215a-759bd73691a4/source/50x50bb.jpg',
+      src: that.data.detaildata.thumburl,
       success: function (res) {
         console.log(res.path);
-        // ctx.drawImage(res.path, 0, 0, 25, 25);
+        ctx.drawImage(res.path, 10, 120, 220, 110);
         ctx.draw(true);
       }
     });
-    // wx.downloadFile({
-    //   url: 'http://is5.mzstatic.com/image/thumb/Purple128/v4/75/3b/90/753b907c-b7fb-5877-215a-759bd73691a4/source/50x50bb.jpg',
-    //   success: function (res) {
-    //     ctx.drawImage(res.tempFilePath, 25, 25);
-        
-    //   }
-    // })
+    drawText("长按扫码阅读", 10, 240, 6, ctx);  
+    wx.getImageInfo({
+      src: that.data.detaildata.codeurl,
+      success: function (res) {
+        console.log(res.path);
+        ctx.drawImage(res.path, 150, 250, 60, 60);
+        ctx.draw(true);
+      }
+    });  
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(0, 0, ctx.width, ctx.height);
   },
 
   //生成临时文件
   bindSaveImageTap:function(){
     wx.canvasToTempFilePath({
       canvasId: 'myCanvas',
-      destWidth:265,
-      destHeight:376,
+      destWidth:530,
+      destHeight:752,
       success: function (res) {
         console.log(res.tempFilePath);
         wx.saveImageToPhotosAlbum({
@@ -198,6 +216,20 @@ Page({
     this.setData({
       hideModalBg: true
     });
-  }
+  },
+
+  //返回顶部
+  goTopFun: function (e) {
+    var _top = this.data.scroll_top;//发现设置scroll-top值不能和上一次的值一样，否则无效，所以这里加了个判断  
+    if (_top == 1) {
+      _top = 0;
+    } else {
+      _top = 1;
+    }
+    this.setData({
+      'scroll_top': _top
+    });
+    console.log(this.data.scrollTop)
+  } 
 
 })
