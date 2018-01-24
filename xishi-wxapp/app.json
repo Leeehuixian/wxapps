@@ -1,7 +1,10 @@
 {
   "pages":[
-    "pages/redPacket-detail/redPacket-detail",
     "pages/index/index",
+    "pages/redPacket_index/redPacket_index",
+    "pages/redPacket-detail/redPacket-detail",
+    "pages/redPacket_withdraw/redPacket_withdraw",
+    "pages/redPacket_send/redPacket_send",
     "pages/detail/detail",
     "pages/test/test"
   ],

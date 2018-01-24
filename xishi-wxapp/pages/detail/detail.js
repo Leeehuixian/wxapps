@@ -2,66 +2,87 @@
 var utils = require("../../utils/util.js");
 var WxParse = require('../../wxParse/wxParse.js');
 var drawText = utils.drawText;
-import { article_detail } from '../../url.js';
+import { article_detail, comment_list, comment_creat, comment_delete, comment_operation } from '../../url.js';
+const app = getApp();
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
     detaildata:"",
+    articleContent:"",
     showView:true,
     inputValue: '',
     placeholderTxt:"写评论...",
-    commentNum:2,
+    commentNum:0,
     toView:'',
     hideModalBg:true,
+    articleId:'',
+    commentList:[],
+    scroll_top:0,
+    loadingModalHide:false
   },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
   onLoad: function (options) {
-    // var article = '<div>我是HTML代码</div>';
-    /**
-    * WxParse.wxParse(bindName , type, data, target,imagePadding)
-    * 1.bindName绑定的数据名(必填)
-    * 2.type可以为html或者md(必填)
-    * 3.data为传入的具体数据(必填)
-    * 4.target为Page对象,一般为this(必填)
-    * 5.imagePadding为当图片自适应是左右的单一padding(默认为0,可选)
-    */
-    // var that = this;
-    // WxParse.wxParse('article', 'html', article, that, 5);
-
-
     var articleId = Number(options.id);
-    // var articleType = Number(options.type);
     var that = this;
+    that.setData({
+      articleId: articleId
+    });
+    //获取文章详情
     utils.requestLoading(article_detail +"?id="+articleId,'get', '', '正在加载数据', function (res) {
-      // var detailsData = res[articleType];
       console.log(res);
-      // var detaildata = res[articleId];
       that.setData({
-        detaildata: WxParse.wxParse('detaildata', 'html', res, that, 5)
+        detaildata:res,
+        articleContent: WxParse.wxParse('articleContent', 'html', res.articlecontent, that, 5),
+        loadingModalHide:true
       });
     }, function () {
       wx.showToast({
+        icon:none,
         title: '加载数据失败',
       })
     });
 
-    this.getCommentData();
+    that.getComment_list(that.data.articleId);
   },
 
+  //获取文章评论
+  getComment_list: function (articleId){
+    var that = this;
+    utils.requestLoading(comment_list, 'post', JSON.stringify({ ArticleID: articleId, OpenId: app.globalData.openId }), '正在加载数据', function (res) {
+      that.setData({
+        commentList: res
+      })
+    }, function () {
+      wx.showToast({
+        icon: none,
+        title: '加载数据失败',
+      })
+    })
+  },
+  
   //删除评论
-  bindDeleteTap:function(){
+  bindDeleteTap:function(e){
+    var that = this;
     wx.showModal({
       title: '提示',
       content: '确定要删除这条评论吗？',
       success: function (res) {
         if (res.confirm) {
-          console.log('用户点击确定')
+          utils.requestLoading(comment_delete, 'post', JSON.stringify({ commentid:e.currentTarget.dataset.commentid }), '数据传输中...', function (res) {
+            if (res.Message) {
+              wx.showToast({
+                icon: "none",
+                title: res.Message,
+              });
+              setTimeout(function () {
+                that.getComment_list(that.data.articleId);
+              }, 1000);
+            }
+          }, function () {
+            wx.showToast({
+              icon: "none",
+              title: '删除失败',
+            })
+          });
+
         } else if (res.cancel) {
           console.log('用户点击取消')
         }
@@ -81,25 +102,66 @@ Page({
     })
   },
 
+  //发表评论
   bindKeyConfirm: function(e){
-    
+    var that = this;
+    this.setData({
+      toView: "comment-section"
+    });
+    utils.requestLoading(comment_creat, 'post', JSON.stringify({ PostMessage: e.detail.value, CreateBy: app.globalData.openId, CreatebyName: app.globalData.userInfo.nickName, ArticleID: this.data.articleId, HeadImgUrl: app.globalData.userInfo.avatarUrl}), '数据传输中...', function (res) {
+      if (res.Message){
+        wx.showToast({
+          icon: "none",
+          title: res.Message,
+        });
+        setTimeout(function(){
+          that.getComment_list(that.data.articleId);
+        },1000);
+      }
+    }, function () {
+      wx.showToast({
+        icon:"none",
+        title: '发表失败',
+      })
+    });
   },
 
+  /*查看评论*/
   bindReadComment:function(){
-    console.log(1);
     this.setData({
       toView: "comment-section"
     })
   },
+
+  /*评论点赞*/
+  bindLikeTap:function(e){
+    var that = this;
+    // console.log(!e.currentTarget.dataset.ismylike);
+    utils.requestLoading(comment_operation, 'post', JSON.stringify({ MessageID: e.currentTarget.dataset.commentid, OpenId: app.globalData.openId, NickName: app.globalData.userInfo.nickName, ArticleID: this.data.articleId, OperateType: !e.currentTarget.dataset.ismylike }), '数据传输中...', function (res) {
+      if (res.Message) {
+        wx.showToast({
+          icon: "none",
+          title: res.Message,
+        });
+        setTimeout(function () {
+          that.getComment_list(that.data.articleId);
+        }, 1000);
+      }
+    }, function () {
+      wx.showToast({
+        icon: 'none',
+        title: '操作失败',
+      })
+    });
+  },
  
   /*发送好友或群*/
   onShareAppMessage: function (res) {
+    this.goTopFun();
     if (res.from === 'button') {
-      console.log(res.target)
+      // console.log(res.target)
     }
     return {
-      title: '冬季恋歌',
-      path: '/pages/index/index?id=123',
       success: function (res) {
         wx.showShareMenu({
           withShareTicket: true
@@ -119,38 +181,59 @@ Page({
       hideModalBg: false
     });
     var ctx = wx.createCanvasContext('myCanvas');
+    ctx.setFillStyle("#ffffff");
+    ctx.fillRect(0, 0, 530, 752);
     ctx.setFontSize(15);
     ctx.save(); 
     drawText(that.data.detaildata.title.substr(0, 30) + "...", 10, 10, 14, ctx);
     var publishInfo = that.data.detaildata.author + that.data.detaildata.publish_time;
     ctx.setFontSize(12);
     ctx.setFillStyle('#969696');
-    drawText(publishInfo, 10, 50, 24, ctx);
+    drawText(publishInfo.substr(0,24), 10, 50, 24, ctx);
     ctx.restore();
-    drawText(that.data.detaildata.content.substr(0,50)+"...", 10, 75, 14, ctx);   
+    ctx.setFillStyle('#000000');
+    drawText(that.data.detaildata.summary.substr(0,50)+"...", 10, 75, 14, ctx);  
     wx.getImageInfo({
-      src: 'http://is5.mzstatic.com/image/thumb/Purple128/v4/75/3b/90/753b907c-b7fb-5877-215a-759bd73691a4/source/50x50bb.jpg',
+      src: that.data.detaildata.thumburl,
       success: function (res) {
         console.log(res.path);
-        // ctx.drawImage(res.path, 0, 0, 25, 25);
+        ctx.drawImage(res.path, 10, 120, 220, 110);
         ctx.draw(true);
       }
     });
-    // wx.downloadFile({
-    //   url: 'http://is5.mzstatic.com/image/thumb/Purple128/v4/75/3b/90/753b907c-b7fb-5877-215a-759bd73691a4/source/50x50bb.jpg',
+    drawText("长按扫码阅读", 10, 240, 6, ctx); 
+    // wx.getImageInfo({
+    //   src: that.data.detaildata.codeurl,
     //   success: function (res) {
-    //     ctx.drawImage(res.tempFilePath, 25, 25);
-        
+    //     console.log(res.path);
+    //     ctx.drawImage(res.path, 150, 250, 60, 60);
+    //     ctx.draw(true);
+    //   },
+    //   fail:function(res){
+    //     console.log(res);
     //   }
-    // })
+    // }); 
+    wx.downloadFile({
+      url: that.data.detaildata.codeurl,
+      success: function (res) {
+        console.log(res);
+        if (res.statusCode === 200) {
+          ctx.drawImage(res.tempFilePath, 150, 250, 60, 60);
+          ctx.draw(true);
+        }
+      },
+      fail:function(res){
+        console.log(res);
+      }
+    }) 
   },
 
   //生成临时文件
   bindSaveImageTap:function(){
     wx.canvasToTempFilePath({
       canvasId: 'myCanvas',
-      destWidth:265,
-      destHeight:376,
+      destWidth:530,
+      destHeight:752,
       success: function (res) {
         console.log(res.tempFilePath);
         wx.saveImageToPhotosAlbum({
@@ -178,19 +261,18 @@ Page({
     });
   },
 
-  //获取评论
-  getCommentData:function(){
-    // wx.request({
-    //   url: 'http://www.xinwangai.com.cn/wx.toutiao.web/api/ApiMessage/list', //仅为示例，并非真实的接口地址
-    //   data: {
-    //     ArticleID:'20180119'
-    //   },
-    //   method:"post",
-    //   success: function (res) {
-    //     console.log(res.data)
-    //   }
-    // })
-  }
+  //返回顶部
+  goTopFun: function (e) {
+    var _top = this.data.scroll_top;//发现设置scroll-top值不能和上一次的值一样，否则无效，所以这里加了个判断  
+    if (_top == 1) {
+      _top = 0;
+    } else {
+      _top = 1;
+    }
+    this.setData({
+      'scroll_top': _top
+    });
+    console.log(this.data.scrollTop)
+  } 
 
-  
 })
