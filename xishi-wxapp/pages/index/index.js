@@ -109,7 +109,7 @@ Page({
     var that = this;
     var pageIndex = that.data.pageIndex;
     network.requestLoading(article_list, 'post', 
-      JSON.stringify({ "AppNavigation": Number(currentTab) + 2, Pager: { PageIndex: pageIndex, PageSize: 10 }}), '',
+      JSON.stringify({ "AppNavigation": Number(currentTab) + 2, Pager: { PageIndex: pageIndex, PageSize: 10 }, cityName: that.data.userCity}), '',
     function (res) {
       console.log(res);
       var resData = that.data.listData.concat(res);
