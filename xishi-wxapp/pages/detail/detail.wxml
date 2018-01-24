@@ -35,22 +35,22 @@
         <block wx:for="{{commentList}}" wx:key="{{index}}">
           <view class="comment-item">
             <view class="comment-avatar">
-              <image mode="aspectFill" src="../../images/authorImg.jpg"></image>
+              <image mode="aspectFill" src="{{item.HeadImgUrl}}"></image>
             </view>
             <view class="comment-content-wrapper">
               <view class="first-line">
                 <text class="comment-nickname">{{item.CreatebyName}}</text>
                 <view class="like-num">
-                  <image wx:if="{{isMylike}}" src="../../images/notlike_icon.png" mode="aspectFill"></image>
-                  <image wx:else src="../../images/like_icon.png" mode="aspectFill"></image>
-                  <text>235</text>
+                  <image wx:if="{{item.IsPraise}}" src="../../images/like_icon.png" mode="aspectFill" bindtap="bindLikeTap" data-isMyLike="{{item.IsPraise}}" data-commentId="{{item.ID}}"></image>
+                  <image wx:else src="../../images/notlike_icon.png" mode="aspectFill" bindtap="bindLikeTap" data-isMyLike="{{item.IsPraise}}" data-commentId="{{item.ID}}"></image>
+                  <text>{{item.PraiseNum}}</text>
                 </view>
               </view>
               <view class="comment-content">
                 <text>{{item.PostMessage}}</text>
               </view>
               <view class="last-line">
-                <text class="issue-time">01-01 09:32</text>
+                <text class="issue-time">{{item.MessageTime}}</text>
                 <text class="delete-comment" hidden="{{item.IsDel}}" bindtap="bindDeleteTap" data-commentId="{{item.ID}}">删除</text>
               </view>
             </view>
@@ -65,7 +65,7 @@
     <input class="write-comment" placeholder="{{placeholderTxt}}" cursor="50" cursor-spacing="50" confirm-type="send" bindfocus="bindInputFocus" bindinput="bindKeyInput" bindconfirm="bindKeyConfirm"/>
   </view>
   <view class="read-comment" bindtap="bindReadComment">
-    <text class="comment-num">{{commentNum}}</text>
+    <text class="comment-num" hidden="{{commentList.length <= 0}}">{{commentList.length}}</text>
     <image src="../../images/comment_icon.png"></image>
   </view>
   <button open-type="share" class="share-btn"></button>   

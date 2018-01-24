@@ -1,6 +1,7 @@
 var network = require("../../utils/util.js")
 import { article_list } from '../../url.js'
-const app = getApp()
+const app = getApp();
+var QQMapWX = require('../../utils/qqmap-wx-jssdk.js');
 
 Page({
   data: {
@@ -14,7 +15,8 @@ Page({
     calcHeight:260,
     initHeight:0,
     animationData: {},
-    hasMore:true
+    hasMore:true,
+    userCity:''
   },
   
   onLoad: function () {
@@ -30,6 +32,29 @@ Page({
           winHeight: calc,
           initHeight:calc
         });
+      }
+    });
+    // 实例化腾讯地图API核心类
+    var qqmapsdk = new QQMapWX({
+      key: "BQCBZ-ZJ4WD-XEA4W-HCNO5-6BTW3-KMFQQ"
+    });
+    //1、获取当前位置坐标
+    wx.getLocation({
+      type: 'wgs84',
+      success: function (res) {
+        //2、根据坐标获取当前位置名称:腾讯地图逆地址解析
+        qqmapsdk.reverseGeocoder({
+          location: {
+            latitude: res.latitude,
+            longitude: res.longitude
+          },
+          success: function (addressRes) {
+            var cityName = addressRes.result.address_component.city;
+            that.setData({
+              userCity: cityName
+            })
+          }
+        })
       }
     });
     //初始化默认加载“推荐”数据
@@ -84,7 +109,7 @@ Page({
     var that = this;
     var pageIndex = that.data.pageIndex;
     network.requestLoading(article_list, 'post', 
-      JSON.stringify({ "AppNavigation": Number(currentTab) + 2, Pager: { PageIndex: pageIndex, PageSize: 10 }}), '', 
+      JSON.stringify({ "AppNavigation": Number(currentTab) + 2, Pager: { PageIndex: pageIndex, PageSize: 10 }}), '',
     function (res) {
       console.log(res);
       var resData = that.data.listData.concat(res);

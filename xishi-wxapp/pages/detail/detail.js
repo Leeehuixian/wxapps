@@ -2,7 +2,7 @@
 var utils = require("../../utils/util.js");
 var WxParse = require('../../wxParse/wxParse.js');
 var drawText = utils.drawText;
-import { article_detail, comment_list, comment_creat, comment_delete } from '../../url.js';
+import { article_detail, comment_list, comment_creat, comment_delete, comment_operation } from '../../url.js';
 const app = getApp();
 Page({
   data: {
@@ -11,7 +11,7 @@ Page({
     showView:true,
     inputValue: '',
     placeholderTxt:"写评论...",
-    commentNum:2,
+    commentNum:0,
     toView:'',
     hideModalBg:true,
     articleId:'',
@@ -46,7 +46,7 @@ Page({
   //获取文章评论
   getComment_list: function (articleId){
     var that = this;
-    utils.requestLoading(comment_list, 'post', JSON.stringify({ ArticleID: articleId }), '正在加载数据', function (res) {
+    utils.requestLoading(comment_list, 'post', JSON.stringify({ ArticleID: articleId, OpenId: app.globalData.openId }), '正在加载数据', function (res) {
       that.setData({
         commentList: res
       })
@@ -72,7 +72,9 @@ Page({
                 icon: "none",
                 title: res.Message,
               });
-              that.getComment_list(that.data.articleId);
+              setTimeout(function () {
+                that.getComment_list(that.data.articleId);
+              }, 1000);
             }
           }, function () {
             wx.showToast({
@@ -106,13 +108,15 @@ Page({
     this.setData({
       toView: "comment-section"
     });
-    utils.requestLoading(comment_creat, 'post', JSON.stringify({ PostMessage: e.detail.value, CreateBy: app.globalData.openId, CreatebyName: app.globalData.userInfo.nickName, ArticleID: this.data.articleId}), '数据传输中...', function (res) {
+    utils.requestLoading(comment_creat, 'post', JSON.stringify({ PostMessage: e.detail.value, CreateBy: app.globalData.openId, CreatebyName: app.globalData.userInfo.nickName, ArticleID: this.data.articleId, HeadImgUrl: app.globalData.userInfo.avatarUrl}), '数据传输中...', function (res) {
       if (res.Message){
         wx.showToast({
           icon: "none",
           title: res.Message,
-        })
-        that.getComment_list(that.data.articleId);
+        });
+        setTimeout(function(){
+          that.getComment_list(that.data.articleId);
+        },1000);
       }
     }, function () {
       wx.showToast({
@@ -122,10 +126,33 @@ Page({
     });
   },
 
+  /*查看评论*/
   bindReadComment:function(){
     this.setData({
       toView: "comment-section"
     })
+  },
+
+  /*评论点赞*/
+  bindLikeTap:function(e){
+    var that = this;
+    // console.log(!e.currentTarget.dataset.ismylike);
+    utils.requestLoading(comment_operation, 'post', JSON.stringify({ MessageID: e.currentTarget.dataset.commentid, OpenId: app.globalData.openId, NickName: app.globalData.userInfo.nickName, ArticleID: this.data.articleId, OperateType: !e.currentTarget.dataset.ismylike }), '数据传输中...', function (res) {
+      if (res.Message) {
+        wx.showToast({
+          icon: "none",
+          title: res.Message,
+        });
+        setTimeout(function () {
+          that.getComment_list(that.data.articleId);
+        }, 1000);
+      }
+    }, function () {
+      wx.showToast({
+        icon: 'none',
+        title: '操作失败',
+      })
+    });
   },
  
   /*发送好友或群*/
@@ -154,6 +181,8 @@ Page({
       hideModalBg: false
     });
     var ctx = wx.createCanvasContext('myCanvas');
+    ctx.setFillStyle("#ffffff");
+    ctx.fillRect(0, 0, 530, 752);
     ctx.setFontSize(15);
     ctx.save(); 
     drawText(that.data.detaildata.title.substr(0, 30) + "...", 10, 10, 14, ctx);
@@ -172,17 +201,31 @@ Page({
         ctx.draw(true);
       }
     });
-    drawText("长按扫码阅读", 10, 240, 6, ctx);  
-    wx.getImageInfo({
-      src: that.data.detaildata.codeurl,
+    drawText("长按扫码阅读", 10, 240, 6, ctx); 
+    // wx.getImageInfo({
+    //   src: that.data.detaildata.codeurl,
+    //   success: function (res) {
+    //     console.log(res.path);
+    //     ctx.drawImage(res.path, 150, 250, 60, 60);
+    //     ctx.draw(true);
+    //   },
+    //   fail:function(res){
+    //     console.log(res);
+    //   }
+    // }); 
+    wx.downloadFile({
+      url: that.data.detaildata.codeurl,
       success: function (res) {
-        console.log(res.path);
-        ctx.drawImage(res.path, 150, 250, 60, 60);
-        ctx.draw(true);
+        console.log(res);
+        if (res.statusCode === 200) {
+          ctx.drawImage(res.tempFilePath, 150, 250, 60, 60);
+          ctx.draw(true);
+        }
+      },
+      fail:function(res){
+        console.log(res);
       }
-    });  
-    ctx.fillStyle = '#fff';
-    ctx.fillRect(0, 0, ctx.width, ctx.height);
+    }) 
   },
 
   //生成临时文件

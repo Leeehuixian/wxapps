@@ -10,13 +10,15 @@
         <block wx:for="{{listData}}" wx:key="*this">
           <view class="list-item" catchtap="onArticleTap" data-articleId="{{item.id}}" data-articleType="{{currentTab}}">
             <view class="first-line">
-              <view wx:if="{{item.has_image}}" class="article-img">
-                <image src="{{item.image_url}}" lazy-load="true" />
+              <view wx:if="{{item.has_image && !item.has_video}}" class="article-img">
+                <image src="{{item.image_url}}" lazy-load="true" mode="aspectFill" />
               </view>
               <view class="article-title">{{item.title}}</view>
             </view>
-            <video wx:if="{{item.has_video}}" class="article-video" src="{{item.video_url}}"
-            />
+            <view wx:if="{{item.has_video}}" class="article-video" src="{{item.video_url}}">
+              <image class="video_thumb" src="{{item.image_url}}" lazy-load="true" mode="aspectFill" />
+              <image class="video_icon" src="../../images/video_icon.png"></image>
+            </view>
             <view class="last-line">
               <view class="issue-info">
                 <image wx:if="{{item.has_flag}}" class="flag-icon" src="{{item.flag_icon_url}}"/>

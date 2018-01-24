@@ -4,6 +4,7 @@ let article_detail = api_host + "ApiArticle/detail";
 let comment_list = api_host + "ApiMessage/list";
 let comment_creat = api_host + "ApiMessage/CreateComment";
 let comment_delete = api_host + "ApiMessage/DelComment";
+let comment_operation = api_host + "Praise/PraiseOperation";
 export { 
   //文章列表
   article_list, 
@@ -14,5 +15,7 @@ export {
   //发表评论
   comment_creat,
   //删除评论
-  comment_delete
+  comment_delete,
+  //评论点赞、取消点赞
+  comment_operation
   }
