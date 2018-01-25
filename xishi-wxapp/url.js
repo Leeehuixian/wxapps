@@ -1,4 +1,4 @@
-const api_host = "http://www.xinwangai.com.cn:8080/api/";
+const api_host = "https://www.muyutoutiao.com/TouTiao/admin/";
 let article_list = api_host +  "ApiArticle/list";
 let article_detail = api_host + "ApiArticle/detail";
 let comment_list = api_host + "ApiMessage/list";

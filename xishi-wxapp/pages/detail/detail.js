@@ -1,4 +1,3 @@
-// pages/detail/detail.js
 var utils = require("../../utils/util.js");
 var WxParse = require('../../wxParse/wxParse.js');
 var drawText = utils.drawText;
@@ -136,7 +135,6 @@ Page({
   /*评论点赞*/
   bindLikeTap:function(e){
     var that = this;
-    // console.log(!e.currentTarget.dataset.ismylike);
     utils.requestLoading(comment_operation, 'post', JSON.stringify({ MessageID: e.currentTarget.dataset.commentid, OpenId: app.globalData.openId, NickName: app.globalData.userInfo.nickName, ArticleID: this.data.articleId, OperateType: !e.currentTarget.dataset.ismylike }), '数据传输中...', function (res) {
       if (res.Message) {
         wx.showToast({
@@ -184,6 +182,7 @@ Page({
     ctx.setFillStyle("#ffffff");
     ctx.fillRect(0, 0, 530, 752);
     ctx.setFontSize(15);
+    ctx.setFillStyle('#000000');
     ctx.save(); 
     drawText(that.data.detaildata.title.substr(0, 30) + "...", 10, 10, 14, ctx);
     var publishInfo = that.data.detaildata.author + that.data.detaildata.publish_time;
@@ -191,6 +190,7 @@ Page({
     ctx.setFillStyle('#969696');
     drawText(publishInfo.substr(0,24), 10, 50, 24, ctx);
     ctx.restore();
+    ctx.setFontSize(15);
     ctx.setFillStyle('#000000');
     drawText(that.data.detaildata.summary.substr(0,50)+"...", 10, 75, 14, ctx);  
     wx.getImageInfo({
@@ -201,31 +201,18 @@ Page({
         ctx.draw(true);
       }
     });
-    drawText("长按扫码阅读", 10, 240, 6, ctx); 
-    // wx.getImageInfo({
-    //   src: that.data.detaildata.codeurl,
-    //   success: function (res) {
-    //     console.log(res.path);
-    //     ctx.drawImage(res.path, 150, 250, 60, 60);
-    //     ctx.draw(true);
-    //   },
-    //   fail:function(res){
-    //     console.log(res);
-    //   }
-    // }); 
-    wx.downloadFile({
-      url: that.data.detaildata.codeurl,
+    drawText("长按扫码阅读", 10, 260, 6, ctx); 
+    wx.getImageInfo({
+      src: that.data.detaildata.codeurl,
       success: function (res) {
-        console.log(res);
-        if (res.statusCode === 200) {
-          ctx.drawImage(res.tempFilePath, 150, 250, 60, 60);
-          ctx.draw(true);
-        }
+        console.log(res.path);
+        ctx.drawImage(res.path, 150, 250, 60, 60);
+        ctx.draw(true);
       },
       fail:function(res){
         console.log(res);
       }
-    }) 
+    }); 
   },
 
   //生成临时文件

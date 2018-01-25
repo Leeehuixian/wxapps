@@ -1,10 +1,10 @@
 {
   "pages":[
+    "pages/redPacket_send/redPacket_send",
     "pages/index/index",
     "pages/redPacket_index/redPacket_index",
     "pages/redPacket-detail/redPacket-detail",
     "pages/redPacket_withdraw/redPacket_withdraw",
-    "pages/redPacket_send/redPacket_send",
     "pages/detail/detail",
     "pages/test/test"
   ],
@@ -13,5 +13,9 @@
     "navigationBarBackgroundColor": "#f32a43",
     "navigationBarTitleText": "沐浴头条",
     "navigationBarTextStyle":"white"
+  },
+  "networkTimeout": {
+    "request": 10000,
+    "downloadFile": 10000
   }
 }

@@ -1,4 +1,3 @@
-<!--pages/detail/detail.wxml-->
 <import src="../../wxParse/wxParse.wxml"/>
 <scroll-view class="detail-container"  scroll-y="true" scroll-into-view="{{toView}}" enable-back-to-top="true" scroll-top="{{scroll_top}}">
   <view class="loading-text-wrap"  hidden="{{ loadingModalHide }}">
@@ -20,12 +19,6 @@
   <view>
     <template is="wxParse" data="{{wxParseData:articleContent.nodes}}" />
   </view>
-  <!-- <view class="banner">
-    <image src="{{detaildata.bannerUrl}}" mode="aspectFill"></image>
-  </view> -->
-  <!-- <view class="content">
-    <text class="content-text">{{detaildata.content}}</text>
-  </view> -->
   <view id="comment-section" class="comment-section">
     <view class="comment-wrapper" hidden="{{commentList.length <= 0}}">
       <view class="section-title">

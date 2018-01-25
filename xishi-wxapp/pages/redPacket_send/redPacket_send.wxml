@@ -1,2 +1,58 @@
-<!--pages/redPacket_send/redPacket_send.wxml-->
-<text>pages/redPacket_send/redPacket_send.wxml</text>
+<view class="container">
+  <view class="editor_box">
+    <view class="sender_avatar">
+      <image src="/images/authorImg.jpg"></image>
+    </view>
+    <view>
+      <view>按住录祝福</view>
+      <view>
+        <view>
+          <image src=""></image>
+          <text>试听</text>
+        </view>
+        <view>
+          <image src=""></image>
+          <text>重录</text>
+        </view>
+      </view>
+    </view>
+    <view>
+      <text>祝福对联</text>
+      <view>
+        <text>套路/自古情深留不住\n唯有套路得人心</text>
+        <image src=""></image>
+      </view>
+    </view>
+    <view>
+      <text>赏金（元）</text>
+      <input placeholder='填写红包金额'></input>
+    </view>
+    <view>
+      <text>数量（个）</text>
+      <input placeholder='填写红包数量'></input>
+    </view>
+    <text>需支付￥0.00服务费，优先使用余额￥0.00</text>
+    <view>生成并发送</view>
+    <view>
+      <image></image>
+      <view>
+        <text>同意</text>
+        <text>《服务费声明》</text>
+      </view>
+    </view>
+  </view>
+  <view class="function_bar">
+    <view>
+      <image src=""></image>
+      <text>我的记录</text>
+    </view>
+    <view>
+      <image src=""></image>
+      <text>余额提现</text>
+    </view>
+    <view>
+      <image src=""></image>
+      <text>常见问题</text>
+    </view>
+  </view>
+</view>

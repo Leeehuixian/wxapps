@@ -12,11 +12,13 @@ Page({
     loadingModalHide:false,
     loadingTipHide:true,
     pageIndex: 0,
-    calcHeight:260,
+    calcHeight:300,
     initHeight:0,
     animationData: {},
     hasMore:true,
-    userCity:''
+    total:0,//当前tab下文章数量
+    userCity:'',
+    loadingTipText:"加载中..."
   },
   
   onLoad: function () {
@@ -82,6 +84,7 @@ Page({
       hasMore:true,
       currentTab: e.detail.current,
       pageIndex: 0,
+      total:0,
       loadingModalHide: false,
       winHeight:this.data.initHeight
     });
@@ -97,6 +100,7 @@ Page({
         hasMore: true,
         currentTab: cur,
         pageIndex: 0,
+        total: 0,
         loadingModalHide: false,
         winHeight: this.data.initHeight
       });
@@ -115,11 +119,17 @@ Page({
           "AppNavigation": Number(currentTab) + 2, 
           Pager: { PageIndex: pageIndex, PageSize: 10 }
           });
+        that.setData({
+          calcHeight: 300
+        });
         break;
       case 1:
         requestParams = JSON.stringify({
           "AppNavigation": Number(currentTab) + 2,
           Pager: { PageIndex: pageIndex, PageSize: 10 }
+        });
+        that.setData({
+          calcHeight:500
         });
         break;
       case 2:
@@ -127,6 +137,9 @@ Page({
           "AppNavigation": Number(currentTab) + 2,
           Pager: { PageIndex: pageIndex, PageSize: 10 },
           cityName: that.data.userCity
+        });
+        that.setData({
+          calcHeight: 300
         });
         break;
     } 
@@ -145,13 +158,17 @@ Page({
         });       
       }else{
         pageIndex++;
-        var calcHeight = that.data.calcHeight * pageIndex * res.length;
+        //重新计算scroll-view长度
+        var total = that.data.total;
+        total += res.length;
+        var calcHeight = that.data.calcHeight * total;
         if (calcHeight < that.data.winHeight) {
           calcHeight = that.data.winHeight;
-        };
+        }
         that.setData({
           loadingModalHide: true,
-          winHeight: calcHeight
+          winHeight: calcHeight,
+          total: total
         });
       }      
       that.setData({
@@ -162,6 +179,7 @@ Page({
     }, function () {
       wx.showToast({
         title: '加载数据失败',
+        icon:"none",
       });
       that.setData({
         hasMore: false
@@ -176,6 +194,11 @@ Page({
       this.setData({
         loadingTipHide: false
       });
+    }else{
+      this.setData({
+        loadingTipHide:false,
+        loadingTipText:"没有更多数据"
+      })
     }
   }, 
 
