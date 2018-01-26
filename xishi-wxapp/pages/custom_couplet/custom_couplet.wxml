@@ -1,0 +1,31 @@
+<view class="container">
+  <view class="check_custom">
+    <text>自定义祝福</text>
+    <image hidden="{{true}}" src="/images/turn_right_icon.png" style="width:20rpx;height:38rpx;"></image>
+    <image hidden="{{false}}" src="/images/turn_down_icon.png" style="width:38rpx;height:20rpx;"></image>
+  </view>
+  <view class="editor_box">
+    <view>
+      <text>横批</text>
+      <input type="text" placeholder='2个汉字以内'></input>
+    </view>
+    <view>
+      <text>上联</text>
+      <input type="text" placeholder='8个汉字以内'></input>
+    </view>
+    <view>
+      <text>下联</text>
+      <input type="text" placeholder='8个汉字以内'></input>
+    </view>
+  </view>
+  <view class="txt_list">
+    <view wx:for="{{[1,2,3,4,5,6]}}">
+      <image hidden="{{false}}" src="/images/radio_icon.png"></image>
+      <image hidden="{{true}}" src="/images/checked_radio_icon.png"></image>
+      <text>爱人：执子之手，与子偕老</text>
+    </view>
+  </view>
+  <view class="sure_btn">
+    <view>确定使用</view>
+  </view>
+</view>

@@ -1,4 +1,4 @@
-var network = require("../../utils/util.js")
+var utils = require("../../utils/util.js")
 import { article_list } from '../../url.js'
 const app = getApp();
 var QQMapWX = require('../../utils/qqmap-wx-jssdk.js');
@@ -143,7 +143,7 @@ Page({
         });
         break;
     } 
-    network.requestLoading(article_list, 'post',  requestParams, '',
+    utils.requestLoading(article_list, 'post',  requestParams, '',
     function (res) {
       console.log(res);
       var resData = that.data.listData.concat(res);

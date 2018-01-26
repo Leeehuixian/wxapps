@@ -1,3 +1,5 @@
+var utils = require("utils/util.js");
+import { get_openid } from 'url.js';
 App({
   onLaunch: function () {
     // 登录
@@ -5,35 +7,27 @@ App({
       success: res => {
         // 发送 res.code 到后台换取 openId, sessionKey, unionId
         console.log(res);
-        var that = this;
-        if (res.code) {
-          //获取openId
-          wx.request({
-            url: 'https://api.weixin.qq.com/sns/jscode2session',
-            data: {
-              //小程序唯一标识
-              appid: 'wxaf03abf21c3b2be9',
-              //小程序的 app secret
-              secret: '6fddfd6ea1b29d696fc78bad494c9696',
-              grant_type: 'authorization_code',
-              js_code: res.code
-            },
-            method: 'GET',
-            header: { 'content-type': 'application/json' },
-            success: function (openIdRes) {
-              console.info("登录成功返回的openId：" + openIdRes.data.openid);
-              // 判断openId是否获取成功
-              if (openIdRes.data.openid != null & openIdRes.data.openid != undefined) {
-                that.globalData.openId = openIdRes.data.openid;
-              } else {
-                console.info("获取用户openId失败");
-              }
-            },
-            fail: function (error) {
-              console.info("获取用户openId失败");
-              console.info(error);
-            }
-          })
+        var sessionKey = wx.getStorageSync("sessionKey");
+        console.log("sessionKey=" + sessionKey);
+        if (!sessionKey){
+          if (res.code) {
+            utils.request(get_openid, "post", JSON.stringify({ code: res.code }), function (res){
+              console.log(res);
+              if (res.StatusCode == "success"){
+                console.log(1);
+                wx.setStorageSync("sessionKey", res.SessionKey);
+              }else{
+                if (res.Message){
+                  wx.showToast({
+                    title: res.Message,
+                    icon:"none"
+                  })
+                }
+              }            
+            },function(res){
+              console.log(res);
+            });
+          }
         }
       }
     })
@@ -56,11 +50,24 @@ App({
           })
         }
       }
+    }),
+    wx.onNetworkStatusChange(res => {
+      if (res.isConnected) {
+        let curpage = getCurrentPages()[0];
+        wx.reLaunch({
+          url: "/" + curpage.route
+        })
+      } else {
+        wx.showToast({
+          title: '网络异常',
+          icon: "none",
+          duration: 2000
+        });
+      }
     })
   },
   globalData: {
-    userInfo: null,
-    openId:''
+    userInfo: null
   }
 
 })

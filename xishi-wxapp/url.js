@@ -1,11 +1,15 @@
-const api_host = "https://www.muyutoutiao.com/TouTiao/admin/";
-let article_list = api_host +  "ApiArticle/list";
-let article_detail = api_host + "ApiArticle/detail";
-let comment_list = api_host + "ApiMessage/list";
-let comment_creat = api_host + "ApiMessage/CreateComment";
-let comment_delete = api_host + "ApiMessage/DelComment";
-let comment_operation = api_host + "Praise/PraiseOperation";
+var sessionKey = wx.getStorageSync("sessionKey");
+const api_host = "https://www.xinwangai.com.cn/toutiao/api/";
+let get_openid = api_host + "applogin/login";
+let article_list = api_host + "ApiArticle/list?sessionKey=" + sessionKey;
+let article_detail = api_host + "ApiArticle/detail?sessionKey=" + sessionKey;
+let comment_list = api_host + "ApiMessage/list?sessionKey=" + sessionKey;
+let comment_creat = api_host + "ApiMessage/CreateComment?sessionKey=" + sessionKey;
+let comment_delete = api_host + "ApiMessage/DelComment?sessionKey=" + sessionKey;
+let comment_operation = api_host + "Praise/PraiseOperation?sessionKey=" + sessionKey;
 export { 
+  //获取openId
+  get_openid,
   //文章列表
   article_list, 
   //文章详情

@@ -25,7 +25,7 @@ Page({
       articleId: articleId
     });
     //获取文章详情
-    utils.requestLoading(article_detail +"?id="+articleId,'get', '', '正在加载数据', function (res) {
+    utils.requestLoading(article_detail +"&id="+articleId,'get', '', '正在加载数据', function (res) {
       console.log(res);
       that.setData({
         detaildata:res,
@@ -156,24 +156,25 @@ Page({
   /*发送好友或群*/
   onShareAppMessage: function (res) {
     this.goTopFun();
-    if (res.from === 'button') {
-      // console.log(res.target)
-    }
-    return {
-      success: function (res) {
-        wx.showShareMenu({
-          withShareTicket: true
-        });
-      },
-      fail: function (res) {
-        console.log(res.shareAppMessage);
+    setTimeout(function(){
+      if (res.from === 'button') {
+        // console.log(res.target)
       }
-    }
+      return {
+        success: function (res) {
+          wx.showShareMenu({
+            withShareTicket: true
+          });
+        },
+        fail: function (res) {
+          console.log(res.shareAppMessage);
+        }
+      }
+    },1000);
   },
 
   /*生成分享朋友圈图片*/
   bindShareTap:function(){
-    console.log("生成分享朋友圈图片");
     var that = this;
     that.setData({
       hideModalBg: false
@@ -196,7 +197,6 @@ Page({
     wx.getImageInfo({
       src: that.data.detaildata.thumburl,
       success: function (res) {
-        console.log(res.path);
         ctx.drawImage(res.path, 10, 120, 220, 110);
         ctx.draw(true);
       }
@@ -205,7 +205,6 @@ Page({
     wx.getImageInfo({
       src: that.data.detaildata.codeurl,
       success: function (res) {
-        console.log(res.path);
         ctx.drawImage(res.path, 150, 250, 60, 60);
         ctx.draw(true);
       },
@@ -222,7 +221,6 @@ Page({
       destWidth:530,
       destHeight:752,
       success: function (res) {
-        console.log(res.tempFilePath);
         wx.saveImageToPhotosAlbum({
           filePath: res.tempFilePath,
           success(res) {
@@ -259,7 +257,6 @@ Page({
     this.setData({
       'scroll_top': _top
     });
-    console.log(this.data.scrollTop)
   } 
 
 })
