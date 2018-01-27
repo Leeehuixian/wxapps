@@ -13,8 +13,7 @@ App({
           if (res.code) {
             utils.request(get_openid, "post", JSON.stringify({ code: res.code }), function (res){
               console.log(res);
-              if (res.StatusCode == "success"){
-                console.log(1);
+              if (res.StatusCode == 1){
                 wx.setStorageSync("sessionKey", res.SessionKey);
               }else{
                 if (res.Message){
