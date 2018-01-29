@@ -1,22 +1,92 @@
 var utils = require("utils/util.js");
 import { get_sessionKey } from 'url.js';
+
+
+function extracted(res) {
+    wx.showToast({
+        title: res.Message,
+        icon: "none"
+    })
+}
+
+function getSetting(Code){
+  wx.getSetting({
+    success: res => {
+      if (res.authSetting['scope.userInfo']) {
+        getUserInfo(Code);
+      }else{
+        wx.showModal({
+          title: '提示',
+          content: '授权登录失败，部分功能将不能使用，是否重新登录？',
+          showCancel: true,
+          cancelText: "否",
+          confirmText: "是",
+          success:function(res){
+            if (res.confirm){
+              wx.openSetting({
+                success: function (data) {
+                  if (data) {
+                    if (data.authSetting["scope.userInfo"] == true) {
+                      getUserInfo(Code);
+                    }
+                  }
+                },
+                fail: function () {
+                  console.info("设置失败返回数据");
+                }
+              });
+            }
+          }
+        })  
+      }
+    }
+  })
+}
+
+function getUserInfo(Code) {
+  wx.getUserInfo({
+    success: res => {
+      getApp().globalData.userInfo = res.userInfo
+      console.log(res.userInfo);
+      let requestParams = JSON.stringify({
+        code: Code,
+        nickname: res.userInfo.nickName,
+        sex: res.userInfo.gender,
+        headurl: res.userInfo.avatarUrl
+      });
+      //请求sessionKey
+      utils.request(get_sessionKey, "post", requestParams, function (res) {
+        console.log(res);
+        if (res.Status == 1) {
+          wx.setStorageSync("sessionKey", res.SessionKey);
+        } else {
+          if (res.Message) {
+            extracted(res);
+          }
+        }
+      }, function (res) {
+        console.log(res);
+      });
+    },
+    fail: res => {
+      console.log(res);
+    }
+  })
+}
+
 App({
   onLaunch: function () {
-    var that = this;
-    // 登录
     wx.login({
       success: res => {
         var sessionKey = wx.getStorageSync("sessionKey");
-        let Code = res.code; 
+        let Code = res.code;
         // if (!sessionKey){
           if (res.code) {
-            // 获取用户信息
-            
-            
+            getSetting(Code)
           }
         // }
       }
-    })
+    }),
     //判断网络状况
     wx.onNetworkStatusChange(res => {
       if (res.isConnected) {
@@ -33,70 +103,7 @@ App({
       }
     })
   },
-  getUserInfo:function(){
-    wx.getSetting({
-      success: res => {
-        // if (res.authSetting['scope.userInfo']) {
-        wx.getUserInfo({
-          success: res => {
-            this.globalData.userInfo = res.userInfo
-            console.log(res.userInfo);
-            // wx.setStorage({
-            //   key: 'baseUserInfo',
-            //   data: res.userInfo,
-            // })
-            let requestParams = JSON.stringify({
-              code: Code,
-              nickname: res.userInfo.nickName,
-              sex: res.userInfo.gender,
-              headurl: res.userInfo.avatarUrl
-            });
-            //请求sessionKey
-            utils.request(get_sessionKey, "post", requestParams, function (res) {
-              console.log(res);
-              if (res.Status == 1) {
-                wx.setStorageSync("sessionKey", res.SessionKey);
-              } else {
-                if (res.Message) {
-                  wx.showToast({
-                    title: res.Message,
-                    icon: "none"
-                  })
-                }
-              }
-            }, function (res) {
-              console.log(res);
-            });
-          },
-          fail: res => {
-            console.log(res);
-          }
-        })
-        // }else{
-        //   wx.openSetting({
-        //     success: function (data) {
-        //       if (data) {
-        //         if (data.authSetting["scope.userInfo"] == true) {
-        //           loginStatus = true;
-        //           wx.getUserInfo({
-        //             withCredentials: false,
-        //             success: function (data) {
-        //               console.info("2成功获取用户返回数据");
-        //               console.info(data.userInfo);
-        //             },
-        //             fail: function () {
-        //               console.info("2授权失败返回数据");
-        //             }            });
-        //         }
-        //       }
-        //     },
-        //     fail: function () {
-        //       console.info("设置失败返回数据");
-        //     }      });
-        // }
-      }
-    })
-  },
+  
   globalData: {
     userInfo: null
   }
