@@ -202,28 +202,28 @@ Page({
       }
     });
     drawText("长按扫码阅读", 10, 260, 6, ctx); 
-    // wx.getImageInfo({
-    //   src: that.data.detaildata.codeurl,
-    //   success: function (res) {
-    //     ctx.drawImage(res.path, 150, 250, 60, 60);
-    //     ctx.draw(true);
-    //   },
-    //   fail:function(res){
-    //     console.log(res);
-    //   }
-    // }); 
-    wx.downloadFile({
-      url: that.data.detaildata.codeurl, 
+    wx.getImageInfo({
+      src: that.data.detaildata.codeurl,
       success: function (res) {
-        if (res.statusCode === 200) {
-          ctx.drawImage(res.path, 150, 250, 60, 60);
-          ctx.draw(true);
-        }
+        ctx.drawImage(res.path, 150, 250, 60, 60);
+        ctx.draw(true);
       },
-      fail: function (res) {
+      fail:function(res){
         console.log(res);
       }
-    })
+    }); 
+    // wx.downloadFile({
+    //   url: that.data.detaildata.codeurl, 
+    //   success: function (res) {
+    //     if (res.statusCode === 200) {
+    //       ctx.drawImage(res.path, 150, 250, 60, 60);
+    //       ctx.draw(true);
+    //     }
+    //   },
+    //   fail: function (res) {
+    //     console.log(res);
+    //   }
+    // })
   },
 
   //生成临时文件

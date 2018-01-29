@@ -1,4 +1,4 @@
-import { get_openid } from '../url.js';
+import { get_sessionKey } from '../url.js';
 function formatTime(date) {
   var year = date.getFullYear()
   var month = date.getMonth() + 1
@@ -59,68 +59,57 @@ function requestLoading(url, method, params,message,success,fail){
     },
     complete:function(res){
       console.log(res);
-      if (res.data.Status == 5){
-        console.log("调用Login");
-        wx.login({
-          success: res => {
-            // 发送 res.code 到后台换取 openId, sessionKey, unionId
-            console.log(res);
-            var sessionKey = wx.getStorageSync("sessionKey");
-            console.log("sessionKey=" + sessionKey);
-            // if (!sessionKey) {
-              if (res.code) {
-                wx.request({
-                  url: get_openid,
-                  data: JSON.stringify({ code: res.code }),
-                  header: {
-                    'content-type': 'application/json'
-                  },
-                  success: function (res) {
-                    if (res.StatusCode == "success") {
-                      console.log(1);
-                      wx.setStorageSync("sessionKey", res.SessionKey);
-                      let curpage = getCurrentPages()[0];
-                      wx.reLaunch({
-                        url: "/" + curpage.route
-                      });
-                    } else {
-                      if (res.Message) {
-                        wx.showToast({
-                          title: res.Message,
-                          icon: "none"
-                        })
-                      }
-                    }
-                  },
-                  fail:function(res){
-                    console.log(res)
-                  }
-                })
-                // this.request(get_openid, "post", JSON.stringify({ code: res.code }), function (res) {
-                //   console.log(res);
-                //   if (res.StatusCode == "success") {
-                //     console.log(1);
-                //     wx.setStorageSync("sessionKey", res.SessionKey);
-                //     let curpage = getCurrentPages()[0];
-                //     wx.reLaunch({
-                //       url: "/" + curpage.route
-                //     });
-                //   } else {
-                //     if (res.Message) {
-                //       wx.showToast({
-                //         title: res.Message,
-                //         icon: "none"
-                //       })
-                //     }
-                //   }
-                // }, function (res) {
-                //   console.log(res);
-                // });
-              }
-            // }
-          }
-        })
-      }
+      // if (res.data.Status == 5){
+      //   // wx.showToast({
+      //   //   title: "sessionKey失效",
+      //   //   icon: "none"
+      //   // })
+      //   // wx.getStorage({
+      //   //   key: 'baseUserInfo',
+      //   //   success: function (res) {
+      //   //     console.log(res);
+      //   //   }
+      //   // })
+      //   // wx.login({
+      //   //   success: res => {
+      //   //     console.log(res);
+      //   //     if (res.code) {
+      //   //       wx.request({
+      //   //         url: get_sessionKey,
+      //   //         data: JSON.stringify({
+      //   //           code: res.code,
+      //   //           nickname: getApp().globalData.userInfo.nickName,
+      //   //           sex: getApp().globalData.userInfo.gender,
+      //   //           headurl: getApp().globalData.userInfo.avatarUrl
+      //   //         }),
+      //   //         header: {
+      //   //           'content-type': 'application/json'
+      //   //         },
+      //   //         success: function (res) {
+      //   //           if (res.StatusCode == "success") {
+      //   //             console.log(1);
+      //   //             wx.setStorageSync("sessionKey", res.SessionKey);
+      //   //             let curpage = getCurrentPages()[0];
+      //   //             wx.reLaunch({
+      //   //               url: "/" + curpage.route
+      //   //             });
+      //   //           } else {
+      //   //             if (res.Message) {
+      //   //               wx.showToast({
+      //   //                 title: res.Message,
+      //   //                 icon: "none"
+      //   //               })
+      //   //             }
+      //   //           }
+      //   //         },
+      //   //         fail:function(res){
+      //   //           console.log(res)
+      //   //         }
+      //   //       })
+      //   //     }
+      //   //   }
+      //   // })
+      // }
     }
   })
 }

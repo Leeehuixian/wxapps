@@ -4,14 +4,14 @@
       <image src="/images/authorImg.jpg"></image>
     </view>
     <view>
-      <view wx:if="true"  class="record_btn">按住录祝福</view>
+      <view wx:if="{{!isHasVioce}}"  class="record_btn" bindtouchstart="touchdown" bindtouchend="touchup">按住录祝福</view>
       <view wx:else class="record_btn">
-        <view class="btn" id="audition">
+        <view class="btn" id="audition" bindtap="playvoice">
           <image src="/images/voice_icon2.png"></image>
           <text>试听</text>
         </view>
         <view class="kerley"></view>
-        <view class="btn" id="recording">
+        <view class="btn" id="recording" bindtap="resetvoice">
           <image src="/images/recording_icon.png"></image>
           <text>重录</text>
         </view>

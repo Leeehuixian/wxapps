@@ -145,7 +145,6 @@ Page({
     } 
     utils.requestLoading(article_list, 'post',  requestParams, '',
     function (res) {
-      console.log(res);
       var resData = that.data.listData.concat(res);
       if(res.length == 0){
         if (pageIndex == 0){

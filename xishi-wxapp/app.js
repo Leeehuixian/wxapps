@@ -1,55 +1,23 @@
 var utils = require("utils/util.js");
-import { get_openid } from 'url.js';
+import { get_sessionKey } from 'url.js';
 App({
   onLaunch: function () {
+    var that = this;
     // 登录
     wx.login({
       success: res => {
-        // 发送 res.code 到后台换取 openId, sessionKey, unionId
-        console.log(res);
         var sessionKey = wx.getStorageSync("sessionKey");
-        console.log("sessionKey=" + sessionKey);
-        if (!sessionKey){
+        let Code = res.code; 
+        // if (!sessionKey){
           if (res.code) {
-            utils.request(get_openid, "post", JSON.stringify({ code: res.code }), function (res){
-              console.log(res);
-              if (res.StatusCode == 1){
-                wx.setStorageSync("sessionKey", res.SessionKey);
-              }else{
-                if (res.Message){
-                  wx.showToast({
-                    title: res.Message,
-                    icon:"none"
-                  })
-                }
-              }            
-            },function(res){
-              console.log(res);
-            });
+            // 获取用户信息
+            
+            
           }
-        }
+        // }
       }
     })
-    // 获取用户信息
-    wx.getSetting({
-      success: res => {
-        if (res.authSetting['scope.userInfo']) {
-          // 已经授权，可以直接调用 getUserInfo 获取头像昵称，不会弹框
-          wx.getUserInfo({
-            success: res => {
-              // 可以将 res 发送给后台解码出 unionId
-              this.globalData.userInfo = res.userInfo
-              console.log(res.userInfo);
-              // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
-              // 所以此处加入 callback 以防止这种情况
-              if (this.userInfoReadyCallback) {
-                this.userInfoReadyCallback(res)
-              }
-            }
-          })
-        }
-      }
-    }),
+    //判断网络状况
     wx.onNetworkStatusChange(res => {
       if (res.isConnected) {
         let curpage = getCurrentPages()[0];
@@ -62,6 +30,70 @@ App({
           icon: "none",
           duration: 2000
         });
+      }
+    })
+  },
+  getUserInfo:function(){
+    wx.getSetting({
+      success: res => {
+        // if (res.authSetting['scope.userInfo']) {
+        wx.getUserInfo({
+          success: res => {
+            this.globalData.userInfo = res.userInfo
+            console.log(res.userInfo);
+            // wx.setStorage({
+            //   key: 'baseUserInfo',
+            //   data: res.userInfo,
+            // })
+            let requestParams = JSON.stringify({
+              code: Code,
+              nickname: res.userInfo.nickName,
+              sex: res.userInfo.gender,
+              headurl: res.userInfo.avatarUrl
+            });
+            //请求sessionKey
+            utils.request(get_sessionKey, "post", requestParams, function (res) {
+              console.log(res);
+              if (res.Status == 1) {
+                wx.setStorageSync("sessionKey", res.SessionKey);
+              } else {
+                if (res.Message) {
+                  wx.showToast({
+                    title: res.Message,
+                    icon: "none"
+                  })
+                }
+              }
+            }, function (res) {
+              console.log(res);
+            });
+          },
+          fail: res => {
+            console.log(res);
+          }
+        })
+        // }else{
+        //   wx.openSetting({
+        //     success: function (data) {
+        //       if (data) {
+        //         if (data.authSetting["scope.userInfo"] == true) {
+        //           loginStatus = true;
+        //           wx.getUserInfo({
+        //             withCredentials: false,
+        //             success: function (data) {
+        //               console.info("2成功获取用户返回数据");
+        //               console.info(data.userInfo);
+        //             },
+        //             fail: function () {
+        //               console.info("2授权失败返回数据");
+        //             }            });
+        //         }
+        //       }
+        //     },
+        //     fail: function () {
+        //       console.info("设置失败返回数据");
+        //     }      });
+        // }
       }
     })
   },

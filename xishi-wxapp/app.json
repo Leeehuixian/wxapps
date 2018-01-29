@@ -7,8 +7,7 @@
     "pages/redPacket-detail/redPacket-detail",
     "pages/redPacket_record/redPacket_record",
     "pages/redPacket_withdraw/redPacket_withdraw",
-    "pages/detail/detail",
-    "pages/test/test"
+    "pages/detail/detail"
   ],
   "window":{
     "backgroundTextStyle":"light",

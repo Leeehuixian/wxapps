@@ -1,6 +1,7 @@
 var sessionKey = wx.getStorageSync("sessionKey");
-const api_host = "https://www.xinwangai.com.cn/toutiao/api/";
-let get_openid = api_host + "applogin/login";
+console.log(sessionKey);
+const api_host = "https://toutiao.goldensoftcn.com/api/";
+let get_sessionKey = api_host + "applogin/login";
 let article_list = api_host + "ApiArticle/list?sessionKey=" + sessionKey;
 let article_detail = api_host + "ApiArticle/detail?sessionKey=" + sessionKey;
 let comment_list = api_host + "ApiMessage/list?sessionKey=" + sessionKey;
@@ -8,8 +9,8 @@ let comment_creat = api_host + "ApiMessage/CreateComment?sessionKey=" + sessionK
 let comment_delete = api_host + "ApiMessage/DelComment?sessionKey=" + sessionKey;
 let comment_operation = api_host + "Praise/PraiseOperation?sessionKey=" + sessionKey;
 export { 
-  //获取openId
-  get_openid,
+  //获取sessionKey
+  get_sessionKey,
   //文章列表
   article_list, 
   //文章详情
