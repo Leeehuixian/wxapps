@@ -18,7 +18,7 @@ function formatNumber(n) {
 }
 
 function request(url, method, params, success, fail){
-  this.requestLoading(url, method, params,'',success, fail)
+  requestLoading(url, method, params,'',success, fail)
 }
 //url：网络请求的url
 //params:请求参数
@@ -44,11 +44,13 @@ function requestLoading(url, method, params,message,success,fail){
       if(message != ""){
         wx.hideLoading()
       }
+
       if(res.statusCode == 200){
         success(res.data)
       }else{
         fail()
       }
+
     },
     fail:function(res){
       wx.hideNavigationBarLoading()
@@ -59,6 +61,80 @@ function requestLoading(url, method, params,message,success,fail){
     },
     complete:function(res){
       // console.log(res);
+    }
+  })
+}
+
+function getSetting() {
+  wx.getSetting({
+    success: res => {
+      if (res.authSetting['scope.userInfo']) {
+        getSessionKey();
+      } else {
+        wx.showModal({
+          title: '提示',
+          content: '授权登录失败，部分功能将不能使用，是否重新登录？',
+          showCancel: true,
+          cancelText: "否",
+          confirmText: "是",
+          success: function (res) {
+            if (res.confirm) {
+              wx.openSetting({
+                success: function (data) {
+                  if (data) {
+                    if (data.authSetting["scope.userInfo"] == true) {
+                      getSessionKey();
+                    }
+                  }
+                },
+                fail: function () {
+                  console.info("设置失败返回数据");
+                }
+              });
+            } else if (res.cancel) {
+              console.info("用户拒绝授权");
+            }
+          }
+        })
+      }
+    }
+  })
+}
+
+function getSessionKey(cb) {
+  wx.getUserInfo({
+    success: res => {
+      getApp().globalData.userInfo = res.userInfo
+      wx.login({
+        success: res => {
+          var sessionKey = wx.getStorageSync("sessionKey");
+          let Code = res.code;
+          if (!sessionKey){
+            //请求sessionKey
+            let requestParams = JSON.stringify({
+              code: Code,
+              nickname: getApp().globalData.userInfo.nickName,
+              sex: getApp().globalData.userInfo.gender,
+              headurl: getApp().globalData.userInfo.avatarUrl
+            });
+            request(get_sessionKey, "post", requestParams, function (res) {
+              if (res.Status == 1) {
+                wx.setStorageSync("sessionKey", res.SessionKey);
+              } else {
+                if (res.Message) {
+                  extracted(res);
+                }
+              }
+            }, function (res) {
+              console.log(res);
+            });
+          }
+        }
+      })
+    },
+    fail: res => {
+      console.log(res);
+      cb()
     }
   })
 }
@@ -82,5 +158,7 @@ module.exports = {
   formatTime: formatTime,
   request:request,
   requestLoading:requestLoading,
-  drawText: drawText
+  drawText: drawText,
+  getSessionKey: getSessionKey,
+  getSetting: getSetting
 }

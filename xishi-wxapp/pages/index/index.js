@@ -2,7 +2,7 @@ var utils = require("../../utils/util.js")
 import { article_list } from '../../url.js'
 const app = getApp();
 var QQMapWX = require('../../utils/qqmap-wx-jssdk.js');
-
+var sessionKey = '';
 Page({
   data: {
     listData:[],
@@ -22,6 +22,8 @@ Page({
   },
   
   onLoad: function () {
+    utils.getSessionKey(utils.getSetting);
+    sessionKey = wx.getStorageSync("sessionKey");
     var that = this;
     //  高度自适应
     wx.getSystemInfo({
@@ -59,6 +61,7 @@ Page({
         })
       }
     });
+    
     //初始化默认加载“推荐”数据
     that.getListData(0);
   },
@@ -143,8 +146,17 @@ Page({
         });
         break;
     } 
-    utils.requestLoading(article_list, 'post',  requestParams, '',
+    utils.requestLoading(article_list + "?sessionKey=" + sessionKey, 'post',  requestParams, '',
     function (res) {
+      if (res.Status == 3 || res.Status == 5){
+        wx.removeStorageSync("sessionKey");
+        setTimeout(function(){
+          let curpage = getCurrentPages()[0];
+          wx.reLaunch({
+            url: "/" + curpage.route
+          });
+        },1000)
+      }
       var resData = that.data.listData.concat(res);
       if(res.length == 0){
         if (pageIndex == 0){

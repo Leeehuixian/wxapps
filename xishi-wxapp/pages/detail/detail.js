@@ -3,6 +3,7 @@ var WxParse = require('../../wxParse/wxParse.js');
 var drawText = utils.drawText;
 import { article_detail, comment_list, comment_creat, comment_delete, comment_operation } from '../../url.js';
 const app = getApp();
+var sessionKey = '';
 Page({
   data: {
     detaildata:"",
@@ -16,17 +17,34 @@ Page({
     articleId:'',
     commentList:[],
     scroll_top:0,
-    loadingModalHide:false
+    loadingModalHide:false,
+    top:0
   },
   onLoad: function (options) {
+    utils.getSessionKey(utils.getSetting);
+    sessionKey = wx.getStorageSync("sessionKey");
     var articleId = Number(options.id);
+    var articleType = Number(options.type);
     var that = this;
+    if (articleType == 1){
+      that.setData({
+        top: "225px"
+      });
+    }
     that.setData({
       articleId: articleId
     });
     //获取文章详情
-    utils.requestLoading(article_detail +"&id="+articleId,'get', '', '正在加载数据', function (res) {
-      console.log(res);
+    utils.requestLoading(article_detail + "?sessionKey=" + sessionKey +"&id="+articleId,'get', '', '正在加载数据', function (res) {
+      if (res.Status == 3 || res.Status == 5) {
+        setTimeout(function () {
+          wx.removeStorageSync("sessionKey");
+          let curpage = getCurrentPages()[0];
+          wx.reLaunch({
+            url: "/" + curpage.route
+          })
+        }, 1000)
+      }
       that.setData({
         detaildata:res,
         articleContent: WxParse.wxParse('articleContent', 'html', res.articlecontent, that, 5),
@@ -34,7 +52,7 @@ Page({
       });
     }, function () {
       wx.showToast({
-        icon:none,
+        icon:"none",
         title: '加载数据失败',
       })
     });
@@ -45,7 +63,16 @@ Page({
   //获取文章评论
   getComment_list: function (articleId){
     var that = this;
-    utils.requestLoading(comment_list, 'post', JSON.stringify({ ArticleID: articleId, OpenId: app.globalData.openId }), '正在加载数据', function (res) {
+    utils.requestLoading(comment_list + "?sessionKey=" + sessionKey, 'post', JSON.stringify({ ArticleID: articleId, OpenId: app.globalData.openId }), '正在加载数据', function (res) {
+      if (res.Status == 3 || res.Status == 5) {
+        setTimeout(function () {
+          wx.removeStorageSync("sessionKey");
+          let curpage = getCurrentPages()[0];
+          wx.reLaunch({
+            url: "/" + curpage.route
+          })
+        }, 1000)
+      }
       that.setData({
         commentList: res
       })
@@ -65,7 +92,16 @@ Page({
       content: '确定要删除这条评论吗？',
       success: function (res) {
         if (res.confirm) {
-          utils.requestLoading(comment_delete, 'post', JSON.stringify({ commentid:e.currentTarget.dataset.commentid }), '数据传输中...', function (res) {
+          utils.requestLoading(comment_delete + "?sessionKey=" + sessionKey, 'post', JSON.stringify({ commentid:e.currentTarget.dataset.commentid }), '数据传输中...', function (res) {
+            if (res.Status == 3 || res.Status == 5) {
+              setTimeout(function () {
+                wx.removeStorageSync("sessionKey");
+                let curpage = getCurrentPages()[0];
+                wx.reLaunch({
+                  url: "/" + curpage.route
+                })
+              }, 1000)
+            }
             if (res.Message) {
               wx.showToast({
                 icon: "none",
@@ -107,7 +143,16 @@ Page({
     this.setData({
       toView: "comment-section"
     });
-    utils.requestLoading(comment_creat, 'post', JSON.stringify({ PostMessage: e.detail.value, CreateBy: app.globalData.openId, CreatebyName: app.globalData.userInfo.nickName, ArticleID: this.data.articleId, HeadImgUrl: app.globalData.userInfo.avatarUrl}), '数据传输中...', function (res) {
+    utils.requestLoading(comment_creat + "?sessionKey=" + sessionKey, 'post', JSON.stringify({ PostMessage: e.detail.value, CreateBy: app.globalData.openId, CreatebyName: app.globalData.userInfo.nickName, ArticleID: this.data.articleId, HeadImgUrl: app.globalData.userInfo.avatarUrl}), '数据传输中...', function (res) {
+      if (res.Status == 3 || res.Status == 5) {
+        setTimeout(function () {
+          wx.removeStorageSync("sessionKey");
+          let curpage = getCurrentPages()[0];
+          wx.reLaunch({
+            url: "/" + curpage.route
+          })
+        }, 1000)
+      }
       if (res.Message){
         wx.showToast({
           icon: "none",
@@ -135,7 +180,16 @@ Page({
   /*评论点赞*/
   bindLikeTap:function(e){
     var that = this;
-    utils.requestLoading(comment_operation, 'post', JSON.stringify({ MessageID: e.currentTarget.dataset.commentid, OpenId: app.globalData.openId, NickName: app.globalData.userInfo.nickName, ArticleID: this.data.articleId, OperateType: !e.currentTarget.dataset.ismylike }), '数据传输中...', function (res) {
+    utils.requestLoading(comment_operation + "?sessionKey=" + sessionKey, 'post', JSON.stringify({ MessageID: e.currentTarget.dataset.commentid, OpenId: app.globalData.openId, NickName: app.globalData.userInfo.nickName, ArticleID: this.data.articleId, OperateType: !e.currentTarget.dataset.ismylike }), '数据传输中...', function (res) {
+      if (res.Status == 3 || res.Status == 5) {
+        setTimeout(function () {
+          wx.removeStorageSync("sessionKey");
+          let curpage = getCurrentPages()[0];
+          wx.reLaunch({
+            url: "/" + curpage.route
+          })
+        }, 1000)
+      }
       if (res.Message) {
         wx.showToast({
           icon: "none",

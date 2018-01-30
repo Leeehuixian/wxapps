@@ -19,13 +19,13 @@
     </view>
   </view>
   <view class="txt_list">
-    <view wx:for="{{[1,2,3,4,5,6]}}">
-      <image hidden="{{false}}" src="/images/radio_icon.png"></image>
-      <image hidden="{{true}}" src="/images/checked_radio_icon.png"></image>
-      <text>爱人：执子之手，与子偕老</text>
+    <view wx:for="{{coupletList}}" wx:key="{{index}}" bindtap="radioCheckedChange" data-checkindex="{{index}}" data-coupletid="{{item.ID}}">
+      <image hidden="{{radioCheckVal == index}}" src="/images/radio_icon.png"></image>
+      <image hidden="{{radioCheckVal != index}}" src="/images/checked_radio_icon.png"></image>
+      <text>{{item.TopWords}}：{{item.LeftWords}}，{{item.RightWords}}</text>
     </view>
   </view>
   <view class="sure_btn">
-    <view>确定使用</view>
+    <view bindtap="backToSend">确定使用</view>
   </view>
 </view>

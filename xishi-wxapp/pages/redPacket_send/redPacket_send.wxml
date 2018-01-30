@@ -19,8 +19,8 @@
     </view>
     <view class="editor_input">
       <text>祝福对联</text>
-      <view>
-        <text>套路/自古情深留不住\n唯有套路得人心</text>
+      <view bindtap="chooseCouplet">
+        <text>横批：{{coupletText.TopWords}}\n上联：{{coupletText.LeftWords}}\n下联：{{coupletText.RightWords}}</text>
         <image src="/images/turn_right_icon.png"></image>
       </view>
     </view>

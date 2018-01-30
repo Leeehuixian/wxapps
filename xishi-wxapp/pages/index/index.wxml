@@ -6,7 +6,7 @@
   </view>
   <swiper class="article-list" current="{{currentTab}}" duration="300" bindchange="switchTab" style="height:{{winHeight}}rpx;"> 
     <swiper-item wx:for="{{[0,1,2]}}" wx:key="{{index}}" hidden="{{currentTab == index?false:true}}">
-        <block wx:for="{{listData}}" wx:key="*this">
+        <block wx:for="{{listData}}" wx:key="{{index}}">
           <view class="list-item" catchtap="onArticleTap" data-articleId="{{item.id}}" data-articleType="{{currentTab}}">
             <view class="first-line">
               <view wx:if="{{item.has_image && !item.has_video}}" class="article-img">

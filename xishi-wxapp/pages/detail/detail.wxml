@@ -1,5 +1,5 @@
 <import src="../../wxParse/wxParse.wxml"/>
-<scroll-view class="detail-container"  scroll-y="true" scroll-into-view="{{toView}}" enable-back-to-top="true" scroll-top="{{scroll_top}}">
+<scroll-view class="detail-container"  scroll-y="true" scroll-into-view="{{toView}}" enable-back-to-top="true" scroll-top="{{scroll_top}}" style="top:{{top}}">
   <view class="loading-text-wrap"  hidden="{{ loadingModalHide }}">
       <image src="../../images/loading-text-img.png" mode="aspectFill"></image>
   </view>
@@ -44,7 +44,7 @@
               </view>
               <view class="last-line">
                 <text class="issue-time">{{item.MessageTime}}</text>
-                <text class="delete-comment" hidden="{{item.IsDel}}" bindtap="bindDeleteTap" data-commentId="{{item.ID}}">删除</text>
+                <text class="delete-comment" hidden="{{!item.IsDel}}" bindtap="bindDeleteTap" data-commentId="{{item.ID}}">删除</text>
               </view>
             </view>
           </view>
