@@ -1,10 +1,10 @@
 {
   "pages":[
-    "pages/redPacket_send/redPacket_send",
     "pages/index/index",
-    "pages/custom_couplet/custom_couplet",
     "pages/redPacket_index/redPacket_index",
-    "pages/redPacket-detail/redPacket-detail",
+    "pages/redPacket-detail/redPacket_detail",
+    "pages/redPacket_send/redPacket_send",
+    "pages/custom_couplet/custom_couplet",
     "pages/redPacket_record/redPacket_record",
     "pages/redPacket_withdraw/redPacket_withdraw",
     "pages/detail/detail"

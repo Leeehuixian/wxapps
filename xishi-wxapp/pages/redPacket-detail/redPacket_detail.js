@@ -1,4 +1,4 @@
-// pages/redPacket-detail/redPacket-detail.js
+// pages/redPacket-detail/redPacket_detail.js
 Page({
 
   /**

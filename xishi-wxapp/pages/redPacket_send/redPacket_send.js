@@ -1,15 +1,18 @@
-import { get_couplet,pay_redPacket } from "../../url.js"
+import { get_couplet, pay_redPacket, get_serviceFee } from "../../url.js"
 var utils = require("../../utils/util.js")
 const app = getApp();
 var sessionKey = '';
 const recorderManager = wx.getRecorderManager()
 const innerAudioContext = wx.createInnerAudioContext()
-var tempFilePath;
+var tempFilePath = '';
 Page({
   data: {
     isHasVioce:false,
     coupletId:'',
-    coupletText:''
+    coupletText:'',
+    money:0,
+    num:0,
+    serviceFee: "0.00"
   },
 
   onLoad: function (options) {
@@ -21,22 +24,9 @@ Page({
 
   getCouplet: function (sessionKey){
     var that = this;
-
-    wx.getStorage({
-      key: 'coupletId',
-      success: function (res) {
-        that.setData({
-          "coupletId": res
-        })
-      }
-    });
-    
+  
     let requestParams = JSON.stringify({
-      OpenId: app.globalData.openId,
-      Pager: {
-        PageSize: 1,
-        PageIndex: 0
-      }
+      OpenId: app.globalData.openId
     });
     utils.requestLoading(get_couplet + "?sessionKey=" + sessionKey, "post", requestParams, "加载数据中...",
       function (res) {
@@ -49,29 +39,64 @@ Page({
             })
           }, 1000)
         }
-        console.log(res);
         that.setData({
           coupletText: res[0],
           coupletId: res[0].ID
         })
+        
       }, function (res) {
         console.log(res);
       }
     )
   },
 
-  sendFun: function (sessionKey){
+  //更换对联
+  changeCouplet:function(coupletxt,coupletid){
+    this.setData({
+      coupletText: coupletxt,
+      coupletId: coupletid
+    })
+  },
+
+  sendFun: function (){
     var that = this;
     let requestParams = JSON.stringify({
-      BonusId: "aaa-bbb-ccc",
-      BonusMoney: 200,
+      BonusMoney: Number(that.data.money),
       ServiceCharge: 1,
-      BonusCount: 10,
-      BonusVoiceUrl: that.tempFilePath,
+      BonusCount: Number(that.data.num),
+      BonusVoiceUrl:tempFilePath,
       CoupletId: that.data.coupletId
     });
+    utils.requestLoading(pay_redPacket + "?sessionKey=" + sessionKey, "post", requestParams,'',
+      function(res){
+        console.log(res)
+      },function(res){
+        console.log(res)
+      }
+    )
+  },
 
-    utils.requestLoading(pay_redPacket + "?sessionKey=" + sessionKey, post, requestParams)
+  inputMoney:function(e){
+    this.setData({
+      money:e.detail.value
+    })
+  },
+
+  inputNum:function(e){
+    this.setData({
+      num:e.detail.value
+    })
+  },
+
+  //计算服务费
+  CaculateServiceFee:function(){
+    utils.requestLoading(get_serviceFee+"?sessionKey="+sessionKey,"post",JSON.stringify({bonusAmount:Number(this.data.money)}),'',
+      function(res){
+        console.log(res)
+      },function(res){
+        console.log(res)
+      }
+    )
   },
 
   //开始录音
@@ -134,6 +159,20 @@ Page({
   chooseCouplet:function(){
     wx.navigateTo({
       url: '/pages/custom_couplet/custom_couplet'
+    })
+  },
+
+  //查看我的记录
+  checkRecord:function(){
+    wx.navigateTo({
+      url: '/pages/redPacket_record/redPacket_record'
+    })
+  },
+
+  //余额体现
+  withdrawTap:function(){
+    wx.navigateTo({
+      url: '/pages/redPacket_withdraw/redPacket_withdraw'
     })
   },
 

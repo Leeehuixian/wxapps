@@ -19,7 +19,7 @@
     </view>
   </view>
   <view class="txt_list">
-    <view wx:for="{{coupletList}}" wx:key="{{index}}" bindtap="radioCheckedChange" data-checkindex="{{index}}" data-coupletid="{{item.ID}}">
+    <view wx:for="{{coupletList}}" wx:key="{{index}}" bindtap="radioCheckedChange" data-checkindex="{{index}}" data-coupletid="{{item.ID}}" data-couplettext="{{item}}">
       <image hidden="{{radioCheckVal == index}}" src="/images/radio_icon.png"></image>
       <image hidden="{{radioCheckVal != index}}" src="/images/checked_radio_icon.png"></image>
       <text>{{item.TopWords}}：{{item.LeftWords}}，{{item.RightWords}}</text>

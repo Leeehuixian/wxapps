@@ -26,14 +26,14 @@
     </view>
     <view class="editor_input">
       <text>赏金（元）</text>
-      <input placeholder='填写红包金额'></input>
+      <input placeholder='填写红包金额' bindinput="inputMoney" bindblur="CaculateServiceFee"></input>
     </view>
     <view class="editor_input">
       <text>数量（个）</text>
-      <input placeholder='填写红包数量'></input>
+      <input placeholder='填写红包数量' bindinput="inputNum">></input>
     </view>
-    <text class="tip_txt">需支付￥0.00服务费，优先使用余额￥0.00</text>
-    <view class="submit_btn">生成并发送</view>
+    <text class="tip_txt">需支付￥{{serviceFee}}服务费，优先使用余额￥0.00</text>
+    <view class="submit_btn" bindtap="sendFun">生成并发送</view>
     <view class="agreement">
       <image src="/images/checked_box_icon.png"></image>
       <view>
@@ -43,15 +43,15 @@
     </view>
   </view>
   <view class="function_bar">
-    <view>
+    <view bindtap="checkRecord">
       <image src="/images/record_icon.png" style="width:49rpx;height:54rpx;"></image>
       <text>我的记录</text>
     </view>
-    <view>
+    <view bindtap="withdrawTap">
       <image src="/images/balance_icon.png" style="width:54rpx;height:54rpx;"></image>
       <text>余额提现</text>
     </view>
-    <view>
+    <view bindtap="askHelp">
       <image src="/images/problem_icon.png" style="width:55rpx;height:54rpx;"></image>
       <text>常见问题</text>
     </view>

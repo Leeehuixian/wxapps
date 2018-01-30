@@ -1,6 +1,7 @@
-import { get_isOpenRed,get_bonusIndexData} from "../../url.js";
+import { get_redPacketDetail, get_bonusDetailList} from "../../url.js";
 var utils = require("../../utils/util.js");
-var sessionKey = "";
+const app = getApp();
+var sessionKey = '';
 Page({
   data: {
   
@@ -10,25 +11,20 @@ Page({
     var bounsId = options.id;
     utils.getSessionKey(utils.getSetting);
     sessionKey = wx.getStorageSync("sessionKey");
-    utils.requestLoading(get_isOpenRed + "?sessionKey=" + sessionKey + "&bounsld=" + bounsId, "get", "",
+    utils.requestLoading(get_redPacketDetail+"?sessionKey="+sessionKey + "&bounsld="+bounsId,"get","",
+    "数据加载中...",function(res){
+        console.log(res)
+      },function(res){
+        console.log(res)
+      }
+    );
+    utils.requestLoading(get_bonusDetailList + "?sessionKey=" + sessionKey + "&bounsld=" + bounsId, "get", "",
       "数据加载中...", function (res) {
         console.log(res)
-        if(res.isOpenRed == false && res.Msg == ""){
-          utils.requestLoading(get_bonusIndexData + "?sessionKey="+sessionKey+"&bonusId="+bounsId,"get","",
-          "",function(res){
-            console.log(res)
-          },function(res){
-            console.log(res)
-          })
-        } else if (res.isOpenRed == true && res.Msg == ""){
-          wx.navigateTo({
-            url: '/pages/redPacket_detail/redPacket_detail?id=' + bounsId,
-          })
-        }
       }, function (res) {
         console.log(res)
       }
-    )  
+    )
   },
 
   /**
