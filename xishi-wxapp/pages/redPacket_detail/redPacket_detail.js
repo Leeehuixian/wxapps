@@ -4,7 +4,7 @@ const app = getApp();
 var sessionKey = '';
 Page({
   data: {
-  
+    hideModalBg:true,
   },
 
   onLoad: function (options) {
@@ -26,6 +26,125 @@ Page({
       }
     )
   },
+
+  /*发送好友或群*/
+  onShareAppMessage: function (res) {
+    this.goTopFun();
+    setTimeout(function () {
+      if (res.from === 'button') {
+        // console.log(res.target)
+      }
+      return {
+        success: function (res) {
+          wx.showShareMenu({
+            withShareTicket: true
+          });
+        },
+        fail: function (res) {
+          console.log(res.shareAppMessage);
+        }
+      }
+    }, 1000);
+  },
+
+  /*生成分享朋友圈图片*/
+  bindShareTap: function () {
+    var that = this;
+    that.setData({
+      hideModalBg: false
+    });
+    // var ctx = wx.createCanvasContext('myCanvas');
+    // ctx.setFillStyle("#ffffff");
+    // ctx.fillRect(0, 0, 530, 752);
+    // ctx.setFontSize(15);
+    // ctx.setFillStyle('#000000');
+    // ctx.save();
+    // drawText(that.data.detaildata.title.substr(0, 30) + "...", 10, 10, 14, ctx);
+    // var publishInfo = that.data.detaildata.author + that.data.detaildata.publish_time;
+    // ctx.setFontSize(12);
+    // ctx.setFillStyle('#969696');
+    // drawText(publishInfo.substr(0, 24), 10, 50, 24, ctx);
+    // ctx.restore();
+    // ctx.setFontSize(15);
+    // ctx.setFillStyle('#000000');
+    // drawText(that.data.detaildata.summary.substr(0, 50) + "...", 10, 75, 14, ctx);
+    // wx.getImageInfo({
+    //   src: that.data.detaildata.thumburl,
+    //   success: function (res) {
+    //     ctx.drawImage(res.path, 10, 120, 220, 110);
+    //     ctx.draw(true);
+    //   }
+    // });
+    // drawText("长按扫码阅读", 10, 260, 6, ctx);
+    // wx.getImageInfo({
+    //   src: that.data.detaildata.codeurl,
+    //   success: function (res) {
+    //     ctx.drawImage(res.path, 150, 250, 60, 60);
+    //     ctx.draw(true);
+    //   },
+    //   fail: function (res) {
+    //     console.log(res);
+    //   }
+    // });
+
+    // wx.downloadFile({
+    //   url: that.data.detaildata.codeurl, 
+    //   success: function (res) {
+    //     if (res.statusCode === 200) {
+    //       ctx.drawImage(res.path, 150, 250, 60, 60);
+    //       ctx.draw(true);
+    //     }
+    //   },
+    //   fail: function (res) {
+    //     console.log(res);
+    //   }
+    // })
+  },
+
+  //生成临时文件
+  bindSaveImageTap: function () {
+    wx.canvasToTempFilePath({
+      canvasId: 'myCanvas',
+      destWidth: 530,
+      destHeight: 752,
+      success: function (res) {
+        wx.saveImageToPhotosAlbum({
+          filePath: res.tempFilePath,
+          success(res) {
+            wx.showModal({
+              title: '成功保存图片',
+              showCancel: false,
+              content: '已成功为你保存图片到手机相册，请自行前往朋友圈分享',
+              success: function (res) { }
+            })
+          },
+          fail(res) {
+            console.log("图片保存失败");
+          }
+        })
+      }
+    })
+  },
+
+  //收起模态窗口
+  bindModalTap: function () {
+    this.setData({
+      hideModalBg: true
+    });
+  },
+
+  //返回顶部
+  goTopFun: function (e) {
+    var _top = this.data.scroll_top;//发现设置scroll-top值不能和上一次的值一样，否则无效，所以这里加了个判断  
+    if (_top == 1) {
+      _top = 0;
+    } else {
+      _top = 1;
+    }
+    this.setData({
+      'scroll_top': _top
+    });
+  }, 
 
   /**
    * 生命周期函数--监听页面初次渲染完成

@@ -318,7 +318,7 @@ video{
 }
 
 /*图片预览窗口*/
-.preview-img{
+/* .preview-img{
   position:fixed;
   top:0;
   left:0;
@@ -335,4 +335,4 @@ video{
 
 .hideCanvas{
   display:none;
-}
+} */

@@ -44,18 +44,35 @@
   width:100%;
 }
 
-.txt_list view{
+.txt_list .txt_item{
   width:100%;
-  height:100rpx;
-  line-height: 100rpx;
-  font-size:32rpx;
+  height:200rpx;
 }
 
-.txt_list view image{
+.txt_item{
+  display:flex;
+  align-items: center;
+  width:100%;
+  height:100%;
+  border-top:1px solid #ebebeb;
+}
+
+.txt_item view{
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.txt_item image{
   width:40rpx;
   height:40rpx;
   vertical-align: middle;
   margin-right:20rpx;
+}
+
+.txt_item text{
+  font-size:32rpx; 
+  line-height: 1.5;
 }
 
 .sure_btn{

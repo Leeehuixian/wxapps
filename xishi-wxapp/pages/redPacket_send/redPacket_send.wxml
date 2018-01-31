@@ -26,11 +26,11 @@
     </view>
     <view class="editor_input">
       <text>赏金（元）</text>
-      <input placeholder='填写红包金额' bindinput="inputMoney" bindblur="CaculateServiceFee"></input>
+      <input placeholder='填写红包金额' bindinput="inputMoney" bindblur="CaculateServiceFee" type="digit" />
     </view>
     <view class="editor_input">
       <text>数量（个）</text>
-      <input placeholder='填写红包数量' bindinput="inputNum">></input>
+      <input placeholder='填写红包数量' bindinput="inputNum" type="number" />
     </view>
     <text class="tip_txt">需支付￥{{serviceFee}}服务费，优先使用余额￥0.00</text>
     <view class="submit_btn" bindtap="sendFun">生成并发送</view>

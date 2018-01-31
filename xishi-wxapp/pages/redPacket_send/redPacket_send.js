@@ -1,10 +1,10 @@
 import { get_couplet, pay_redPacket, get_serviceFee } from "../../url.js"
 var utils = require("../../utils/util.js")
 const app = getApp();
-var sessionKey = '';
 const recorderManager = wx.getRecorderManager()
 const innerAudioContext = wx.createInnerAudioContext()
 var tempFilePath = '';
+var sessionKey = '';
 Page({
   data: {
     isHasVioce:false,
@@ -18,11 +18,37 @@ Page({
   onLoad: function (options) {
     utils.getSessionKey(utils.getSetting);
     sessionKey = wx.getStorageSync("sessionKey");
-    this.getCouplet(sessionKey);//获取对联
+    // this.getCouplet();//获取对联
+    var that = this;
+
+    let requestParams = JSON.stringify({
+      OpenId: app.globalData.openId
+    });
+    utils.requestLoading(get_couplet + "?sessionKey=" + sessionKey, "post", requestParams, "加载数据中...",
+      function (res) {
+        if (res.Status == 3 || res.Status == 5) {
+          console.log("sessionKey=" + sessionKey);
+          // setTimeout(function () {
+          //   wx.removeStorageSync("sessionKey");
+          //   let curpage = getCurrentPages()[0];
+          //   wx.reLaunch({
+          //     url: "/" + curpage.route
+          //   })
+          // }, 1000)
+        }
+        that.setData({
+          coupletText: res[0],
+          coupletId: res[0].ID
+        })
+
+      }, function (res) {
+        console.log(res);
+      }
+    )
 
   },
 
-  getCouplet: function (sessionKey){
+  getCouplet: function (){
     var that = this;
   
     let requestParams = JSON.stringify({
@@ -30,15 +56,15 @@ Page({
     });
     utils.requestLoading(get_couplet + "?sessionKey=" + sessionKey, "post", requestParams, "加载数据中...",
       function (res) {
-        if (res.Status == 3 || res.Status == 5) {
-          setTimeout(function () {
-            wx.removeStorageSync("sessionKey");
-            let curpage = getCurrentPages()[0];
-            wx.reLaunch({
-              url: "/" + curpage.route
-            })
-          }, 1000)
-        }
+        // if (res.Status == 3 || res.Status == 5) {
+        //   setTimeout(function () {
+        //     wx.removeStorageSync("sessionKey");
+        //     let curpage = getCurrentPages()[0];
+        //     wx.reLaunch({
+        //       url: "/" + curpage.route
+        //     })
+        //   }, 1000)
+        // }
         that.setData({
           coupletText: res[0],
           coupletId: res[0].ID
@@ -58,22 +84,80 @@ Page({
     })
   },
 
+  //发送红包
   sendFun: function (){
-    var that = this;
-    let requestParams = JSON.stringify({
-      BonusMoney: Number(that.data.money),
-      ServiceCharge: 1,
-      BonusCount: Number(that.data.num),
-      BonusVoiceUrl:tempFilePath,
-      CoupletId: that.data.coupletId
-    });
-    utils.requestLoading(pay_redPacket + "?sessionKey=" + sessionKey, "post", requestParams,'',
-      function(res){
-        console.log(res)
-      },function(res){
-        console.log(res)
-      }
-    )
+    let isSubmit = true;
+    let that = this;
+    if (that.data.money == 0){
+      wx.showToast({
+        title: '请输入红包金额',
+        icon:'none'
+      })
+    } else if (that.data.num == 0){
+      wx.showToast({
+        title: '请输入红包数量',
+        icon: 'none'
+      })
+    } else if (!isSubmit){
+      wx.showToast({
+        title: '请求发送中...',
+        icon: 'loading'
+      })
+    }else{
+      isSubmit = false;
+      let requestParams = JSON.stringify({
+        BonusMoney: Number(that.data.money),
+        ServiceCharge: that.data.serviceFee,
+        BonusCount: Number(that.data.num),
+        BonusVoiceUrl:tempFilePath,
+        CoupletId: that.data.coupletId
+      });
+      utils.requestLoading(pay_redPacket + "?sessionKey=" + sessionKey, "post", requestParams,'',
+        function(res){
+          if(res.Msg == ""){
+            let share_bgUrl = res.BackGroundImgUrl;
+            let wxaCode_url = res.WXACodeUrl;
+            
+            //调用微信支付
+            wx.requestPayment({
+              'timeStamp': res.TimeStamp,
+              'nonceStr': res.NonceStr,
+              'package': res.Package ,
+              'signType': res.SignType,
+              'paySign': res.PaySign,
+              'success': function (res) {
+                console.log("支付成功")
+                isSubmit = false;
+                
+                wx.setStorage({
+                  key: 'bonusSend_cacheData',
+                  data: {
+                    "coupletTxt": that.data.coupletText,
+                    "shareBgUrl": share_bgUrl,
+                    "codeUrl": wxaCode_url
+                  }
+                })
+
+                wx.navigateTo({
+                  url: '/pages/redPacket_afterPay/redPacket_afterPay',
+                })
+              },
+              'fail': function (res) {
+                console.log(res)
+                console.log("支付失败")
+              }
+            })
+          }else{
+            wx.showToast({
+              title: res.Msg,
+              icon:'none'
+            })
+          }
+        },function(res){
+          console.log(res)
+        }
+      )
+    }
   },
 
   inputMoney:function(e){
@@ -90,9 +174,12 @@ Page({
 
   //计算服务费
   CaculateServiceFee:function(){
+    let that = this;
     utils.requestLoading(get_serviceFee+"?sessionKey="+sessionKey,"post",JSON.stringify({bonusAmount:Number(this.data.money)}),'',
       function(res){
-        console.log(res)
+        that.setData({
+          serviceFee:res           
+        });
       },function(res){
         console.log(res)
       }

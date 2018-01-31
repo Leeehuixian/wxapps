@@ -13,7 +13,9 @@
     <image class="hat_img" src="/images/hat_icon.png"></image>
     <image class="avatar_img" src="/images/authorImg.jpg"></image>
   </view>
-  <!--录音框内图标文字-->
-  <image class="voice_icon" src="/images/voice_icon.png"></image>
-  <text class="voice_tiem">34"</text>
+  <!--语音框-->
+  <view class="voice_wrap">
+    <image class="voice_icon" src="/images/voice_icon.png"></image>
+    <text class="voice_tiem">34"</text>
+  </view>
 </view>

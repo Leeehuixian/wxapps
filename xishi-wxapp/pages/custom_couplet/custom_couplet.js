@@ -12,23 +12,7 @@ Page({
     utils.getSessionKey(utils.getSetting);
     sessionKey = wx.getStorageSync("sessionKey");
     var that = this;
-    //获取对联类型
-    utils.requestLoading(get_coupletType + "?sessionKey=" + sessionKey, "get", requestParams, "加载数据中...",
-      function (res) {
-        if (res.Status == 3 || res.Status == 5) {
-          setTimeout(function () {
-            wx.removeStorageSync("sessionKey");
-            let curpage = getCurrentPages()[0];
-            wx.reLaunch({
-              url: "/" + curpage.route
-            })
-          }, 1000)
-        }
-        console.log(res);
-      }, function (res) {
-        console.log(res);
-      }
-    )
+  
     //获取对联列表
     let requestParams = JSON.stringify({
       OpenId: app.globalData.openId,

@@ -7,22 +7,26 @@
   <view class="editor_box">
     <view>
       <text>横批</text>
-      <input type="text" placeholder='2个汉字以内'></input>
+      <input type="text" placeholder='4个汉字以内'></input>
     </view>
     <view>
       <text>上联</text>
-      <input type="text" placeholder='8个汉字以内'></input>
+      <input type="text" placeholder='10个汉字以内'></input>
     </view>
     <view>
       <text>下联</text>
-      <input type="text" placeholder='8个汉字以内'></input>
+      <input type="text" placeholder='10个汉字以内'></input>
     </view>
   </view>
   <view class="txt_list">
-    <view wx:for="{{coupletList}}" wx:key="{{index}}" bindtap="radioCheckedChange" data-checkindex="{{index}}" data-coupletid="{{item.ID}}" data-couplettext="{{item}}">
+    <view class="txt_item" wx:for="{{coupletList}}" wx:key="{{index}}" bindtap="radioCheckedChange" data-checkindex="{{index}}" data-coupletid="{{item.ID}}" data-couplettext="{{item}}">
       <image hidden="{{radioCheckVal == index}}" src="/images/radio_icon.png"></image>
       <image hidden="{{radioCheckVal != index}}" src="/images/checked_radio_icon.png"></image>
-      <text>{{item.TopWords}}：{{item.LeftWords}}，{{item.RightWords}}</text>
+      <view>
+        <text>横批：{{item.TopWords}}</text>
+        <text>上联：{{item.LeftWords}}</text>
+        <text>下联：{{item.RightWords}}</text>  
+      </view>
     </view>
   </view>
   <view class="sure_btn">

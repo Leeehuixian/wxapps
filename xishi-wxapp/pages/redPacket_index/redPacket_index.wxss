@@ -90,7 +90,18 @@ page{
   height:100%;
 }
 
-/*录音框的图标和文字*/
+/*语音框*/
+.voice_wrap{
+  position: fixed;
+  left:232rpx;
+  bottom:88rpx;
+  z-index:10;
+  width:400rpx;
+  height:70rpx;
+  border-radius: 16rpx;
+  background:#ececec; 
+}
+
 .voice_icon{
   position: fixed;
   left:250rpx;
