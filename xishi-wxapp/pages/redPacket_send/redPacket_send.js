@@ -16,36 +16,12 @@ Page({
   },
 
   onLoad: function (options) {
-    utils.getSessionKey(utils.getSetting);
     sessionKey = wx.getStorageSync("sessionKey");
-    // this.getCouplet();//获取对联
-    var that = this;
-
-    let requestParams = JSON.stringify({
-      OpenId: app.globalData.openId
-    });
-    utils.requestLoading(get_couplet + "?sessionKey=" + sessionKey, "post", requestParams, "加载数据中...",
-      function (res) {
-        if (res.Status == 3 || res.Status == 5) {
-          console.log("sessionKey=" + sessionKey);
-          // setTimeout(function () {
-          //   wx.removeStorageSync("sessionKey");
-          //   let curpage = getCurrentPages()[0];
-          //   wx.reLaunch({
-          //     url: "/" + curpage.route
-          //   })
-          // }, 1000)
-        }
-        that.setData({
-          coupletText: res[0],
-          coupletId: res[0].ID
-        })
-
-      }, function (res) {
-        console.log(res);
-      }
-    )
-
+    if (!sessionKey) {
+      utils.getSessionKey(utils.getSetting);
+      return;
+    }
+    this.getCouplet();//获取对联
   },
 
   getCouplet: function (){
@@ -56,15 +32,10 @@ Page({
     });
     utils.requestLoading(get_couplet + "?sessionKey=" + sessionKey, "post", requestParams, "加载数据中...",
       function (res) {
-        // if (res.Status == 3 || res.Status == 5) {
-        //   setTimeout(function () {
-        //     wx.removeStorageSync("sessionKey");
-        //     let curpage = getCurrentPages()[0];
-        //     wx.reLaunch({
-        //       url: "/" + curpage.route
-        //     })
-        //   }, 1000)
-        // }
+        if (res.Status == 5) {
+          wx.removeStorageSync("sessionKey");
+          utils.getSessionKey(utils.getSetting);
+        }
         that.setData({
           coupletText: res[0],
           coupletId: res[0].ID
@@ -77,10 +48,10 @@ Page({
   },
 
   //更换对联
-  changeCouplet:function(coupletxt,coupletid){
+  changeCouplet:function(coupletxt){
     this.setData({
       coupletText: coupletxt,
-      coupletId: coupletid
+      coupletId: coupletxt.ID
     })
   },
 

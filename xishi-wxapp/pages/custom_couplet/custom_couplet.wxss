@@ -1,7 +1,5 @@
 .container{
   width:100%;
-  box-sizing: border-box;
-  padding:0 30rpx;
 }
 
 .check_custom{
@@ -10,12 +8,16 @@
   align-items: center;
   width:100%;
   height:100rpx;
+  box-sizing: border-box;
+  padding:0 30rpx;
   font-size:32rpx;
   color:#323232;
 }
 
 .editor_box{
   width:100%;
+  box-sizing: border-box;
+  padding:0 30rpx;
 }
 
 .editor_box view{
@@ -39,21 +41,17 @@
 }
 
 .txt_list{
-  margin-top:-30rpx;
   padding-bottom:200rpx;
   width:100%;
-}
-
-.txt_list .txt_item{
-  width:100%;
-  height:200rpx;
 }
 
 .txt_item{
   display:flex;
   align-items: center;
   width:100%;
-  height:100%;
+  height:200rpx;
+  box-sizing: border-box;
+  padding:0 30rpx;
   border-top:1px solid #ebebeb;
 }
 

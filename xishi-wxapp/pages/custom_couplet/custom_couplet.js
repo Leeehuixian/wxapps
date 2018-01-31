@@ -5,34 +5,70 @@ var sessionKey = '';
 Page({
   data: {
     coupletList:[],
-    radioCheckVal:0
+    radioCheckVal:0,
+    hideCustom:true,
+    topWords:'',
+    leftWords:'',
+    rightWords:''
   },
 
   onLoad: function (options) {
-    utils.getSessionKey(utils.getSetting);
     sessionKey = wx.getStorageSync("sessionKey");
-    var that = this;
-  
-    //获取对联列表
+    if (!sessionKey) {
+      utils.getSessionKey(utils.getSetting);
+      return;
+    }
+    
+    this.getCoupletList();//获取对联列表
+
+  },
+
+  /*选择自定义*/
+  bindTapCustom:function(){
+    this.setData({
+      hideCustom: !this.data.hideCustom
+    })
+  },
+
+  /*监听自定义编辑*/
+  inputTopWords:function(e){
+    this.setData({
+      topWords: e.detail.value,
+      radioCheckVal: false
+    })
+  },
+
+  inputLeftWords: function (e) {
+    this.setData({
+      leftWords: e.detail.value,
+      radioCheckVal: false
+    })
+  },
+
+  inputRightWords: function (e) {
+    this.setData({
+      rightWords: e.detail.value,
+      radioCheckVal: false
+    })
+  },
+
+  /*获取对联列表*/
+  getCoupletList:function(){
+    let that = this;
     let requestParams = JSON.stringify({
       OpenId: app.globalData.openId,
     })
-    utils.requestLoading(get_couplet+"?sessionKey="+sessionKey, "post", requestParams,"加载数据中...",
-      function(res){
-        if (res.Status == 3 || res.Status == 5) {
-          setTimeout(function () {
-            wx.removeStorageSync("sessionKey");
-            let curpage = getCurrentPages()[0];
-            wx.reLaunch({
-              url: "/" + curpage.route
-            })
-          }, 1000)
+    utils.requestLoading(get_couplet + "?sessionKey=" + sessionKey, "post", requestParams, "加载数据中...",
+      function (res) {
+        if (res.Status == 5) {
+          wx.removeStorageSync("sessionKey");
+          utils.getSessionKey(utils.getSetting);
         }
 
         that.setData({
-          coupletList:res
+          coupletList: res
         })
-      },function(res){
+      }, function (res) {
         console.log(res);
       }
     )
@@ -40,6 +76,7 @@ Page({
 
   /*选择对联*/
   radioCheckedChange:function(e){
+    console.log(e.currentTarget.dataset.couplettext);
     this.setData({
       radioCheckVal: e.currentTarget.dataset.checkindex
     })
@@ -47,63 +84,23 @@ Page({
     var pages = getCurrentPages();
     if(pages.length > 1){
       var prePage = pages[pages.length - 2];
-      prePage.changeCouplet(e.currentTarget.dataset.couplettext, e.currentTarget.dataset.coupletid);
+      prePage.changeCouplet(e.currentTarget.dataset.couplettext);
     }
   },  
 
   /*确定使用*/
   backToSend:function(){
+    let that = this;
+    if (this.data.radioCheckVal == false){
+      var pages = getCurrentPages();
+      if (pages.length > 1) {
+        var prePage = pages[pages.length - 2];
+        prePage.changeCouplet({ "TopWords": that.data.topWords,"LeftWords":that.data.leftWords,"RightWords":that.data.rightWords,"ID":res.Id});
+      }
+    }
     wx.navigateBack({
       delta: 1
     })
-  },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-  
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-  
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-  
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-  
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-  
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-  
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-  
   }
+
 })

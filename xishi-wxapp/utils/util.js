@@ -120,10 +120,17 @@ function getSessionKey(cb) {
             request(get_sessionKey, "post", requestParams, function (res) {
               if (res.Status == 1) {
                 wx.setStorageSync("sessionKey", res.SessionKey);
-              } else {
-                if (res.Message) {
-                  extracted(res);
-                }
+                let curpage = getCurrentPages()[0];
+                wx.reLaunch({
+                  url: "/" + curpage.route
+                });
+              } else if (res.Message){
+                wx.showToast({
+                  title: res.Message,
+                  icon:'none'
+                })
+              }else{
+                console.log(res)
               }
             }, function (res) {
               console.log(res);

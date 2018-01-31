@@ -21,8 +21,11 @@ Page({
     top:0
   },
   onLoad: function (options) {
-    utils.getSessionKey(utils.getSetting);
     sessionKey = wx.getStorageSync("sessionKey");
+    if (!sessionKey) {
+      utils.getSessionKey(utils.getSetting);
+      return;
+    }
     var articleId = Number(options.id);
     var articleType = Number(options.type);
     var that = this;
@@ -36,14 +39,9 @@ Page({
     });
     //获取文章详情
     utils.requestLoading(article_detail + "?sessionKey=" + sessionKey +"&id="+articleId,'get', '', '正在加载数据', function (res) {
-      if (res.Status == 3 || res.Status == 5) {
-        setTimeout(function () {
-          wx.removeStorageSync("sessionKey");
-          let curpage = getCurrentPages()[0];
-          wx.reLaunch({
-            url: "/" + curpage.route
-          })
-        }, 1000)
+      if (res.Status == 5) {
+        wx.removeStorageSync("sessionKey");
+        utils.getSessionKey(utils.getSetting);
       }
       that.setData({
         detaildata:res,
@@ -64,14 +62,9 @@ Page({
   getComment_list: function (articleId){
     var that = this;
     utils.requestLoading(comment_list + "?sessionKey=" + sessionKey, 'post', JSON.stringify({ ArticleID: articleId, OpenId: app.globalData.openId }), '正在加载数据', function (res) {
-      if (res.Status == 3 || res.Status == 5) {
-        setTimeout(function () {
-          wx.removeStorageSync("sessionKey");
-          let curpage = getCurrentPages()[0];
-          wx.reLaunch({
-            url: "/" + curpage.route
-          })
-        }, 1000)
+      if (res.Status == 5) {
+        wx.removeStorageSync("sessionKey");
+        utils.getSessionKey(utils.getSetting);
       }
       that.setData({
         commentList: res
@@ -93,14 +86,9 @@ Page({
       success: function (res) {
         if (res.confirm) {
           utils.requestLoading(comment_delete + "?sessionKey=" + sessionKey, 'post', JSON.stringify({ commentid:e.currentTarget.dataset.commentid }), '数据传输中...', function (res) {
-            if (res.Status == 3 || res.Status == 5) {
-              setTimeout(function () {
-                wx.removeStorageSync("sessionKey");
-                let curpage = getCurrentPages()[0];
-                wx.reLaunch({
-                  url: "/" + curpage.route
-                })
-              }, 1000)
+            if (res.Status == 5) {
+              wx.removeStorageSync("sessionKey");
+              utils.getSessionKey(utils.getSetting);
             }
             if (res.Message) {
               wx.showToast({
@@ -144,14 +132,9 @@ Page({
       toView: "comment-section"
     });
     utils.requestLoading(comment_creat + "?sessionKey=" + sessionKey, 'post', JSON.stringify({ PostMessage: e.detail.value, CreateBy: app.globalData.openId, CreatebyName: app.globalData.userInfo.nickName, ArticleID: this.data.articleId, HeadImgUrl: app.globalData.userInfo.avatarUrl}), '数据传输中...', function (res) {
-      if (res.Status == 3 || res.Status == 5) {
-        setTimeout(function () {
-          wx.removeStorageSync("sessionKey");
-          let curpage = getCurrentPages()[0];
-          wx.reLaunch({
-            url: "/" + curpage.route
-          })
-        }, 1000)
+      if (res.Status == 5) {
+        wx.removeStorageSync("sessionKey");
+        utils.getSessionKey(utils.getSetting);
       }
       if (res.Message){
         wx.showToast({
@@ -181,14 +164,9 @@ Page({
   bindLikeTap:function(e){
     var that = this;
     utils.requestLoading(comment_operation + "?sessionKey=" + sessionKey, 'post', JSON.stringify({ MessageID: e.currentTarget.dataset.commentid, OpenId: app.globalData.openId, NickName: app.globalData.userInfo.nickName, ArticleID: this.data.articleId, OperateType: !e.currentTarget.dataset.ismylike }), '数据传输中...', function (res) {
-      if (res.Status == 3 || res.Status == 5) {
-        setTimeout(function () {
-          wx.removeStorageSync("sessionKey");
-          let curpage = getCurrentPages()[0];
-          wx.reLaunch({
-            url: "/" + curpage.route
-          })
-        }, 1000)
+      if (res.Status == 5) {
+        wx.removeStorageSync("sessionKey");
+        utils.getSessionKey(utils.getSetting);
       }
       if (res.Message) {
         wx.showToast({
