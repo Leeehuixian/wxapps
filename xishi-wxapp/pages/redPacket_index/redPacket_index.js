@@ -1,28 +1,48 @@
-import { get_isOpenRed,get_bonusIndexData} from "../../url.js";
+import { get_isOpenRed, get_bonusIndexData, grab_redPacket} from "../../url.js";
 var utils = require("../../utils/util.js");
 var sessionKey = "";
 Page({
   data: {
-  
+    topWordsStyle: "font-size:64rpx;",
+    verticalWordsStyle: "font-size:60rpx;",
+    topWords: '',
+    leftWords: '',
+    rightWords: '',
+    voiceUrl:'',
+    headImgUrl:'',
+    bonusId:''
   },
 
   onLoad: function (options) {
-    var bounsId = options.id;
-    utils.getSessionKey(utils.getSetting);
     sessionKey = wx.getStorageSync("sessionKey");
-    utils.requestLoading(get_isOpenRed + "?sessionKey=" + sessionKey + "&bounsld=" + bounsId, "get", "",
-      "数据加载中...", function (res) {
+    if (!sessionKey) {
+      utils.getSessionKey(utils.getSetting);
+      return;
+    }
+
+    var bounsId = options.id;
+    this.verifyOpen(bounsId);//验证用户是否已经拆过红包
+  },
+
+  verifyOpen: function (bounsId){
+    let that = this;
+    utils.requestLoading(get_isOpenRed + "?sessionKey=" + sessionKey, "post",
+      JSON.stringify({ bonusId: "50ba8520847742059b33ef0927d1ac73" }),"数据加载中...", 
+    function (res) {
         console.log(res)
-        if(res.isOpenRed == false && res.Msg == ""){
-          utils.requestLoading(get_bonusIndexData + "?sessionKey="+sessionKey+"&bonusId="+bounsId,"get","",
-          "",function(res){
-            console.log(res)
-          },function(res){
-            console.log(res)
-          })
-        } else if (res.isOpenRed == true && res.Msg == ""){
+        if (res.Status == 5) {
+          wx.removeStorageSync("sessionKey");
+          utils.getSessionKey(utils.getSetting);
+        } else if (res.IsOpenRed == false && res.Msg == "") {
+          that.getBonusIndexData(bounsId);//获取拆红包主页数据
+        } else if (res.IsOpenRed == true && res.Msg == "") {
           wx.navigateTo({
-            url: '/pages/redPacket_detail/redPacket_detail?id=' + bounsId,
+            url: '/pages/redPacket_detail/redPacket_detail?id=' + that.data.bounsId,
+          })
+        } else {
+          wx.showToast({
+            title: res.Msg,
+            icon: 'none'
           })
         }
       }, function (res) {
@@ -31,52 +51,80 @@ Page({
     )  
   },
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-  
+  getBonusIndexData: function (bounsId) {
+    let that = this;
+    utils.requestLoading(get_bonusIndexData + "?sessionKey=" + sessionKey, "post",
+      JSON.stringify({ bonusId: "50ba8520847742059b33ef0927d1ac73" }), "数据加载中...",
+      function (res) {
+        console.log(res)
+        if (res.Msg == "") {
+          if (res.TopWords.length < 4) {
+            that.setData({
+              topWordsStyle: "font-size:90rpx;"
+            })
+          }
+
+          if (res.LeftWords.length > 7) {
+            that.setData({
+              verticalWordsStyle: "font-size:50rpx;line-height:1.1;"
+            })
+          }
+
+          that.setData({
+            topWords: res.TopWords,
+            leftWords: res.LeftWords,
+            rightWords: res.RightWords,
+            bonusId: res.BonusId,
+            voiceUrl: res.BonusVoiceUrl,
+            headImgUrl: res.HeadImgUrl,
+          })
+        } else if (res.Status == 5) {
+          wx.removeStorageSync("sessionKey");
+          utils.getSessionKey(utils.getSetting);
+        } else {
+          wx.showToast({
+            title: res.Message,
+            icon: 'none'
+          })
+        }
+      }, function (res) {
+        console.log(res)
+      })
   },
 
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-  
+  bindTapBtn:function(){
+    console.log(this.data.bonusId);
+    this.grabRedPacket(this.data.bonusId);
+    
   },
 
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-  
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-  
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-  
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-  
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-  
+  /*拆红包*/
+  grabRedPacket: function (bonusId) {
+    utils.requestLoading(grab_redPacket + "?sessionKey=" + sessionKey, "post",
+      JSON.stringify({ bonusId: bonusId }), "数据加载中...",
+      function (res) {
+        switch (res.Status){
+          case 1:case 2:
+            wx.navigateTo({
+              url: '/pages/redPacket_detail/redPacket_detail?id=' + bonusId,
+            });
+            break;
+          case 5:
+            wx.removeStorageSync("sessionKey");
+            utils.getSessionKey(utils.getSetting);
+            break;
+          default:
+            wx.showToast({
+              title: res.Message,
+              icon: 'none'
+            });
+            break;
+        }
+      }, function (res) {
+        console.log(res)
+      }
+    );
   }
+
+
 })

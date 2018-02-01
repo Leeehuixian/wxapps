@@ -22,12 +22,16 @@ page{
 /*横批*/
 .top_roll{
   position:fixed;
-  left:280rpx;
+  left:50%;
   top:80rpx;
   z-index:10;
-  font-size:90rpx;
   color:#ffffc6;
-  line-height: 90rpx;
+  line-height:1;
+  font-family:'华文中宋';
+  font-weight:bold;
+  width:300rpx;
+  text-align:center;
+  margin-left:-150rpx;
 }
 
 .vertical_roll{
@@ -43,8 +47,9 @@ page{
   box-sizing: border-box;
   padding:0 40rpx;
   line-height: 1.2;
-  font-size:58rpx;
   color:#ffffc6;
+  font-family:'华文中宋';
+  font-weight: bold;
 }
 
 .left_roll{

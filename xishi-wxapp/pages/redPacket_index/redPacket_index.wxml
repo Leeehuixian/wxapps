@@ -1,17 +1,17 @@
 <view class="container">
   <image class="bg" src="/images/redPacket_index_bg.png"></image>
   <!--对联-->
-  <view class="top_roll">套路</view>
-  <view class="left_roll vertical_roll">自古情深留不住</view>
-  <view class="right_roll vertical_roll">总是套路得人心</view>
+  <view class="top_roll" style="{{topWordsStyle}}">{{topWords}}</view>
+  <view class="left_roll vertical_roll" style="{{verticalWordsStyle}}">{{leftWords}}</view>
+  <view class="right_roll vertical_roll" style="{{verticalWordsStyle}}">{{rightWords}}</view>
   <!--拆红包按钮-->
-  <view class="open_redPacket">
+  <view class="open_redPacket" bindtap="bindTapBtn">
     <image src="/images/open_redPacket.png"></image>
   </view>
   <!--头像-->
   <view>
     <image class="hat_img" src="/images/hat_icon.png"></image>
-    <image class="avatar_img" src="/images/authorImg.jpg"></image>
+    <image class="avatar_img" src="{{headImgUrl}}"></image>
   </view>
   <!--语音框-->
   <view class="voice_wrap">

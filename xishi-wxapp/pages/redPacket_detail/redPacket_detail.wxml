@@ -1,6 +1,6 @@
 <view class="container">
   <view class="sender-info">
-    <image class="avatar" src="../../images/authorImg.jpg" />
+    <image class="avatar" src="{{}}" />
     <text class="nickname">昵称</text>
     <view class="money">
       <text>12.50</text>元

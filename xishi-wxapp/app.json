@@ -1,11 +1,11 @@
 {
   "pages":[
+    "pages/redPacket_index/redPacket_index",
+    "pages/redPacket_detail/redPacket_detail",
     "pages/redPacket_send/redPacket_send",
+    "pages/redPacket_afterPay/redPacket_afterPay",
     "pages/index/index",
     "pages/custom_couplet/custom_couplet",
-    "pages/redPacket_index/redPacket_index",
-    "pages/redPacket_afterPay/redPacket_afterPay",
-    "pages/redPacket_detail/redPacket_detail",
     "pages/redPacket_record/redPacket_record",
     "pages/redPacket_withdraw/redPacket_withdraw",
     "pages/detail/detail"

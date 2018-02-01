@@ -32,15 +32,15 @@ Page({
     });
     utils.requestLoading(get_couplet + "?sessionKey=" + sessionKey, "post", requestParams, "加载数据中...",
       function (res) {
-        if (res.Status == 5) {
+        if (res.Status == 1){
+          that.setData({
+            coupletText: res[0],
+            coupletId: res[0].ID
+          })
+        }else if (res.Status == 5) {
           wx.removeStorageSync("sessionKey");
           utils.getSessionKey(utils.getSetting);
         }
-        that.setData({
-          coupletText: res[0],
-          coupletId: res[0].ID
-        })
-        
       }, function (res) {
         console.log(res);
       }
@@ -75,7 +75,7 @@ Page({
         icon: 'loading'
       })
     }else{
-      isSubmit = false;
+      // isSubmit = false;
       let requestParams = JSON.stringify({
         BonusMoney: Number(that.data.money),
         ServiceCharge: that.data.serviceFee,
@@ -88,36 +88,53 @@ Page({
           if(res.Msg == ""){
             let share_bgUrl = res.BackGroundImgUrl;
             let wxaCode_url = res.WXACodeUrl;
+            let bonusId = res.BonusId; 
             
-            //调用微信支付
-            wx.requestPayment({
-              'timeStamp': res.TimeStamp,
-              'nonceStr': res.NonceStr,
-              'package': res.Package ,
-              'signType': res.SignType,
-              'paySign': res.PaySign,
-              'success': function (res) {
-                console.log("支付成功")
-                isSubmit = false;
-                
-                wx.setStorage({
-                  key: 'bonusSend_cacheData',
-                  data: {
-                    "coupletTxt": that.data.coupletText,
-                    "shareBgUrl": share_bgUrl,
-                    "codeUrl": wxaCode_url
-                  }
-                })
-
-                wx.navigateTo({
-                  url: '/pages/redPacket_afterPay/redPacket_afterPay',
-                })
-              },
-              'fail': function (res) {
-                console.log(res)
-                console.log("支付失败")
+            /*测试代码*/
+            wx.setStorage({
+              key: 'bonusSend_cacheData',
+              data: {
+                "coupletTxt": that.data.coupletText,
+                "shareBgUrl": share_bgUrl,
+                "codeUrl": wxaCode_url,
+                "bonusId": bonusId
               }
             })
+
+            wx.navigateTo({
+              url: '/pages/redPacket_afterPay/redPacket_afterPay',
+            })
+            /*测试代码结束*/
+
+            //调用微信支付
+            // wx.requestPayment({
+            //   'timeStamp': res.TimeStamp,
+            //   'nonceStr': res.NonceStr,
+            //   'package': res.Package ,
+            //   'signType': res.SignType,
+            //   'paySign': res.PaySign,
+            //   'success': function (res) {
+            //     isSubmit = false;
+                
+            //     wx.setStorage({
+            //       key: 'bonusSend_cacheData',
+            //       data: {
+            //         "coupletTxt": that.data.coupletText,
+            //         "shareBgUrl": share_bgUrl,
+            //         "codeUrl": wxaCode_url,
+            //         "bonusId":bonusId
+            //       }
+            //     })
+
+            //     wx.navigateTo({
+            //       url: '/pages/redPacket_afterPay/redPacket_afterPay',
+            //     })
+            //   },
+            //   'fail': function (res) {
+            //     console.log(res)
+            //     console.log("支付失败")
+            //   }
+            // })
           }else{
             wx.showToast({
               title: res.Msg,

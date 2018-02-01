@@ -1,26 +1,58 @@
-import { get_redPacketDetail, get_bonusDetailList} from "../../url.js";
+import {get_bonusDetailList} from "../../url.js";
 var utils = require("../../utils/util.js");
 const app = getApp();
 var sessionKey = '';
 Page({
   data: {
     hideModalBg:true,
+    bonusId:'',
+    bonusCount:'',
+    openCount:'',
+    amountSum:'',
+    myMoney:'',
+    headImgUrl:'',
+    nickName:'',
+    detailList:[]
   },
 
   onLoad: function (options) {
-    var bounsId = options.id;
-    utils.getSessionKey(utils.getSetting);
     sessionKey = wx.getStorageSync("sessionKey");
-    utils.requestLoading(get_redPacketDetail+"?sessionKey="+sessionKey + "&bounsld="+bounsId,"get","",
-    "数据加载中...",function(res){
+    if (!sessionKey) {
+      utils.getSessionKey(utils.getSetting);
+      return;
+    }
+    var bounsId = options.id;
+    this.getRecord(bounsId);//获取红包领取结果
+    
+    
+  },
+
+  getRecord: function (bounsId){
+    let that = this;
+    utils.requestLoading(get_bonusDetailList + "?sessionKey=" + sessionKey, "post",
+      JSON.stringify({ bonusId: bounsId }), "数据加载中...",
+      function (res) {
         console.log(res)
-      },function(res){
-        console.log(res)
-      }
-    );
-    utils.requestLoading(get_bonusDetailList + "?sessionKey=" + sessionKey + "&bounsld=" + bounsId, "get", "",
-      "数据加载中...", function (res) {
-        console.log(res)
+        if (res.Msg == ""){
+          that.setData({
+            bonusId: res.BonusId,
+            bonusCount: res.BonusCount,
+            openCount: res.OpenCount,
+            amountSum: res.AmountSum,
+            myMoney: res.myMoney,
+            headImgUrl: res.HeadImgUrl,
+            nickName: res.NickName,
+            detailList: res.DetailList
+          })
+        }else if(res.Status == 5){
+          wx.removeStorageSync("sessionKey");
+          utils.getSessionKey(utils.getSetting);
+        }else{
+          wx.showToast({
+            title: res.Message,
+            icon: 'none'
+          })
+        }
       }, function (res) {
         console.log(res)
       }

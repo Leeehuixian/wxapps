@@ -1,4 +1,4 @@
-import { get_couplet,get_coupletType } from "../../url.js"
+import { get_couplet, get_coupletType, creat_couplet} from "../../url.js"
 var utils = require("../../utils/util.js")
 const app = getApp();
 var sessionKey = '';
@@ -34,21 +34,21 @@ Page({
   inputTopWords:function(e){
     this.setData({
       topWords: e.detail.value,
-      radioCheckVal: false
+      radioCheckVal: null
     })
   },
 
   inputLeftWords: function (e) {
     this.setData({
       leftWords: e.detail.value,
-      radioCheckVal: false
+      radioCheckVal: null
     })
   },
 
   inputRightWords: function (e) {
     this.setData({
       rightWords: e.detail.value,
-      radioCheckVal: false
+      radioCheckVal: null
     })
   },
 
@@ -76,11 +76,9 @@ Page({
 
   /*选择对联*/
   radioCheckedChange:function(e){
-    console.log(e.currentTarget.dataset.couplettext);
     this.setData({
       radioCheckVal: e.currentTarget.dataset.checkindex
     })
-    
     var pages = getCurrentPages();
     if(pages.length > 1){
       var prePage = pages[pages.length - 2];
@@ -91,16 +89,47 @@ Page({
   /*确定使用*/
   backToSend:function(){
     let that = this;
-    if (this.data.radioCheckVal == false){
-      var pages = getCurrentPages();
-      if (pages.length > 1) {
-        var prePage = pages[pages.length - 2];
-        prePage.changeCouplet({ "TopWords": that.data.topWords,"LeftWords":that.data.leftWords,"RightWords":that.data.rightWords,"ID":res.Id});
-      }
+    let pages = getCurrentPages();
+    if (this.data.radioCheckVal == null){
+      let requestParams = JSON.stringify({
+        CreatebyName:app.globalData.userInfo.nickName,
+        RightWords:that.data.rightWords,
+        TopWords:that.data.topWords,
+        LeftWords:that.data.leftWords
+      })
+      utils.requestLoading(creat_couplet+"?sessionKey="+sessionKey, "post", requestParams,'数据加载中...',
+        function(res){
+          if (res.Status == 5) {
+            wx.removeStorageSync("sessionKey");
+            utils.getSessionKey(utils.getSetting);
+          }else if (res.Status == 1){
+            if (pages.length > 1) {
+              var prePage = pages[pages.length - 2];
+              prePage.changeCouplet(
+                { 
+                "TopWords": that.data.topWords, 
+                "LeftWords": that.data.leftWords, 
+                "RightWords": that.data.rightWords, 
+                "ID": res.CoupletId
+                }
+              );
+            }
+          }else if(res.Message){
+            wx.showToast({
+              title: res.Message,
+              icon:'none'
+            })
+          }
+        },function(res){
+          console.log(res)
+        }
+      );
     }
+
     wx.navigateBack({
       delta: 1
     })
+
   }
 
 })

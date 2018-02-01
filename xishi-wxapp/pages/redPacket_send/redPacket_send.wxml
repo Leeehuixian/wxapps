@@ -20,7 +20,7 @@
     <view class="editor_input">
       <text>祝福对联</text>
       <view bindtap="chooseCouplet">
-        <text>横批：{{coupletText.TopWords}}\n上联：{{coupletText.LeftWords}}\n下联：{{coupletText.RightWords}}</text>
+        <text>{{coupletText.TopWords}}\n{{coupletText.LeftWords}}\n{{coupletText.RightWords}}</text>
         <image src="/images/turn_right_icon.png"></image>
       </view>
     </view>

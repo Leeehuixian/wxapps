@@ -104,7 +104,8 @@ function getSetting() {
 function getSessionKey(cb) {
   wx.getUserInfo({
     success: res => {
-      getApp().globalData.userInfo = res.userInfo
+      getApp().globalData.userInfo = res.userInfo;
+      wx.setStorageSync("userInfo", res.userInfo);
       wx.login({
         success: res => {
           var sessionKey = wx.getStorageSync("sessionKey");

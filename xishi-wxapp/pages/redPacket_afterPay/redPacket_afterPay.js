@@ -1,4 +1,5 @@
-
+var utils = require("../../utils/util.js");
+var drawText = utils.drawText;
 Page({
   data: {
     coupletText:{},
@@ -6,22 +7,33 @@ Page({
     verticalWordsStyle: "font-size:60rpx;",
     share_bgUrl:'',
     wxaCode_url:'',
-    hideModalBg: true
+    hideModalBg: true,
+    bonusId:''
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
   onLoad: function (options) {
     let that = this;
     wx.getStorage({
       key: 'bonusSend_cacheData',
       success: function(res) {
         console.log(res)
+        if (res.data.coupletTxt.TopWords.length < 4){
+            that.setData({
+              topWordsStyle:"font-size:90rpx;"
+            })
+        }
+
+        if (res.data.coupletTxt.LeftWords.length > 7){
+          that.setData({
+            verticalWordsStyle: "font-size:50rpx;line-height:1.1;"
+          })
+        }
+
         that.setData({
           coupletText: res.data.coupletTxt,
           share_bgUrl: res.data.shareBgUrl,
-          wxaCode_url: res.data.codeUrl
+          wxaCode_url: res.data.codeUrl,
+          bonusId: res.data.bonusId
         })
       },
     })
@@ -29,30 +41,85 @@ Page({
 
   /*发送好友或群*/
   onShareAppMessage: function (res) {
-    this.goTopFun();
-    setTimeout(function () {
-      if (res.from === 'button') {
-        // console.log(res.target)
+    var that = this;
+    if (res.from === 'button') {
+      // console.log(res.target)
+    }
+    return {
+      title: '我的心意，请收下',
+      path: '/pages/redPacket_index/redPacket_index?bonusId=' + that.data.bonusId,
+      success: function (res) {
+        wx.showShareMenu({
+          withShareTicket: true
+        });
+      },
+      fail: function (res) {
+        console.log(res.shareAppMessage);
       }
-      return {
-        success: function (res) {
-          wx.showShareMenu({
-            withShareTicket: true
-          });
-        },
-        fail: function (res) {
-          console.log(res.shareAppMessage);
-        }
+    }
+  },
+
+  /*生成分享朋友圈图片*/
+  bindShareTap: function () {
+    var that = this;
+    that.setData({
+      hideModalBg: false
+    });
+    var ctx = wx.createCanvasContext('myCanvas');
+    ctx.setFillStyle("#ffffff");
+    ctx.fillRect(0, 0, 478, 770);
+    // ctx.setFontSize(14);
+    // ctx.setFillStyle('#fdf8b4');
+    // ctx.save();
+    // drawText(that.data.coupletText.TopWords, 10, 10, 4, ctx);
+    // var publishInfo = that.data.detaildata.author + that.data.detaildata.publish_time;
+    // ctx.setFontSize(12);
+    // ctx.setFillStyle('#969696');
+    // drawText(publishInfo.substr(0, 24), 10, 50, 24, ctx);
+    // ctx.restore();
+    // ctx.setFontSize(15);
+    // ctx.setFillStyle('#000000');
+    // drawText(that.data.detaildata.summary.substr(0, 50) + "...", 10, 75, 14, ctx);
+    wx.getImageInfo({
+      src: that.data.share_bgUrl,
+      success: function (res) {
+        ctx.drawImage(res.path, 0, 0, 239, 385);
+        ctx.draw(true);
+        wx.getImageInfo({
+          src: that.data.wxaCode_url,
+          success: function (res) {
+            ctx.drawImage(res.path, 80, 257, 80, 80);
+            ctx.draw(true);
+          },
+          fail: function (res) {
+            console.log(res);
+          }
+        });
       }
-    }, 1000);
+    });
+    // drawText("长按扫码阅读", 10, 260, 6, ctx);
+    
+
+    // wx.downloadFile({
+    //   url: that.data.detaildata.codeurl, 
+    //   success: function (res) {
+    //     if (res.statusCode === 200) {
+    //       ctx.drawImage(res.path, 150, 250, 60, 60);
+    //       ctx.draw(true);
+    //     }
+    //   },
+    //   fail: function (res) {
+    //     console.log(res);
+    //   }
+    // })
   },
 
   //生成临时文件
   bindSaveImageTap: function () {
     wx.canvasToTempFilePath({
       canvasId: 'myCanvas',
-      destWidth: 530,
-      destHeight: 752,
+      destWidth: 478,
+      destHeight: 770,
       success: function (res) {
         wx.saveImageToPhotosAlbum({
           filePath: res.tempFilePath,
@@ -77,51 +144,6 @@ Page({
     this.setData({
       hideModalBg: true
     });
-  },
-  
-  onReady: function () {
-  
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-  
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-  
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-  
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-  
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-  
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-  
   }
+  
 })
