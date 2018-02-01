@@ -5,20 +5,20 @@
   </view>
   <view class="summary_record">
     <view class="user_avatar">
-      <image src="/images/authorImg.jpg"></image>
+      <image src="{{headImgUrl}}"></image>
     </view>
     <view style="font-size:28rpx;">
-      <text style="color:#6699cc">昵称</text>
-      <text>共发出</text>
+      <text style="color:#6699cc">{{nickName}}</text>
+      <text>{{typeTxt}}</text>
     </view>
     <view class="total_record">
       <view>
         <text style="font-size:32rpx;color:#969696;margin-bottom:20rpx;">金额（元）</text>
-        <text style="font-size:48rpx;color:#000;">100.09<text style="font-size:28rpx;">元</text></text>          
+        <text style="font-size:48rpx;color:#000;">{{amountMoney}}<text style="font-size:28rpx;">元</text></text>          
       </view>
       <view>
         <text style="font-size:32rpx;color:#969696;margin-bottom:20rpx;">数量（个）</text>
-        <text style="font-size:48rpx;color:#000;">10</text>
+        <text style="font-size:48rpx;color:#000;">bonusCount</text>
       </view>
     </view>
   </view>

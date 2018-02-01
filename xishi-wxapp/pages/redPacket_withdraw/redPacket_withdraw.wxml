@@ -11,7 +11,7 @@
       </view>
       <view class="input_wrap">
         <text>￥</text>
-        <input type="digit"></input>
+        <input type="digit" bindinput="bindInput"></input>
       </view>
       <view style="width:100%;height:100rpx;line-height:100rpx;">
         <text style="font-size:24rpx;color:#969696">提现到微信钱包，</text>

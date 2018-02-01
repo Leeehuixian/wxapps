@@ -61,12 +61,15 @@ Page({
 
   /*发送好友或群*/
   onShareAppMessage: function (res) {
+    let that = this;
     this.goTopFun();
     setTimeout(function () {
       if (res.from === 'button') {
         // console.log(res.target)
       }
       return {
+        title: '我的心意，请收下',
+        path: '/pages/redPacket_index/redPacket_index?bonusId=' + that.data.bonusId,
         success: function (res) {
           wx.showShareMenu({
             withShareTicket: true
@@ -178,52 +181,15 @@ Page({
     });
   }, 
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-  
+  bindTapWithdraw:function(){
+    wx.navigateTo({
+      url: '/pages/redPacket_withdraw/redPacket_withdraw',
+    })
   },
 
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-  
+  bindTapSend: function () {
+    wx.navigateTo({
+      url: '/pages/redPacket_send/redPacket_send',
+    })
   },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-  
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-  
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-  
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-  
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-  
-  }
 })

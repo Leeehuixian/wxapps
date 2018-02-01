@@ -20,14 +20,15 @@ Page({
       return;
     }
 
-    var bounsId = options.id;
+    var bounsId = options.bonusId;
+    console.log(bounsId);
     this.verifyOpen(bounsId);//验证用户是否已经拆过红包
   },
 
   verifyOpen: function (bounsId){
     let that = this;
     utils.requestLoading(get_isOpenRed + "?sessionKey=" + sessionKey, "post",
-      JSON.stringify({ bonusId: "50ba8520847742059b33ef0927d1ac73" }),"数据加载中...", 
+      JSON.stringify({ bonusId: bounsId }),"数据加载中...", 
     function (res) {
         console.log(res)
         if (res.Status == 5) {
@@ -37,7 +38,7 @@ Page({
           that.getBonusIndexData(bounsId);//获取拆红包主页数据
         } else if (res.IsOpenRed == true && res.Msg == "") {
           wx.navigateTo({
-            url: '/pages/redPacket_detail/redPacket_detail?id=' + that.data.bounsId,
+            url: '/pages/redPacket_detail/redPacket_detail?id=' + bounsId,
           })
         } else {
           wx.showToast({
@@ -54,7 +55,7 @@ Page({
   getBonusIndexData: function (bounsId) {
     let that = this;
     utils.requestLoading(get_bonusIndexData + "?sessionKey=" + sessionKey, "post",
-      JSON.stringify({ bonusId: "50ba8520847742059b33ef0927d1ac73" }), "数据加载中...",
+      JSON.stringify({ bonusId: bounsId }), "数据加载中...",
       function (res) {
         console.log(res)
         if (res.Msg == "") {
@@ -83,7 +84,7 @@ Page({
           utils.getSessionKey(utils.getSetting);
         } else {
           wx.showToast({
-            title: res.Message,
+            title: res.Msg,
             icon: 'none'
           })
         }

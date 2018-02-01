@@ -42,6 +42,7 @@ Page({
   /*发送好友或群*/
   onShareAppMessage: function (res) {
     var that = this;
+    console.log(that.data.bonusId)
     if (res.from === 'button') {
       // console.log(res.target)
     }

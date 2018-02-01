@@ -1,8 +1,8 @@
 {
   "pages":[
+    "pages/redPacket_send/redPacket_send",
     "pages/redPacket_index/redPacket_index",
     "pages/redPacket_detail/redPacket_detail",
-    "pages/redPacket_send/redPacket_send",
     "pages/redPacket_afterPay/redPacket_afterPay",
     "pages/index/index",
     "pages/custom_couplet/custom_couplet",

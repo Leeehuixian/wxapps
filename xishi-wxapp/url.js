@@ -15,6 +15,9 @@ let grab_redPacket = api_host + "Bonus/GrabPackage";
 let get_isOpenRed = api_host + "Bonus/IsOpenRed";
 let get_bonusIndexData = api_host + "Bonus/BonusIndex";
 let get_bonusDetailList = api_host + "Bonus/BonusDetailList";
+let get_giveOutRecord = api_host + "Bonus/AlreadyGiveOut";
+let get_grabRecord = api_host + "Bonus/GrabPackage";
+let withdraw_money = api_host + "Pay/EnterprisePay";
 export { 
   get_sessionKey,//获取sessionKey
   article_list,  //文章列表
@@ -32,4 +35,7 @@ export {
   get_isOpenRed,//验证当前用户是否已经拆过红包
   get_bonusIndexData,//获取拆红包主页的数据
   get_bonusDetailList,//红包已领取记录列表
+  get_giveOutRecord,//已发出红包统计
+  get_grabRecord,//已领取红包统计
+  withdraw_money,//余额体现
   }
