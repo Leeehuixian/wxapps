@@ -16,8 +16,10 @@ let get_isOpenRed = api_host + "Bonus/IsOpenRed";
 let get_bonusIndexData = api_host + "Bonus/BonusIndex";
 let get_bonusDetailList = api_host + "Bonus/BonusDetailList";
 let get_giveOutRecord = api_host + "Bonus/AlreadyGiveOut";
-let get_grabRecord = api_host + "Bonus/GrabPackage";
+let get_grabRecord = api_host + "Bonus/AlreadyOpen";
 let withdraw_money = api_host + "Pay/EnterprisePay";
+let get_userBalance = api_host + "Bonus/UserBalance";
+let get_serviceFeeExplain = api_host + "Bonus/ServiceFeeExplain";
 export { 
   get_sessionKey,//获取sessionKey
   article_list,  //文章列表
@@ -37,5 +39,7 @@ export {
   get_bonusDetailList,//红包已领取记录列表
   get_giveOutRecord,//已发出红包统计
   get_grabRecord,//已领取红包统计
-  withdraw_money,//余额体现
+  withdraw_money,//余额提现
+  get_userBalance,//用户账户余额
+  get_serviceFeeExplain,//服务费声明
   }

@@ -18,6 +18,9 @@
   </view>
   <view>
     <template is="wxParse" data="{{wxParseData:articleContent.nodes}}" />
+    <view class="toutiaoCodeImg">
+      <image src="{{toutiaocodeurl}}"></image>
+    </view>
   </view>
   <view id="comment-section" class="comment-section">
     <view class="comment-wrapper" hidden="{{commentList.length <= 0}}">
@@ -55,7 +58,7 @@
 </scroll-view>
 <view class="toolbar">
   <view class="input-wrapper">
-    <input class="write-comment" placeholder="{{placeholderTxt}}" cursor="50" cursor-spacing="50" confirm-type="send" bindfocus="bindInputFocus" bindinput="bindKeyInput" bindconfirm="bindKeyConfirm"/>
+    <input class="write-comment" placeholder="{{placeholderTxt}}" cursor="50" cursor-spacing="50" confirm-type="send" bindfocus="bindInputFocus" bindinput="bindKeyInput" bindconfirm="bindKeyConfirm" value="{{initInputVal}}"/>
   </view>
   <view class="read-comment" bindtap="bindReadComment">
     <text class="comment-num" hidden="{{commentList.length <= 0}}">{{commentList.length}}</text>

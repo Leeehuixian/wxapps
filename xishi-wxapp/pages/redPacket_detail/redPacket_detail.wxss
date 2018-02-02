@@ -12,7 +12,12 @@
 .sender-info .avatar{
   width:182rpx;
   height:182rpx;
-  margin-bottom:20rpx;
+  margin:20rpx 0;
+}
+
+.avatar image{
+  width:178rpx;
+  height:178rpx;
   border-radius: 50%;
   border:2px solid #fff;
 }

@@ -18,7 +18,9 @@ Page({
     commentList:[],
     scroll_top:0,
     loadingModalHide:false,
-    top:0
+    top:0,
+    toutiaocodeurl:'',
+    initInputVal:''
   },
   onLoad: function (options) {
     sessionKey = wx.getStorageSync("sessionKey");
@@ -39,14 +41,17 @@ Page({
     });
     //获取文章详情
     utils.requestLoading(article_detail + "?sessionKey=" + sessionKey +"&id="+articleId,'get', '', '正在加载数据', function (res) {
+      console.log(res);
       if (res.Status == 5) {
         wx.removeStorageSync("sessionKey");
         utils.getSessionKey(utils.getSetting);
+        return;
       }
       that.setData({
         detaildata:res,
         articleContent: WxParse.wxParse('articleContent', 'html', res.articlecontent, that, 5),
-        loadingModalHide:true
+        loadingModalHide:true,
+        toutiaocodeurl: res.toutiaocodeurl
       });
     }, function () {
       wx.showToast({
@@ -129,7 +134,8 @@ Page({
   bindKeyConfirm: function(e){
     var that = this;
     this.setData({
-      toView: "comment-section"
+      toView: "comment-section",
+      initInputVal:''
     });
     utils.requestLoading(comment_creat + "?sessionKey=" + sessionKey, 'post', JSON.stringify({ PostMessage: e.detail.value, CreateBy: app.globalData.openId, CreatebyName: app.globalData.userInfo.nickName, ArticleID: this.data.articleId, HeadImgUrl: app.globalData.userInfo.avatarUrl}), '数据传输中...', function (res) {
       if (res.Status == 5) {
@@ -187,12 +193,14 @@ Page({
  
   /*发送好友或群*/
   onShareAppMessage: function (res) {
+    let that = this;
     this.goTopFun();
     setTimeout(function(){
       if (res.from === 'button') {
         // console.log(res.target)
       }
       return {
+        path: "/pages/detail/detail?id=" + that.data.articleId,
         success: function (res) {
           wx.showShareMenu({
             withShareTicket: true
@@ -244,18 +252,6 @@ Page({
         console.log(res);
       }
     }); 
-    // wx.downloadFile({
-    //   url: that.data.detaildata.codeurl, 
-    //   success: function (res) {
-    //     if (res.statusCode === 200) {
-    //       ctx.drawImage(res.path, 150, 250, 60, 60);
-    //       ctx.draw(true);
-    //     }
-    //   },
-    //   fail: function (res) {
-    //     console.log(res);
-    //   }
-    // })
   },
 
   //生成临时文件

@@ -23,7 +23,7 @@ Page({
     }
     var bounsId = options.id;
     this.getRecord(bounsId);//获取红包领取结果
-    
+    console.log(bounsId);
     
   },
 
@@ -39,7 +39,7 @@ Page({
             bonusCount: res.BonusCount,
             openCount: res.OpenCount,
             amountSum: res.AmountSum,
-            myMoney: res.myMoney,
+            myMoney: res.MyMoney,
             headImgUrl: res.HeadImgUrl,
             nickName: res.NickName,
             detailList: res.DetailList

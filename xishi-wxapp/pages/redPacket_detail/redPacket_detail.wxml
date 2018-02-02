@@ -1,6 +1,8 @@
 <view class="container">
   <view class="sender-info">
-    <image class="avatar" src="{{headImgUrl}}" />
+    <view class="avatar">
+      <image src="{{headImgUrl}}" mode="aspectFill" />
+    </view>
     <text class="nickname">{{nickName}}</text>
     <view class="money">
       <text>{{myMoney}}</text>元

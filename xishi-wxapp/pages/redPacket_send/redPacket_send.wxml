@@ -32,13 +32,13 @@
       <text>数量（个）</text>
       <input placeholder='填写红包数量' bindinput="inputNum" type="number" />
     </view>
-    <text class="tip_txt">需支付￥{{serviceFee}}服务费，优先使用余额￥0.00</text>
+    <text class="tip_txt">需支付￥{{serviceFee}}服务费</text>
     <view class="submit_btn" bindtap="sendFun">生成并发送</view>
     <view class="agreement">
       <image src="/images/checked_box_icon.png"></image>
       <view>
         <text>同意</text>
-        <text style="color:#6699cc;">《服务费声明》</text>
+        <text style="color:#6699cc;" bindtap="checkExplain">《服务费声明》</text>
       </view>
     </view>
   </view>

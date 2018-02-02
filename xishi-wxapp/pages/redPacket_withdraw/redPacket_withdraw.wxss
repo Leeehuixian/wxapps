@@ -61,6 +61,10 @@ page{
   opacity: .5;
 }
 
+.withdraw-active{
+  opacity: 1;
+}
+
 .tip_txt{
   width:100%;
   height:100rpx;

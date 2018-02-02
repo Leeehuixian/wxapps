@@ -27,7 +27,9 @@ Page({
       utils.getSessionKey(utils.getSetting);
       return;
     }
+    
     var that = this;
+    that.getLocation();//获取地理位置
     //高度自适应
     wx.getSystemInfo({
       success: function (res) {
@@ -41,6 +43,115 @@ Page({
         });
       }
     });
+    
+    //初始化默认加载“推荐”数据
+    that.getListData(0);
+  },
+
+  onShow:function(){
+    var animation = wx.createAnimation({
+      transformOrigin: "50% 50%",
+      duration: 2000,
+      timingFunction: "ease",
+      delay: 0
+    });
+    this.animation = animation;
+    animation.rotate(360).step()
+    this.setData({
+      animationData: animation.export()
+    })
+  },
+
+  // 滚动切换tab
+  switchTab: function (e) {
+    let that = this;
+    let cur = e.detail.current;
+    if (cur == 2 && that.data.userCity == '') {
+      if (that.data.userCity == '') {
+        that.getSetting();
+      } 
+    }
+    this.setData({
+      listData: [],
+      hasMore:true,
+      currentTab: cur,
+      pageIndex: 0,
+      total:0,
+      loadingModalHide: false,
+      winHeight:this.data.initHeight
+    });
+    this.getListData(this.data.currentTab);
+  },
+  
+  // 点击切换tab
+  bindTapTab: function (e) {
+    let that = this;
+    let cur = Number(e.target.dataset.current);
+    if (that.data.currentTab == cur) { return false; }
+    else if (cur == 2) {
+      if (that.data.userCity == ''){
+        that.getSetting(
+          that.setData({
+            currentTab: cur,
+          })
+        );
+      }else{
+        that.setData({
+          currentTab: cur,
+        })
+      }
+    }else {
+      that.setData({
+        currentTab: cur,
+      });
+    };
+  },
+
+  /*判断用户是否授权获取地理位置*/
+  getSetting:function(cb){
+    let that = this;
+    wx.getSetting({
+      success: res => {
+        if (res.authSetting['scope.userLocation']) {
+          that.getLocation();
+          cb();
+        } else {
+          wx.showModal({
+            title: '提示',
+            content: '授权获取地理位置失败，无法查看本地资讯，是否重新授权？',
+            showCancel: true,
+            cancelText: "否",
+            confirmText: "是",
+            success: function (res) {
+              if (res.confirm) {
+                wx.openSetting({
+                  success: function (data) {
+                    if (data) {
+                      if (data.authSetting["scope.userLocation"] == true) {
+                        let curpage = getCurrentPages()[0];
+                        wx.reLaunch({
+                          url: "/" + curpage.route
+                        });
+                      }
+                    }
+                  },
+                  fail: function () {
+                    console.info("设置失败返回数据");
+                  }
+                });
+              } else if (res.cancel) {
+                console.info("用户拒绝授权");
+              }
+            }
+          })
+        }
+      }
+    })
+  },
+
+  /*获取地理位置*/
+  getLocation:function(){
+    let that = this;
     // 实例化腾讯地图API核心类
     var qqmapsdk = new QQMapWX({
       key: "BQCBZ-ZJ4WD-XEA4W-HCNO5-6BTW3-KMFQQ"
@@ -64,55 +175,6 @@ Page({
         })
       }
     });
-    
-    //初始化默认加载“推荐”数据
-    that.getListData(0);
-  },
-
-  onShow:function(){
-    var animation = wx.createAnimation({
-      transformOrigin: "50% 50%",
-      duration: 2000,
-      timingFunction: "ease",
-      delay: 0
-    });
-    this.animation = animation;
-    animation.rotate(360).step()
-    this.setData({
-      animationData: animation.export()
-    })
-  },
-
-  // 滚动切换标签样式
-  switchTab: function (e) {
-    this.setData({
-      listData: [],
-      hasMore:true,
-      currentTab: e.detail.current,
-      pageIndex: 0,
-      total:0,
-      loadingModalHide: false,
-      winHeight:this.data.initHeight
-    });
-    this.getListData(this.data.currentTab);
-  },
-  
-  // 点击标题切换当前页时改变样式
-  swichNav: function (e) {
-    let cur = e.target.dataset.current;
-    if (this.data.currentTab == cur) { return false; }
-    else {
-      this.setData({
-        listData: [],
-        hasMore: true,
-        currentTab: cur,
-        pageIndex: 0,
-        total: 0,
-        loadingModalHide: false,
-        winHeight: this.data.initHeight
-      });
-      this.getListData(this.data.currentTab);
-    };
   },
 
   //加载数据
@@ -155,7 +217,9 @@ Page({
       if (res.Status == 5){
         wx.removeStorageSync("sessionKey");
         utils.getSessionKey(utils.getSetting);
+        return;
       }
+      
       var resData = that.data.listData.concat(res);
       if(res.length == 0){
         if (pageIndex == 0){
