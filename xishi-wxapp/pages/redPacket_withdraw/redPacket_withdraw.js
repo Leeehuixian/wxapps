@@ -45,6 +45,10 @@ Page({
         title: '提现金额不得超过余额',
         icon:'none'
       })
+    }else{
+      that.setData({
+        canWithdraw: false
+      })
     }
     that.setData({
       withdrawmoney: e.detail.value

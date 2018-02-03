@@ -1,14 +1,14 @@
 {
   "pages":[
-    "pages/index/index",
     "pages/redPacket_send/redPacket_send",
+    "pages/index/index",
+    "pages/redPacket_record/redPacket_record",
+    "pages/redPacket_withdraw/redPacket_withdraw",
     "pages/redPacket_detail/redPacket_detail",
     "pages/serviceFee_statement/serviceFee_statement",
-    "pages/redPacket_record/redPacket_record",
     "pages/redPacket_index/redPacket_index",
     "pages/redPacket_afterPay/redPacket_afterPay",
     "pages/custom_couplet/custom_couplet",
-    "pages/redPacket_withdraw/redPacket_withdraw",
     "pages/detail/detail"
   ],
   "window":{

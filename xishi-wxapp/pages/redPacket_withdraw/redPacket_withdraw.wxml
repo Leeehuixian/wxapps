@@ -17,7 +17,7 @@
         <text style="font-size:24rpx;color:#969696">提现到微信钱包，</text>
         <text style="font-size:24rpx;color:#3871d0" bindtap="withdrawAll">全部提现</text>
       </view>
-      <view class="withdraw_btn {{canWithdraw?withdraw-active:''}}" bindtap="withdrawFun">提现</view>
+      <view class="withdraw_btn {{canWithdraw?'withdraw-active':''}}" bindtap="withdrawFun">提现</view>
       <view class="tip_txt">
         <text>1-5个工作日到账</text>
       </view>

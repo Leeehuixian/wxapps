@@ -82,22 +82,27 @@ Page({
     // ctx.setFillStyle('#000000');
     // drawText(that.data.detaildata.summary.substr(0, 50) + "...", 10, 75, 14, ctx);
     wx.getImageInfo({
-      src: that.data.share_bgUrl,
+      src: that.data.wxaCode_url,
       success: function (res) {
-        ctx.drawImage(res.path, 0, 0, 239, 385);
+        ctx.drawImage(res.path, 80, 247, 80, 80);
         ctx.draw(true);
         wx.getImageInfo({
-          src: that.data.wxaCode_url,
+          src: that.data.share_bgUrl,
           success: function (res) {
-            ctx.drawImage(res.path, 80, 257, 80, 80);
+            ctx.drawImage(res.path, 0, 0, 239, 385);
             ctx.draw(true);
+
           },
           fail: function (res) {
             console.log(res);
           }
         });
+      },
+      fail: function (res) {
+        console.log(res);
       }
     });
+    
     // drawText("长按扫码阅读", 10, 260, 6, ctx);
     
 

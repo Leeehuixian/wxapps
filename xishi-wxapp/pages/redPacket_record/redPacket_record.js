@@ -37,7 +37,7 @@ Page({
       recordList: [],
       hasMore: true,
       pageIndex: 0,
-      loadingTipHide: false,
+      loadingTipHide: true,
     });
     this.get_RecordFun(this.data.currentTab);
   },
@@ -69,6 +69,8 @@ Page({
         return;
       };
 
+      wx.hideNavigationBarLoading() //完成停止加载
+      wx.stopPullDownRefresh() //停止下拉刷新
       var resData = that.data.recordList.concat(res.DetailList);
       if (res.DetailList.length == 0) {
         if (pageIndex == 0) {
@@ -79,6 +81,7 @@ Page({
         that.setData({
           hasMore: false
         });
+        console.log(that.data.hasMore);
       } else {
         pageIndex++;
         that.setData({
@@ -86,13 +89,41 @@ Page({
           pageIndex: pageIndex,
           amountMoney: res.AmountSum,
           bonusCount: res.BonusCount,
-          recordList: res.DetailList
+          recordList: resData
         });
       }
 
     },function(res){
       console.log(res);
     });
+  },
+
+  //下拉刷新
+  onPullDownRefresh: function () {
+    wx.showNavigationBarLoading();
+    this.setData({
+      recordList: [],
+      hasMore: true,
+      pageIndex: 0,
+      loadingTipHide: true,
+    });
+    this.get_RecordFun(this.data.currentTab);
+  },
+
+  //上拉加载
+  onReachBottom: function () {
+    let that = this;
+    console.log(this.data.hasMore);
+    if (that.data.hasMore) {
+      that.setData({
+        loadingTipHide: true
+      });
+      that.get_RecordFun(that.data.currentTab);
+    } else {
+      that.setData({
+        loadingTipHide: false
+      })
+    }
   },
 
   bindTapWithdraw: function () {
@@ -102,23 +133,11 @@ Page({
   },
 
   bindTapSend: function () {
-    wx.navigateTo({
-      url: '/pages/redPacket_send/redPacket_send',
+    wx.navigateBack({
+      delta: 1
     })
-  },
-
-  //上拉加载
-  onReachBottom: function () {
-    if (this.data.hasMore) {
-      this.get_RecordFun(this.data.currentTab);
-      this.setData({
-        loadingTipHide: false
-      });
-    } else {
-      this.setData({
-        loadingTipHide: false
-      })
-    }
   }
+
+  
   
 })
