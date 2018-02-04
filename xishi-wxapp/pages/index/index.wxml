@@ -1,42 +1,37 @@
 <view class="container">
   <view class="nav-list">
-    <text class="tab-item {{currentTab==0?'active':''}}"  data-current="0" bindtap="bindTapTab">推荐</text>
-    <text class="tab-item {{currentTab==1?'active':''}}" data-current="1" bindtap="bindTapTab">视频</text>
-    <text class="tab-item {{currentTab==2?'active':''}}" data-current="2" bindtap="bindTapTab">本地</text>
+    <text class="tab-item {{currentTab==0?'active':''}}"  data-current="0" bindtap="bindTapTab">原创</text>
+    <text class="tab-item {{currentTab==1?'active':''}}"  data-current="1" bindtap="bindTapTab">推荐</text>
+    <text class="tab-item {{currentTab==2?'active':''}}" data-current="2" bindtap="bindTapTab">视频</text>
+    <text class="tab-item {{currentTab==3?'active':''}}" data-current="3" bindtap="bindTapTab">本地</text>
   </view>
-  <swiper class="article-list" current="{{currentTab}}" duration="300" bindchange="switchTab" style="height: {{winHeight?winHeight+'rpx':'auto'}}"> 
-    <swiper-item wx:for="{{[0,1,2]}}" wx:key="{{index}}" hidden="{{currentTab == index?false:true}}">
-        <!-- <scroll-view style="height:auto"> -->
-          <block wx:for="{{listData}}" wx:key="{{index}}">
-              <view class="list-item" catchtap="onArticleTap" data-articleId="{{item.id}}" data-articleType="{{currentTab}}">
-                <view class="first-line">
-                  <view wx:if="{{item.has_image && !item.has_video}}" class="article-img">
-                    <image src="{{item.image_url}}" lazy-load="true" mode="aspectFill" />
-                  </view>
-                  <view class="article-title">{{item.title}}</view>
-                </view>
-                <view wx:if="{{item.has_video}}" class="article-video" src="{{item.video_url}}">
-                  <image class="video_thumb" src="{{item.image_url}}" lazy-load="true" mode="aspectFill" />
-                  <image class="video_icon" src="../../images/video_icon.png"></image>
-                </view>
-                <view class="last-line">
-                  <view class="issue-info">
-                    <image wx:if="{{item.has_flag}}" class="flag-icon" src="{{item.flag_icon_url}}"/>
-                    <text>{{item.author}} {{item.publish_time}}</text>
-                  </view>
-                  <view class="read-num">
-                    <image class="read-icon" src="/images/read-icon.png" />
-                    <text>{{item.view_num}}</text>
-                  </view>
-                </view>
-              </view>
-          </block>
-        <!-- </scroll-view> -->
-        <view class="loading-text-wrap"  hidden="{{ loadingModalHide }}">
-            <image src="../../images/loading-text-img.png" mode="aspectFill"></image>
+  <view class="article-list">
+    <view wx:for="{{listData}}" wx:key="{{index}}" class="list-item" catchtap="onArticleTap" data-articleId="{{item.id}}" data-articleType="{{currentTab}}">
+      <view class="first-line">
+        <view wx:if="{{item.has_image && !item.has_video}}" class="article-img">
+          <image src="{{item.image_url}}" lazy-load="true" mode="aspectFill" />
         </view>
-    </swiper-item>
-  </swiper>
+        <view class="article-title">{{item.title}}</view>
+      </view>
+      <view wx:if="{{item.has_video}}" class="article-video" src="{{item.video_url}}">
+        <image class="video_thumb" src="{{item.image_url}}" lazy-load="true" mode="aspectFill" />
+        <image class="video_icon" src="../../images/video_icon.png"></image>
+      </view>
+      <view class="last-line">
+        <view class="issue-info">
+          <image wx:if="{{item.has_flag}}" class="flag-icon" src="{{item.flag_icon_url}}"/>
+          <text>{{item.author}} {{item.publish_time}}</text>
+        </view>
+        <view class="read-num">
+          <image class="read-icon" src="/images/read-icon.png" />
+          <text>{{item.view_num}}</text>
+        </view>
+      </view>
+    </view>
+    <view class="loading-text-wrap" hidden="{{ loadingModalHide }}">
+      <image src="../../images/loading-text-img.png" mode="aspectFill"></image>
+    </view>
+  </view>
   <view class="loading-tips" hidden="{{ loadingTipHide }}">
     <text class="loading-tips-text">{{loadingTipText}}</text>
   </view>

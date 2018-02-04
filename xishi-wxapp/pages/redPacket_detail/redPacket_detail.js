@@ -23,8 +23,10 @@ Page({
     }
     var bounsId = options.id;
     this.getRecord(bounsId);//获取红包领取结果
-    console.log(bounsId);
-    
+    this.setData({
+      headImgUrl: app.globalData.userInfo.avatarUrl,
+      nickName: app.globalData.userInfo.nickName,
+    })
   },
 
   getRecord: function (bounsId){
@@ -40,8 +42,6 @@ Page({
             openCount: res.OpenCount,
             amountSum: res.AmountSum,
             myMoney: res.MyMoney,
-            headImgUrl: res.HeadImgUrl,
-            nickName: res.NickName,
             detailList: res.DetailList
           })
         }else if(res.Status == 5){

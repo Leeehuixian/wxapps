@@ -64,6 +64,11 @@ Page({
 
   /*生成分享朋友圈图片*/
   bindShareTap: function () {
+    wx.showToast({
+      title: '图片生成中',
+      icon:'loading',
+      duration:3000
+    })
     var that = this;
     that.setData({
       hideModalBg: false
@@ -74,7 +79,7 @@ Page({
     wx.getImageInfo({
       src: that.data.wxaCode_url,
       success: function (res) {
-        ctx.drawImage(res.path, 80, 247, 80, 80);
+        ctx.drawImage(res.path, 85, 253, 70, 70);
         ctx.draw(true);
         console.log(that.data.avatarUrl);
         wx.getImageInfo({

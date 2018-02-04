@@ -6,17 +6,13 @@ var sessionKey ='';
 Page({
   data: {
     listData:[],
-    winHeight: "",//窗口高度
     currentTab: 0, //预设当前项的值
     flag_icon_url:'',
     loadingModalHide:false,
     loadingTipHide:true,
     pageIndex: 0,
-    calcHeight:300,
-    initHeight:0,
     animationData: {},
     hasMore:true,
-    total:0,//当前tab下文章数量
     userCity:'',
     loadingTipText:"加载中..."
   },
@@ -30,22 +26,7 @@ Page({
     
     var that = this;
     that.getLocation();//获取地理位置
-    //高度自适应
-    wx.getSystemInfo({
-      success: function (res) {
-        var clientHeight = res.windowHeight,
-          clientWidth = res.windowWidth,
-          rpxR = 750 / clientWidth;
-        var calc = clientHeight * rpxR + 100;
-        that.setData({
-          winHeight: calc,
-          initHeight:calc
-        });
-      }
-    });
-    
-    //初始化默认加载“推荐”数据
-    that.getListData(0);
+    that.getListData(0);//初始化默认加载“推荐”数据
   },
 
   onShow:function(){
@@ -62,49 +43,25 @@ Page({
     })
   },
 
-  // 滚动切换tab
-  switchTab: function (e) {
-    let that = this;
-    let cur = e.detail.current;
-    if (cur == 2 && that.data.userCity == '') {
-      if (that.data.userCity == '') {
-        that.getSetting();
-      } 
-    }
-    this.setData({
-      listData: [],
-      hasMore:true,
-      currentTab: cur,
-      pageIndex: 0,
-      total:0,
-      loadingModalHide: false,
-      winHeight:this.data.initHeight
-    });
-    this.getListData(this.data.currentTab);
-  },
-  
-  // 点击切换tab
   bindTapTab: function (e) {
     let that = this;
     let cur = Number(e.target.dataset.current);
     if (that.data.currentTab == cur) { return false; }
-    else if (cur == 2) {
-      if (that.data.userCity == ''){
-        that.getSetting(
-          that.setData({
-            currentTab: cur,
-          })
-        );
-      }else{
-        that.setData({
-          currentTab: cur,
-        })
+    if (cur == 3 && that.data.userCity == '') {
+      if (that.data.userCity == '') {
+        that.getSetting();
       }
-    }else {
-      that.setData({
-        currentTab: cur,
-      });
-    };
+    }
+    this.setData({
+      listData: [],
+      hasMore: true,
+      currentTab: cur,
+      pageIndex: 0,
+      total: 0,
+      loadingModalHide: false,
+      winHeight: this.data.initHeight
+    });
+    this.getListData(this.data.currentTab);
   },
 
   /*判断用户是否授权获取地理位置*/
@@ -183,32 +140,17 @@ Page({
     var pageIndex = that.data.pageIndex;
     var requestParams = '';
     switch (currentTab){
-      case 0:
+      case 0:case 1:case 2:
         requestParams = JSON.stringify({ 
-          "AppNavigation": Number(currentTab) + 2, 
+          "AppNavigation": Number(currentTab) + 1, 
           Pager: { PageIndex: pageIndex, PageSize: 10 }
           });
-        that.setData({
-          calcHeight: 300
-        });
         break;
-      case 1:
+      case 3:
         requestParams = JSON.stringify({
-          "AppNavigation": Number(currentTab) + 2,
-          Pager: { PageIndex: pageIndex, PageSize: 10 }
-        });
-        that.setData({
-          calcHeight:500
-        });
-        break;
-      case 2:
-        requestParams = JSON.stringify({
-          "AppNavigation": Number(currentTab) + 2,
+          "AppNavigation": Number(currentTab) + 1,
           Pager: { PageIndex: pageIndex, PageSize: 10 },
           cityName: that.data.userCity
-        });
-        that.setData({
-          calcHeight: 300
         });
         break;
     } 
@@ -232,17 +174,8 @@ Page({
         });       
       }else{
         pageIndex++;
-        //重新计算scroll-view长度
-        var total = that.data.total;
-        total += res.length;
-        var calcHeight = that.data.calcHeight * total;
-        if (calcHeight < that.data.winHeight) {
-          calcHeight = that.data.winHeight;
-        }
         that.setData({
           loadingModalHide: true,
-          winHeight: calcHeight,
-          total: total
         });
       }      
       that.setData({

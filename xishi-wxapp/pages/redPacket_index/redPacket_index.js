@@ -38,7 +38,7 @@ Page({
         } else if (res.IsOpenRed == false && res.Msg == "") {
           that.getBonusIndexData(bounsId);//获取拆红包主页数据
         } else if (res.IsOpenRed == true && res.Msg == "") {
-          wx.navigateTo({
+          wx.redirectTo({
             url: '/pages/redPacket_detail/redPacket_detail?id=' + bounsId,
           })
         } else {
@@ -81,7 +81,7 @@ Page({
             voiceUrl: res.BonusVoiceUrl,
             headImgUrl: res.HeadImgUrl,
           });
-          innerAudioContext.src = res.BonusVoiceUrl;
+          
         } else if (res.Status == 5) {
           wx.removeStorageSync("sessionKey");
           utils.getSessionKey(utils.getSetting);
@@ -100,7 +100,6 @@ Page({
   bindTapBtn:function(){
     console.log(this.data.bonusId);
     this.grabRedPacket(this.data.bonusId);
-    
   },
 
   /*拆红包*/
@@ -111,7 +110,7 @@ Page({
         console.log(res.Status);
         switch (res.Status){
           case 1:case 2:
-            wx.navigateTo({
+            wx.redirectTo({
               url: '/pages/redPacket_detail/redPacket_detail?id=' + bonusId,
             });
             break;
@@ -134,6 +133,7 @@ Page({
 
   /*播放语音*/
   tapPlayVoice:function(){
+    innerAudioContext.src = this.data.voiceUrl;
     innerAudioContext.autoplay = true;
     innerAudioContext.play()
   }

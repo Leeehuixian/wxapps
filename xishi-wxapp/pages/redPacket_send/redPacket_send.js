@@ -87,7 +87,7 @@ Page({
         BonusMoney: Number(that.data.money),
         ServiceCharge: that.data.serviceFee,
         BonusCount: Number(that.data.num),
-        BonusVoiceUrl:tempFilePath,
+        BonusVoiceUrl: that.tempFilePath,
         CoupletId: that.data.coupletId
       });
       utils.requestLoading(pay_redPacket + "?sessionKey=" + sessionKey, "post", requestParams,'',
@@ -109,6 +109,7 @@ Page({
             //     "headImgUrl": headImgUrl
             //   }
             // })
+            // that.UploadVoiceFun(UploadVoice, that.tempFilePath, bonusId);//上传语音            
 
             // wx.navigateTo({
             //   url: '/pages/redPacket_afterPay/redPacket_afterPay',
@@ -195,9 +196,10 @@ Page({
   },
 
   //语音提交微信服务器
-  UploadVoiceFun: function (url,filePath, bonusId){
+  UploadVoiceFun: function (url,filePath,bonusId){
+    console.log(filePath);
     wx.uploadFile({
-      url: url,
+      url: url+"?sessionKey="+sessionKey,
       filePath: filePath,
       formData: {
         'bonusId': bonusId
@@ -208,9 +210,7 @@ Page({
       },
       success: function (res) {
         console.log("语音上传成功");
-        var str = res.data; 
-        // var dataJson = JSON.parse(str);
-        // that.data.src = dataJson.Url;
+        console.log(res);
       },
       fail: function (res) {
         console.log(res);

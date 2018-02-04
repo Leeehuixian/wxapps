@@ -19,7 +19,7 @@
   <view>
     <template is="wxParse" data="{{wxParseData:articleContent.nodes}}" />
     <view class="toutiaoCodeImg">
-      <image src="{{toutiaocodeurl}}"></image>
+      <image src="{{toutiaocodeurl}}" style="width:100%;height:480rpx;" mode="aspectFill"></image>
     </view>
   </view>
   <view id="comment-section" class="comment-section">

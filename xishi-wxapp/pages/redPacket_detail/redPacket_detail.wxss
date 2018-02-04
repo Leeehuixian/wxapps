@@ -6,24 +6,27 @@
   align-items: center;
   width:100%;
   height:480rpx;
+  box-sizing:border-box;
+  padding-top:30rpx;
   background:#f32a43;
 }
 
 .sender-info .avatar{
   width:182rpx;
   height:182rpx;
-  margin:20rpx 0;
-}
-
-.avatar image{
-  width:178rpx;
-  height:178rpx;
+  margin:0 0 20rpx;
   border-radius: 50%;
   border:2px solid #fff;
 }
 
+.avatar image{
+  width:182rpx;
+  height:182rpx;
+  border-radius: 50%;
+}
+
 .sender-info .nickname{
-  margin-bottom:50rpx;
+  margin-bottom:15rpx;
   font-size:40rpx;
   color:#fff;
 }
@@ -31,7 +34,7 @@
 .sender-info .money{
   font-size:48rpx;
   color:#fff;
-  margin-bottom:50rpx;
+   margin-bottom:30rpx; 
 }
 
 .sender-info .money text{
