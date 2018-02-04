@@ -20,6 +20,7 @@ let get_grabRecord = api_host + "Bonus/AlreadyOpen";
 let withdraw_money = api_host + "Pay/EnterprisePay";
 let get_userBalance = api_host + "Bonus/UserBalance";
 let get_serviceFeeExplain = api_host + "Bonus/ServiceFeeExplain";
+let UploadVoice = api_host + "Bonus/UploadFileNew";
 export { 
   get_sessionKey,//获取sessionKey
   article_list,  //文章列表
@@ -42,4 +43,5 @@ export {
   withdraw_money,//余额提现
   get_userBalance,//用户账户余额
   get_serviceFeeExplain,//服务费声明
+  UploadVoice,//语音上传服务器
   }

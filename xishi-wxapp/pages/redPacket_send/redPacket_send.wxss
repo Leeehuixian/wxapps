@@ -71,6 +71,24 @@ page{
   margin-right:14rpx;
 }
 
+.speak-style{  
+    position: relative;  
+    height: 240rpx;  
+    width: 240rpx;  
+    border-radius: 20rpx;  
+    margin: 50% auto;  
+    background:rgba(0,0,0,.6);
+    z-index:300;
+} 
+
+.sound-style{  
+  position: absolute;  
+  width: 74rpx;  
+  height:150rpx;  
+  margin-top: 45rpx;  
+  margin-left: 83rpx;  
+}   
+
 .editor_input{
   display:flex;
   justify-content: space-between;

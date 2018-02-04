@@ -148,7 +148,7 @@ page{
 .canvas-view{
   position:fixed;
   left:50%;
-  top:100rpx;
+  top:50rpx;
   z-index:201;
   width:265px;
   height:411px;
@@ -167,7 +167,7 @@ page{
 
 .save-image{
   position: fixed;
-  bottom:100rpx;
+  bottom:50rpx;
   left:50%;
   z-index:201;
   width:380rpx;

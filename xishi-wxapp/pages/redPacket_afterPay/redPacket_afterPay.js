@@ -8,7 +8,8 @@ Page({
     share_bgUrl:'',
     wxaCode_url:'',
     hideModalBg: true,
-    bonusId:''
+    bonusId:'',
+    avatarUrl:''
   },
 
   onLoad: function (options) {
@@ -33,7 +34,8 @@ Page({
           coupletText: res.data.coupletTxt,
           share_bgUrl: res.data.shareBgUrl,
           wxaCode_url: res.data.codeUrl,
-          bonusId: res.data.bonusId
+          bonusId: res.data.bonusId,
+          avatarUrl: res.data.headImgUrl
         })
       },
     })
@@ -69,29 +71,27 @@ Page({
     var ctx = wx.createCanvasContext('myCanvas');
     ctx.setFillStyle("#ffffff");
     ctx.fillRect(0, 0, 478, 770);
-    // ctx.setFontSize(14);
-    // ctx.setFillStyle('#fdf8b4');
-    // ctx.save();
-    // drawText(that.data.coupletText.TopWords, 10, 10, 4, ctx);
-    // var publishInfo = that.data.detaildata.author + that.data.detaildata.publish_time;
-    // ctx.setFontSize(12);
-    // ctx.setFillStyle('#969696');
-    // drawText(publishInfo.substr(0, 24), 10, 50, 24, ctx);
-    // ctx.restore();
-    // ctx.setFontSize(15);
-    // ctx.setFillStyle('#000000');
-    // drawText(that.data.detaildata.summary.substr(0, 50) + "...", 10, 75, 14, ctx);
     wx.getImageInfo({
       src: that.data.wxaCode_url,
       success: function (res) {
         ctx.drawImage(res.path, 80, 247, 80, 80);
         ctx.draw(true);
+        console.log(that.data.avatarUrl);
         wx.getImageInfo({
-          src: that.data.share_bgUrl,
+          src: that.data.avatarUrl,
           success: function (res) {
-            ctx.drawImage(res.path, 0, 0, 239, 385);
+            ctx.drawImage(res.path, 23, 320, 40, 40);
             ctx.draw(true);
-
+            wx.getImageInfo({
+              src: that.data.share_bgUrl,
+              success: function (res) {
+                ctx.drawImage(res.path, 0, 0, 239, 385);
+                ctx.draw(true);
+              },
+              fail: function (res) {
+                console.log(res);
+              }
+            });
           },
           fail: function (res) {
             console.log(res);
@@ -102,22 +102,6 @@ Page({
         console.log(res);
       }
     });
-    
-    // drawText("长按扫码阅读", 10, 260, 6, ctx);
-    
-
-    // wx.downloadFile({
-    //   url: that.data.detaildata.codeurl, 
-    //   success: function (res) {
-    //     if (res.statusCode === 200) {
-    //       ctx.drawImage(res.path, 150, 250, 60, 60);
-    //       ctx.draw(true);
-    //     }
-    //   },
-    //   fail: function (res) {
-    //     console.log(res);
-    //   }
-    // })
   },
 
   //生成临时文件

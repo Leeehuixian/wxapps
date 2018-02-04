@@ -1,6 +1,7 @@
 import { get_isOpenRed, get_bonusIndexData, grab_redPacket} from "../../url.js";
 var utils = require("../../utils/util.js");
 var sessionKey = "";
+const innerAudioContext = wx.createInnerAudioContext();
 Page({
   data: {
     topWordsStyle: "font-size:64rpx;",
@@ -41,6 +42,7 @@ Page({
             url: '/pages/redPacket_detail/redPacket_detail?id=' + bounsId,
           })
         } else {
+          console.log("验证拆包权限出错");
           wx.showToast({
             title: res.Msg,
             icon: 'none'
@@ -78,11 +80,13 @@ Page({
             bonusId: res.BonusId,
             voiceUrl: res.BonusVoiceUrl,
             headImgUrl: res.HeadImgUrl,
-          })
+          });
+          innerAudioContext.src = res.BonusVoiceUrl;
         } else if (res.Status == 5) {
           wx.removeStorageSync("sessionKey");
           utils.getSessionKey(utils.getSetting);
         } else {
+          console.log("请求主页数据出错了");
           wx.showToast({
             title: res.Msg,
             icon: 'none'
@@ -104,6 +108,7 @@ Page({
     utils.requestLoading(grab_redPacket + "?sessionKey=" + sessionKey, "post",
       JSON.stringify({ bonusId: bonusId }), "数据加载中...",
       function (res) {
+        console.log(res.Status);
         switch (res.Status){
           case 1:case 2:
             wx.navigateTo({
@@ -116,7 +121,7 @@ Page({
             break;
           default:
             wx.showToast({
-              title: res.Message,
+              title: res.Msg,
               icon: 'none'
             });
             break;
@@ -125,7 +130,12 @@ Page({
         console.log(res)
       }
     );
-  }
+  },
 
+  /*播放语音*/
+  tapPlayVoice:function(){
+    innerAudioContext.autoplay = true;
+    innerAudioContext.play()
+  }
 
 })

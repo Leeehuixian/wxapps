@@ -14,7 +14,7 @@
     <image class="avatar_img" src="{{headImgUrl}}"></image>
   </view>
   <!--语音框-->
-  <view class="voice_wrap">
+  <view class="voice_wrap" bindtap="tapPlayVoice">
     <image class="voice_icon" src="/images/voice_icon.png"></image>
     <text class="voice_tiem">34"</text>
   </view>

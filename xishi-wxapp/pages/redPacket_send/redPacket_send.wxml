@@ -1,7 +1,7 @@
 <view class="container">
   <view class="editor_box">
     <view class="sender_avatar">
-      <image src="/images/authorImg.jpg"></image>
+      <image src="{{headImgUrl}}"></image>
     </view>
     <view>
       <view wx:if="{{!isHasVioce}}"  class="record_btn" bindtouchstart="touchdown" bindtouchend="touchup">按住录祝福</view>
@@ -42,6 +42,13 @@
       </view>
     </view>
   </view>
+  <view  wx:if="{{isSpeaking}}"  class="speak-style">  
+    <image class="sound-style" src="/images/voice_speech_icon1.png" ></image>  
+    <image wx:if="{{j==2}}" class="sound-style" src="/images/voice_speech_icon2.png" ></image>  
+    <image wx:if="{{j==3}}" class="sound-style" src="/images/voice_speech_icon3.png" ></image>  
+    <image wx:if="{{j==4}}" class="sound-style" src="/images/voice_speech_icon4.png" ></image>  
+    <image wx:if="{{j==5}}"class="sound-style" src="/images/voice_speech_icon5.png" ></image>  
+ </view>  
   <view class="function_bar">
     <view bindtap="checkRecord">
       <image src="/images/record_icon.png" style="width:49rpx;height:54rpx;"></image>
