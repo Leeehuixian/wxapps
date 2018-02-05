@@ -1,0 +1,164 @@
+page{
+  height: 100%;
+}
+/*顶部导航栏*/
+.nav-list{
+  position:fixed;
+  left:0;
+  top:0;
+  z-index:10;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  width:100%;
+  height:100rpx;
+  background:#fff;
+  border-bottom:1px solid #e6e6e6;
+  font-size:19px;
+  text-align: center;
+}
+
+.nav-list text{
+  width:140rpx;
+  height:100%;
+  box-sizing: border-box;
+  line-height: 100rpx;
+}
+
+.nav-list .active{
+  color:#f32a43;
+  border-bottom:6rpx solid #f32a43;
+}
+
+/*信息列表*/
+.article-list{
+  margin-top:100rpx;
+  width:100%;
+  min-height: 100%;
+}
+
+.list-item{
+  width:100%;
+  box-sizing: border-box;
+  padding:20px 10px;
+  border-bottom:1px solid #e6e6e6;
+}
+
+.first-line{
+  display:flex;
+  justify-content: space-between;
+}
+
+.first-line .article-img{
+  width:226rpx;
+  height:150rpx;
+  margin-right:15px;
+}
+
+.article-img image{
+  width:226rpx;
+  height:150rpx;
+}
+
+.article-title{
+  font-size:17px;
+  line-height: 1.5;
+}
+
+.last-line{
+  display: flex;
+  justify-content: space-between;
+  width:100%;
+  font-size:12px;
+  line-height:2;
+}
+
+.flag-icon{
+  width:32rpx;
+  height:36rpx;
+  vertical-align:middle;
+  margin-right:5px;
+
+}
+
+.issue-info{
+  color:#969696;
+}
+
+.article-video{
+  position:relative;
+  width:100%;
+  height:280rpx;
+  margin-top:10px;
+}
+
+.video_thumb{
+  width:100%;
+  height:100%;
+}
+
+.video_icon{
+  position: absolute;
+  top:50%;
+  left:50%;
+  z-index:10;
+  margin-top:-60rpx;
+  margin-left:-60rpx;
+  width:120rpx;
+  height:120rpx;
+
+}
+
+.read-num{
+  color:#646464;
+}
+
+.read-icon{
+  width:39rpx;
+  height:22rpx;
+  margin-right:5px;
+}
+
+/*加载过渡状态*/
+.loading-text-wrap{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100rpx;
+  margin-top:400rpx;
+}
+
+.loading-text-wrap image{
+  width:366rpx;
+  height:94rpx;
+}
+
+/*加载中提示*/
+.loading-tips{
+  width:100%;
+  height:100rpx;
+  line-height: 100rpx;
+  text-align: center;
+  font-size:14px;
+  color:#646464;
+}
+
+/*刷新按钮*/
+#refresh{
+  position:fixed;
+  right:20px;
+  bottom:50px;
+  z-index:200;
+  width:130rpx;
+  height:130rpx;
+}
+
+#refresh image{
+  width:130rpx;
+  height:130rpx;
+}
+
+
+
+

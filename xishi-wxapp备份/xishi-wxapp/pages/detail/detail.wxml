@@ -1,0 +1,77 @@
+<import src="../../wxParse/wxParse.wxml"/>
+<scroll-view class="detail-container"  scroll-y="true" scroll-into-view="{{toView}}" enable-back-to-top="true" scroll-top="{{scroll_top}}" style="top:{{top}}">
+  <view class="loading-text-wrap"  hidden="{{ loadingModalHide }}">
+      <image src="../../images/loading-text-img.png" mode="aspectFill"></image>
+  </view>
+  <view class="title-autor">
+    <text class="title">{{detaildata.title}}</text>
+    <view class="second-line">
+      <view class="issue-info">
+        <image wx:if="{{detaildata.has_flag}}" class="flag-icon" src="{{detaildata.flag_icon_url}}"/>
+        <text>{{detaildata.author}} {{detaildata.publish_time}}</text>
+      </view>
+      <view class="read-num">
+        <image class="read-icon" src="/images/read-icon.png" />
+        <text>{{detaildata.view_num}}</text>
+      </view>
+    </view>
+  </view>
+  <view>
+    <template is="wxParse" data="{{wxParseData:articleContent.nodes}}" />
+    <view class="toutiaoCodeImg">
+      <image src="{{toutiaocodeurl}}" style="width:100%;height:480rpx;" mode="aspectFill"></image>
+    </view>
+  </view>
+  <view id="comment-section" class="comment-section">
+    <view class="comment-wrapper" hidden="{{commentList.length <= 0}}">
+      <view class="section-title">
+        <text>热门评论</text>
+      </view>     
+      <view class="comment-list">
+        <block wx:for="{{commentList}}" wx:key="{{index}}">
+          <view class="comment-item">
+            <view class="comment-avatar">
+              <image mode="aspectFill" src="{{item.HeadImgUrl}}"></image>
+            </view>
+            <view class="comment-content-wrapper">
+              <view class="first-line">
+                <text class="comment-nickname">{{item.CreatebyName}}</text>
+                <view class="like-num">
+                  <image wx:if="{{item.IsPraise}}" src="../../images/like_icon.png" mode="aspectFill" bindtap="bindLikeTap" data-isMyLike="{{item.IsPraise}}" data-commentId="{{item.ID}}"></image>
+                  <image wx:else src="../../images/notlike_icon.png" mode="aspectFill" bindtap="bindLikeTap" data-isMyLike="{{item.IsPraise}}" data-commentId="{{item.ID}}"></image>
+                  <text>{{item.PraiseNum}}</text>
+                </view>
+              </view>
+              <view class="comment-content">
+                <text>{{item.PostMessage}}</text>
+              </view>
+              <view class="last-line">
+                <text class="issue-time">{{item.MessageTime}}</text>
+                <text class="delete-comment" hidden="{{!item.IsDel}}" bindtap="bindDeleteTap" data-commentId="{{item.ID}}">删除</text>
+              </view>
+            </view>
+          </view>
+        </block> 
+      </view>
+    </view>
+  </view>
+</scroll-view>
+<view class="toolbar">
+  <view class="input-wrapper">
+    <input class="write-comment" placeholder="{{placeholderTxt}}" cursor="50" cursor-spacing="50" confirm-type="send" bindfocus="bindInputFocus" bindinput="bindKeyInput" bindconfirm="bindKeyConfirm" value="{{initInputVal}}"/>
+  </view>
+  <view class="read-comment" bindtap="bindReadComment">
+    <text class="comment-num" hidden="{{commentList.length <= 0}}">{{commentList.length}}</text>
+    <image src="../../images/comment_icon.png"></image>
+  </view>
+  <button open-type="share" class="share-btn"></button>   
+  <image class="share-to-friends" src="../../images/firends_circle_icon.png" bindtap="bindShareTap"></image>
+</view> 
+<view class="modal-bg" hidden="{{hideModalBg}}" catchtap="bindModalTap">
+  <view class="canvas-view">
+    <canvas class="my-canvas" canvas-id="myCanvas" />
+  </view>
+  <text class="save-image" bindtap="bindSaveImageTap">保存图片立即分享</text>
+</view>
+
+

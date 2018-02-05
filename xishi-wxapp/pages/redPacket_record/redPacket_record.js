@@ -1,11 +1,11 @@
-var utils = require("../../utils/util.js")
-import { get_giveOutRecord,get_grabRecord } from '../../url.js'
+var utils = require("../../utils/util.js");
+import { get_giveOutRecord, get_grabRecord, get_showInfo } from '../../url.js';
+var drawText = utils.drawText;
 const app = getApp();
 var sessionKey = '';
 Page({
 
   data: {
-    headImgUrl: '',
     nickName: '',
     typeTxt:'共发出',
     amountMoney:0,
@@ -14,7 +14,14 @@ Page({
     currentTab:0,
     hasMore:true,
     loadingTipHide:true,
-    pageIndex:0
+    pageIndex:0,
+    hideWithdraw:true,
+    hideModalBg: true,
+    share_bgUrl: '',
+    wxaCode_url: '',
+    avatarUrl:'',
+    totalSend: 0,
+    totalGet: 0
   },
 
   onLoad: function (options) {
@@ -25,10 +32,11 @@ Page({
     }
 
     this.setData({
-      headImgUrl: app.globalData.userInfo.avatarUrl,
+      avatarUrl: app.globalData.userInfo.avatarUrl,
       nickName: app.globalData.userInfo.nickName,
     })
     this.get_RecordFun(this.data.currentTab, this.data.pageIndex);
+    this.getShowInfoFun();//获取晒红包数据
   },
 
   tapTab:function(e){
@@ -40,6 +48,28 @@ Page({
       loadingTipHide: true,
     });
     this.get_RecordFun(this.data.currentTab);
+  },
+
+  getShowInfoFun: function () {
+    let that = this;
+    utils.requestLoading(get_showInfo + "?sessionKey=" + sessionKey, "post", "", "",
+      function (res) {
+        if (res.Status == 5) {
+          wx.removeStorageSync("sessionKey");
+          utils.getSessionKey(utils.getSetting);
+          return;
+        };
+
+        that.setData({
+          share_bgUrl: res.BackGroundImgUrl,
+          wxaCode_url: res.showcodeurl,
+          totalSend: res.totalsend,
+          totalGet: res.totalget
+        })
+      }, function (res) {
+        console.log(res)
+      }
+    )
   },
 
   get_RecordFun: function (currentTab){
@@ -87,11 +117,14 @@ Page({
         that.setData({
           loadingTipHide: true,
           pageIndex: pageIndex,
-          amountMoney: res.AmountSum,
-          bonusCount: res.BonusCount,
           recordList: resData
         });
       }
+
+      that.setData({
+        amountMoney: res.AmountSum,
+        bonusCount: res.BonusCount,
+      })
 
     },function(res){
       console.log(res);
@@ -127,17 +160,125 @@ Page({
   },
 
   bindTapWithdraw: function () {
-    wx.navigateTo({
-      url: '/pages/redPacket_withdraw/redPacket_withdraw',
-    })
+    this.setData({
+      hideWithdraw: false,
+    });
+  },
+
+  bindTapSun: function () {
+    this.setData({
+      hideModalBg : false,
+    });
   },
 
   bindTapSend: function () {
     wx.navigateBack({
       delta: 1
     })
-  }
+  },
 
-  
+  //收起模态窗口
+  bindModalTap: function () {
+    this.setData({
+      hideModalBg: true,
+      hideWithdraw: true,
+    });
+  },
+
+  //晒红包
+  bindTapSun: function () {
+    wx.showToast({
+      title: '图片生成中',
+      icon: 'loading',
+      duration: 2000
+    })
+    var that = this;
+    that.setData({
+      hideModalBg: false
+    });
+    var ctx = wx.createCanvasContext('myCanvas');
+    ctx.setFillStyle("#ffffff");
+    ctx.fillRect(0, 0, 478, 770);
+    ctx.setFontSize(15);
+    ctx.setFillStyle('#000000');
+    drawText("长按扫码发红包", 10, 366, 10, ctx); 
+    wx.getImageInfo({
+      src: that.data.share_bgUrl,
+      success: function (res) {
+        ctx.drawImage(res.path, 0, 0, 239, 348);
+        ctx.draw(true);
+        ctx.setFontSize(25);
+        ctx.setFillStyle('#f32a43');
+        if (that.data.totalGet.toString().length > 3){
+          drawText(that.data.totalGet.toString(), 96, 172, 6, ctx);
+        } else if (that.data.totalGet.toString().length <= 1) {
+          drawText(that.data.totalGet.toString(), 106, 172, 6, ctx);
+        }else if (that.data.totalGet.toString().length <= 3){
+          drawText(that.data.totalGet.toString(), 96, 172, 6, ctx);
+        } 
+        if (that.data.totalSend.toString().length > 3) {
+          ctx.setFontSize(18);
+          drawText(that.data.totalSend.toString(), 106, 223, 6, ctx);
+        } else if (that.data.totalSend.toString().length <= 1) {
+          drawText(that.data.totalSend.toString(), 116, 223, 6, ctx);
+        } else if (that.data.totalSend.toString().length <= 3) {
+          drawText(that.data.totalSend.toString(), 106, 223, 6, ctx);
+        }
+        wx.getImageInfo({
+          src: that.data.avatarUrl,
+          success: function (res) {
+            ctx.drawImage(res.path, 19, 40, 201, 129);
+            ctx.draw(true);
+          },
+          fail: function (res) {
+            console.log(res);
+          }
+        });
+      },
+      fail: function (res) {
+        console.log(res);
+      }
+    });
+    wx.getImageInfo({
+      src: that.data.wxaCode_url,
+      success: function (res) {
+        ctx.drawImage(res.path, 173, 352, 59, 59);
+        ctx.draw(true);
+      },
+      fail: function (res) {
+        console.log(res);
+      }
+    });
+    
+
+  },
+
+  //生成临时文件
+  bindSaveImageTap: function () {
+    wx.canvasToTempFilePath({
+      canvasId: 'myCanvas',
+      destWidth: 478,
+      destHeight: 832,
+      success: function (res) {
+        wx.saveImageToPhotosAlbum({
+          filePath: res.tempFilePath,
+          success(res) {
+            wx.showModal({
+              title: '成功保存图片',
+              showCancel: false,
+              content: '已成功为你保存图片到手机相册，请自行前往朋友圈分享',
+              success: function (res) { }
+            })
+          },
+          fail(res) {
+            console.log("图片保存失败");
+          }
+        })
+      }
+    })
+  } 
+
+
+
   
 })

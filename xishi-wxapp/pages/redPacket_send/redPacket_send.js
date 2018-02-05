@@ -7,6 +7,7 @@ var tempFilePath = '';
 var sessionKey = '';
 Page({
   data: {
+    hideModalBg: true,
     isHasVioce:false,
     coupletId:'',
     coupletText:'',
@@ -98,24 +99,6 @@ Page({
             let bonusId = res.BonusId; 
             let headImgUrl = res.HeadImgUrl;
             
-            /*测试代码*/
-            // wx.setStorage({
-            //   key: 'bonusSend_cacheData',
-            //   data: {
-            //     "coupletTxt": that.data.coupletText,
-            //     "shareBgUrl": share_bgUrl,
-            //     "codeUrl": wxaCode_url,
-            //     "bonusId": bonusId,
-            //     "headImgUrl": headImgUrl
-            //   }
-            // })
-            // that.UploadVoiceFun(UploadVoice, that.tempFilePath, bonusId);//上传语音            
-
-            // wx.navigateTo({
-            //   url: '/pages/redPacket_afterPay/redPacket_afterPay',
-            // })
-            /*测试代码结束*/
-
             //调用微信支付
             wx.requestPayment({
               'timeStamp': res.TimeStamp,
@@ -137,7 +120,9 @@ Page({
                   }
                 })
 
-                that.UploadVoiceFun(UploadVoice, that.tempFilePath, bonusId);//上传语音
+                    if (that.tempFilePath) {
+                      that.UploadVoiceFun(UploadVoice, that.tempFilePath, bonusId);//上传语音            
+                    }
 
                 wx.navigateTo({
                   url: '/pages/redPacket_afterPay/redPacket_afterPay',
@@ -222,14 +207,13 @@ Page({
   touchdown:function(){
     let that = this;
     const options = {
-      duration: 10000,//指定录音的时长，单位 ms
-      sampleRate: 16000,//采样率
-      numberOfChannels: 1,//录音通道数
-      encodeBitRate: 96000,//编码码率
-      format: 'mp3',//音频格式，有效值 aac/mp3
-      frameSize: 50,//指定帧大小，单位 KB
+      duration: 10000,
+      sampleRate: 16000,
+      numberOfChannels: 1,
+      encodeBitRate: 96000,
+      format: 'mp3',
+      frameSize: 50,
     }
-    //开始录音
     recorderManager.start(options);
     recorderManager.onStart(() => {
       console.log('recorder start')
@@ -238,7 +222,6 @@ Page({
         isSpeaking: true
       })
     });
-    //错误回调
     recorderManager.onError((res) => {
       console.log(res);
     })
@@ -265,9 +248,7 @@ Page({
   //播放录音
   playvoice:function(){
     console.log("点击播放")
-    console.log(this.tempFilePath);
     innerAudioContext.autoplay = true
-    // innerAudioContext.loop = true
     innerAudioContext.obeyMuteSwitch = false
     innerAudioContext.src = this.tempFilePath
     innerAudioContext.play()
@@ -303,9 +284,16 @@ Page({
   },
 
   withdrawTap:function(){
-    wx.navigateTo({
-      url: '/pages/redPacket_withdraw/redPacket_withdraw'
-    })
+    this.setData({
+      hideModalBg: false
+    });
+  },
+
+  //收起模态窗口
+  bindModalTap: function () {
+    this.setData({
+      hideModalBg: true
+    });
   },
 
   checkExplain:function(){
