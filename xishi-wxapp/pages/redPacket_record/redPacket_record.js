@@ -226,22 +226,22 @@ Page({
             ctx.drawImage(res.path, 0, 0, 239, 348);
             ctx.setFontSize(19);
             ctx.setFillStyle('#f32a43');
-            if (that.data.totalGet.toString().length <= 1) {
-              drawText(that.data.totalGet.toString(), 115, 163, 6, ctx);
-            } else if (that.data.totalGet.toString().length == 2) {
-              drawText(that.data.totalGet.toString(), 109, 163, 6, ctx);
-            } else if (that.data.totalGet.toString().length == 3) {
-              drawText(that.data.totalGet.toString(), 104, 163, 6, ctx);
-            } if (that.data.totalGet.toString().length == 4) {
-              drawText(that.data.totalGet.toString(), 98, 163, 6, ctx);
+            if (that.data.totalSend.toString().length <= 1) {
+              drawText(that.data.totalSend.toString(), 115, 163, 6, ctx);
+            } else if (that.data.totalSend.toString().length == 2) {
+              drawText(that.data.totalSend.toString(), 109, 163, 6, ctx);
+            } else if (that.data.totalSend.toString().length == 3) {
+              drawText(that.data.totalSend.toString(), 104, 163, 6, ctx);
+            } if (that.data.totalSend.toString().length == 4) {
+              drawText(that.data.totalSend.toString(), 98, 163, 6, ctx);
             } 
 
-            if (that.data.totalSend.toString().length <= 1) {
-              drawText(that.data.totalSend.toString(), 114, 223, 6, ctx);
-            } else if (that.data.totalSend.toString().length == 2) {
-              drawText(that.data.totalSend.toString(), 110, 223, 6, ctx);
-            } else if (that.data.totalSend.toString().length == 3) {
-              drawText(that.data.totalSend.toString(), 104, 223, 6, ctx);
+            if (that.data.totalGet.toString().length <= 1) {
+              drawText(that.data.totalGet.toString(), 114, 223, 6, ctx);
+            } else if (that.data.totalGet.toString().length == 2) {
+              drawText(that.data.totalGet.toString(), 110, 223, 6, ctx);
+            } else if (that.data.totalGet.toString().length == 3) {
+              drawText(that.data.totalGet.toString(), 104, 223, 6, ctx);
             }
             ctx.draw(true);
           },
