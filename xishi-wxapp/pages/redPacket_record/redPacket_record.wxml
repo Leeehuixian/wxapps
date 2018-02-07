@@ -1,4 +1,5 @@
 <view class="container">
+  <button class="contact-btn" open-type="contact" bindtap='concatFun'>{{serviceMsg}}</button>
   <view class="top_bar">
     <view class="{{currentTab==0?'active':''}}" data-tabindex="0" bindtap="tapTab">我发出的</view>
     <view class="{{currentTab==1?'active':''}}" data-tabindex="1" bindtap="tapTab">我收到的</view>
@@ -51,16 +52,6 @@
     </view>
   </view>
   <!--弹层-->
-  <view class="modal-bg" hidden="{{hideWithdraw}}" catchtap="bindModalTap">
-    <view class="code_wrap">
-      <view class="code_img">
-        <image src="/images/vipcnCode.jpg" mode="aspectFill" style="width:240rpx;height:240rpx;"></image>
-      </view>
-      <view class="code_txt">
-        <text>请移步至“沐浴头条”服务号提现</text>
-      </view>
-    </view>
-  </view>
   <view class="modal-bg" hidden="{{hideModalBg}}" catchtap="bindModalTap">
     <view class="canvas-view">
       <canvas class="my-canvas" canvas-id="myCanvas" />

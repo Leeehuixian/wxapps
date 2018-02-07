@@ -44,12 +44,12 @@ Page({
   /*发送好友或群*/
   onShareAppMessage: function (res) {
     var that = this;
-    console.log(that.data.bonusId)
     if (res.from === 'button') {
       // console.log(res.target)
     }
     return {
       title: '我的心意，请收下',
+      imageUrl: '../../images/share_url_img.png',
       path: '/pages/redPacket_index/redPacket_index?id=' + that.data.bonusId,
       success: function (res) {
         wx.showShareMenu({

@@ -1,12 +1,13 @@
 var utils = require("../../utils/util.js");
-import { withdraw_money,get_userBalance } from "../../url.js";
+import { withdraw_money, get_userBalance, get_serviceMsg } from "../../url.js";
 var sessionKey = '';
 Page({
   data: {
     balance:0,
     withdrawmoney:0,
     canWithdraw:false,
-    initValue:''
+    initValue:'',
+    serviceMsg: ''
   },
 
   onLoad: function (options) {
@@ -16,6 +17,23 @@ Page({
       return;
     }
     this.getBalance();
+    this.setData({
+      serviceMsg: wx.getStorageSync("serviceMsg")
+    });
+  },
+
+  concatFun: function () {
+    utils.requestLoading(get_serviceMsg + "?sessionKey=" + sessionKey, "post", JSON.stringify({ Type: "image" }), '数据加载中...',
+      function (res) {
+        if (res.Status == 5) {
+          wx.removeStorageSync("sessionKey");
+          utils.getSessionKey(utils.getSetting);
+          return;
+        }
+        console.log(res);
+      }, function (res) {
+        console.log(res);
+      })
   },
 
   getBalance:function(){

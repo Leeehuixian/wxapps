@@ -22,6 +22,7 @@ let get_userBalance = api_host + "Bonus/UserBalance";
 let get_serviceFeeExplain = api_host + "Bonus/ServiceFeeExplain";
 let UploadVoice = api_host + "Bonus/UploadFileNew";
 let get_showInfo = api_host + "Bonus/ShowBonus";
+let get_serviceMsg = api_host + "follow/GetCustomerServiceMsg";
 export { 
   get_sessionKey,//获取sessionKey
   article_list,  //文章列表
@@ -46,4 +47,5 @@ export {
   get_serviceFeeExplain,//服务费声明
   UploadVoice,//语音上传服务器
   get_showInfo,//获取晒红包所需的信息
+  get_serviceMsg,//获取客户推送消息
   }

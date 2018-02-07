@@ -1,7 +1,7 @@
 <view class="container">
   <view class="editor_box">
     <view class="sender_avatar">
-      <image src="{{headImgUrl}}"></image>
+       <image src="{{headImgUrl}}" mode="aspectFill"></image> 
     </view>
     <view>
       <view wx:if="{{!isHasVioce}}"  class="record_btn" bindtouchstart="touchdown" bindtouchend="touchup">按住录祝福</view>
@@ -25,14 +25,14 @@
       </view>
     </view>
     <view class="editor_input">
-      <text>赏金（元）</text>
+      <text>金额（元）</text>
       <input placeholder='填写红包金额' bindinput="inputMoney" bindblur="CaculateServiceFee" type="digit" />
     </view>
     <view class="editor_input">
       <text>数量（个）</text>
       <input placeholder='填写红包数量' bindinput="inputNum" type="number" />
     </view>
-    <text class="tip_txt">需支付￥{{serviceFee}}服务费</text>
+    <text class="tip_txt">需支付￥{{serviceFee}}服务费，支付总金额为￥{{totalPay}}</text>
     <view class="submit_btn" bindtap="sendFun">生成并发送</view>
     <view class="agreement">
       <image src="/images/checked_box_icon.png"></image>
@@ -55,7 +55,7 @@
       <text>我的记录</text>
     </view>
     <view bindtap="withdrawTap">
-      <image src="/images/balance_icon.png" style="width:54rpx;height:54rpx;"></image>
+       <image src="/images/balance_icon.png" style="width:54rpx;height:54rpx;"></image> 
       <text>余额提现</text>
     </view>
     <view bindtap="askHelp">
@@ -63,15 +63,4 @@
       <text>常见问题</text>
     </view>
   </view>
-  <view class="modal-bg" hidden="{{hideModalBg}}" catchtap="bindModalTap">
-    <view class="code_wrap">
-      <view class="code_img">
-        <image src="/images/vipcnCode.jpg" mode="aspectFill" style="width:240rpx;height:240rpx;"></image>
-      </view>
-      <view class="code_txt">
-        <text>请移步至“沐浴头条”服务号提现</text>
-      </view>
-    </view>
-  </view>
-  
 </view>

@@ -1,11 +1,12 @@
 var utils = require("../../utils/util.js");
-import { get_giveOutRecord, get_grabRecord, get_showInfo } from '../../url.js';
+import { get_giveOutRecord, get_grabRecord, get_showInfo, get_serviceMsg } from '../../url.js';
 var drawText = utils.drawText;
 const app = getApp();
 var sessionKey = '';
 Page({
 
   data: {
+    serviceMsg:'',
     nickName: '',
     typeTxt:'共发出',
     amountMoney:0,
@@ -15,7 +16,6 @@ Page({
     hasMore:true,
     loadingTipHide:true,
     pageIndex:0,
-    hideWithdraw:true,
     hideModalBg: true,
     share_bgUrl: '',
     wxaCode_url: '',
@@ -34,6 +34,7 @@ Page({
     this.setData({
       avatarUrl: app.globalData.userInfo.avatarUrl,
       nickName: app.globalData.userInfo.nickName,
+      serviceMsg: wx.getStorageSync("serviceMsg")
     })
     this.get_RecordFun(this.data.currentTab, this.data.pageIndex);
     this.getShowInfoFun();//获取晒红包数据
@@ -146,7 +147,6 @@ Page({
   //上拉加载
   onReachBottom: function () {
     let that = this;
-    console.log(this.data.hasMore);
     if (that.data.hasMore) {
       that.setData({
         loadingTipHide: true
@@ -159,10 +159,24 @@ Page({
     }
   },
 
+  concatFun:function(){
+    utils.requestLoading(get_serviceMsg + "?sessionKey=" + sessionKey,"post",JSON.stringify({Type:"image"}),'数据加载中...',
+      function(res){
+        if (res.Status == 5) {
+          wx.removeStorageSync("sessionKey");
+          utils.getSessionKey(utils.getSetting);
+          return;
+        }
+        console.log(res);
+      },function(res){
+        console.log(res);
+    })
+  },
+
   bindTapWithdraw: function () {
-    this.setData({
-      hideWithdraw: false,
-    });
+    wx.navigateTo({
+      url: '/pages/redPacket_withdraw/redPacket_withdraw'
+    })
   },
 
   bindTapSun: function () {
@@ -180,8 +194,7 @@ Page({
   //收起模态窗口
   bindModalTap: function () {
     this.setData({
-      hideModalBg: true,
-      hideWithdraw: true,
+      hideModalBg: true
     });
   },
 
@@ -203,31 +216,33 @@ Page({
     ctx.setFillStyle('#000000');
     drawText("长按扫码发红包", 10, 366, 10, ctx); 
     wx.getImageInfo({
-      src: that.data.share_bgUrl,
+      src: that.data.avatarUrl,
       success: function (res) {
-        ctx.drawImage(res.path, 0, 0, 239, 348);
+        ctx.drawImage(res.path, 73, 59, 92, 92);
         ctx.draw(true);
-        ctx.setFontSize(25);
-        ctx.setFillStyle('#f32a43');
-        if (that.data.totalGet.toString().length > 3){
-          drawText(that.data.totalGet.toString(), 96, 172, 6, ctx);
-        } else if (that.data.totalGet.toString().length <= 1) {
-          drawText(that.data.totalGet.toString(), 106, 172, 6, ctx);
-        }else if (that.data.totalGet.toString().length <= 3){
-          drawText(that.data.totalGet.toString(), 96, 172, 6, ctx);
-        } 
-        if (that.data.totalSend.toString().length > 3) {
-          ctx.setFontSize(18);
-          drawText(that.data.totalSend.toString(), 106, 223, 6, ctx);
-        } else if (that.data.totalSend.toString().length <= 1) {
-          drawText(that.data.totalSend.toString(), 116, 223, 6, ctx);
-        } else if (that.data.totalSend.toString().length <= 3) {
-          drawText(that.data.totalSend.toString(), 106, 223, 6, ctx);
-        }
         wx.getImageInfo({
-          src: that.data.avatarUrl,
+          src: that.data.share_bgUrl,
           success: function (res) {
-            ctx.drawImage(res.path, 19, 40, 201, 129);
+            ctx.drawImage(res.path, 0, 0, 239, 348);
+            ctx.setFontSize(19);
+            ctx.setFillStyle('#f32a43');
+            if (that.data.totalGet.toString().length <= 1) {
+              drawText(that.data.totalGet.toString(), 115, 163, 6, ctx);
+            } else if (that.data.totalGet.toString().length == 2) {
+              drawText(that.data.totalGet.toString(), 109, 163, 6, ctx);
+            } else if (that.data.totalGet.toString().length == 3) {
+              drawText(that.data.totalGet.toString(), 104, 163, 6, ctx);
+            } if (that.data.totalGet.toString().length == 4) {
+              drawText(that.data.totalGet.toString(), 98, 163, 6, ctx);
+            } 
+
+            if (that.data.totalSend.toString().length <= 1) {
+              drawText(that.data.totalSend.toString(), 114, 223, 6, ctx);
+            } else if (that.data.totalSend.toString().length == 2) {
+              drawText(that.data.totalSend.toString(), 110, 223, 6, ctx);
+            } else if (that.data.totalSend.toString().length == 3) {
+              drawText(that.data.totalSend.toString(), 104, 223, 6, ctx);
+            }
             ctx.draw(true);
           },
           fail: function (res) {
@@ -239,6 +254,7 @@ Page({
         console.log(res);
       }
     });
+    
     wx.getImageInfo({
       src: that.data.wxaCode_url,
       success: function (res) {
@@ -277,8 +293,5 @@ Page({
       }
     })
   } 
-
-
-
   
 })

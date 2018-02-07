@@ -1,4 +1,4 @@
-import { get_couplet, pay_redPacket, get_serviceFee, UploadVoice } from "../../url.js"
+import { get_couplet, pay_redPacket, get_serviceFee, UploadVoice, get_serviceFeeExplain } from "../../url.js"
 var utils = require("../../utils/util.js")
 const app = getApp();
 const recorderManager = wx.getRecorderManager();
@@ -16,7 +16,8 @@ Page({
     serviceFee: "0.00",
     headImgUrl:'',
     j: 1,//帧动画初始图片  
-    isSpeaking: false 
+    isSpeaking: false,
+    totalPay:"0.00"
   },
 
   onLoad: function (options) {
@@ -30,6 +31,7 @@ Page({
       headImgUrl: app.globalData.userInfo.avatarUrl
     })
     this.getCouplet();//获取对联
+    this.getFeeExplain();//获取服务费声明
   },
 
   getCouplet: function (){
@@ -164,20 +166,43 @@ Page({
   //计算服务费
   CaculateServiceFee:function(){
     let that = this;
-    utils.requestLoading(get_serviceFee+"?sessionKey="+sessionKey,"post",JSON.stringify({bonusAmount:Number(this.data.money)}),'',
+    utils.requestLoading(get_serviceFee + "?sessionKey=" + sessionKey, "post", JSON.stringify({ bonusAmount: Number(that.data.money)}),'',
       function(res){
         if (res.Status == 5) {
           wx.removeStorageSync("sessionKey");
           utils.getSessionKey(utils.getSetting);
           return;
         }
+
+        let totalMoney = res + Number(that.data.money)
         that.setData({
-          serviceFee:res           
+          serviceFee:res,
+          totalPay:totalMoney        
         });
       },function(res){
         console.log(res)
       }
     )
+  },
+
+  //服务费声明
+  getFeeExplain:function(){
+    let that = this;
+    utils.requestLoading(get_serviceFeeExplain + "?sessionKey=" + sessionKey, "post", "", "数据加载中...",
+      function (res) {
+        if (res.Status == 5) {
+          wx.removeStorageSync("sessionKey");
+          utils.getSessionKey(utils.getSetting);
+          return;
+        }
+        
+        if (res.wechatMsg != 'none') {
+          wx.setStorageSync("serviceMsg", res.wechatMsg);
+        }
+      }, function (res) {
+        console.log(res);
+      }
+    );
   },
 
   //语音提交微信服务器
@@ -194,6 +219,11 @@ Page({
         'content-type': 'multipart/form-data'
       },
       success: function (res) {
+        if (res.Status == 5) {
+          wx.removeStorageSync("sessionKey");
+          utils.getSessionKey(utils.getSetting);
+          return;
+        }
         console.log("语音上传成功");
         console.log(res);
       },
@@ -205,6 +235,24 @@ Page({
 
   //开始录音
   touchdown:function(){
+    let that = this;
+    wx.getSetting({
+      success(res) {
+        if (res.authSetting['scope.record']) {
+          that.starRecord();
+        }else{
+          wx.authorize({
+            scope: 'scope.record',
+            success() {
+              return;
+            }
+          })
+        }
+      }
+    });
+  },
+
+  starRecord:function(){
     let that = this;
     const options = {
       duration: 10000,
@@ -230,18 +278,20 @@ Page({
   //停止录音
   touchup:function(){
     let that = this;
-    recorderManager.stop();
-    recorderManager.onStop((res) => {
-      that.tempFilePath = res.tempFilePath;
-      that.setData({
-        isHasVioce:true
-      });
-      that.setData({
-        isSpeaking: false,
-      })
-      clearInterval(that.timer)  
-      console.log('停止录音', res.tempFilePath)
-      // const { tempFilePath } = res
+    wx.authorize({
+      scope: 'scope.record',
+      success() {
+        recorderManager.stop();
+        recorderManager.onStop((res) => {
+          that.tempFilePath = res.tempFilePath;
+          that.setData({
+            isHasVioce: true,
+            isSpeaking: false,
+          });
+          clearInterval(that.timer)
+          // console.log('停止录音', res.tempFilePath)
+        })
+      }
     })
   },
 
@@ -284,9 +334,9 @@ Page({
   },
 
   withdrawTap:function(){
-    this.setData({
-      hideModalBg: false
-    });
+    wx.navigateTo({
+      url: '/pages/redPacket_withdraw/redPacket_withdraw'
+    })
   },
 
   //收起模态窗口

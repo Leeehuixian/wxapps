@@ -24,7 +24,13 @@ Page({
 
     var bounsId = options.id;
     // bounsId = '0c945bef333f42968f4ebe1ce4d4e8f6';
-    this.verifyOpen(bounsId);//验证用户是否已经拆过红包
+    if (bounsId == null) {
+      bounsId = wx.getStorageSync('bounsId');
+      this.verifyOpen(bounsId);//验证用户是否已经拆过红包
+    } else {
+      wx.setStorageSync('bounsId', bounsId);
+      this.verifyOpen(bounsId);
+    }
   },
 
   verifyOpen: function (bounsId){

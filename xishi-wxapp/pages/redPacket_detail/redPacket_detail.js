@@ -1,11 +1,11 @@
-import { get_bonusDetailList} from "../../url.js";
+import { get_bonusDetailList, get_serviceFeeExplain, get_serviceMsg} from "../../url.js";
 var utils = require("../../utils/util.js");
 var sessionKey = '';
 const innerAudioContext = wx.createInnerAudioContext();
 Page({
   data: {
+    serviceMsg: '',
     hideModalBg:true,
-    hideWithdraw: true,
     bonusId:'',
     bonusCount:'',
     openCount:'',
@@ -36,12 +36,49 @@ Page({
       wx.setStorageSync('bounsId', bounsId);
       this.getRecord(bounsId);
     }
+    this.getFeeExplain();//获取服务费声明
   },
 
   onPullDownRefresh: function () {
     wx.showNavigationBarLoading();
     let bounsId = wx.getStorageSync('bounsId');
     this.getRecord(bounsId);
+  },
+
+  concatFun: function () {
+    utils.requestLoading(get_serviceMsg + "?sessionKey=" + sessionKey, "post", JSON.stringify({ Type: "image" }), '数据加载中...',
+      function (res) {
+        if (res.Status == 5) {
+          wx.removeStorageSync("sessionKey");
+          utils.getSessionKey(utils.getSetting);
+          return;
+        }
+        console.log(res);
+      }, function (res) {
+        console.log(res);
+      })
+  },
+
+  //服务费声明
+  getFeeExplain: function () {
+    let that = this;
+    utils.requestLoading(get_serviceFeeExplain + "?sessionKey=" + sessionKey, "post", "", "数据加载中...",
+      function (res) {
+        if (res.Status == 5) {
+          wx.removeStorageSync("sessionKey");
+          utils.getSessionKey(utils.getSetting);
+          return;
+        }
+
+        if (res.wechatMsg != 'none') {
+          that.setData({
+            serviceMsg: res.wechatMsg
+          })          
+        }
+      }, function (res) {
+        console.log(res);
+      }
+    );
   },
 
   /*播放语音*/
@@ -95,28 +132,33 @@ Page({
     )
   },
 
-  /*发送好友或群*/
-  onShareAppMessage: function (res) {
+  transpondFun:function(){
     let that = this;
     this.goTopFun();
     setTimeout(function () {
-      if (res.from === 'button') {
-        // console.log(res.target)
-      }
-      return {
-        title: '我的心意，请收下',
-        imageUrl:'/images/share_url_img.png',
-        path: '/pages/redPacket_index/redPacket_index?id=' + that.data.bonusId,
-        success: function (res) {
-          wx.showShareMenu({
-            withShareTicket: true
-          });
-        },
-        fail: function (res) {
-          console.log(res.shareAppMessage);
-        }
-      }
+      that.onShareAppMessage()
     }, 1000);
+  },
+
+  /*发送好友或群*/
+  onShareAppMessage: function (res) {
+    let that = this;
+    if (res.from === 'button') {
+      // console.log(res.target)
+    }
+    return {
+      title: '我的心意，请收下',
+      // imageUrl: '../../images/share_url_img.png',
+      path: '/pages/redPacket_index/redPacket_index?id=' + that.data.bonusId,
+      success: function (res) {
+        wx.showShareMenu({
+          withShareTicket: true
+        });
+      },
+      fail: function (res) {
+        console.log(res.shareAppMessage);
+      }
+    }
   },
 
   /*生成分享朋友圈图片*/
@@ -195,7 +237,6 @@ Page({
   bindModalTap: function () {
     this.setData({
       hideModalBg: true,
-      hideWithdraw: true,
     });
   },
 
@@ -213,9 +254,9 @@ Page({
   }, 
 
   bindTapWithdraw:function(){
-    this.setData({
-      hideWithdraw: false,
-    });
+    wx.navigateTo({
+      url: '/pages/redPacket_withdraw/redPacket_withdraw'
+    })
   },
 
   bindTapSend: function () {
