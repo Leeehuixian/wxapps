@@ -23,7 +23,6 @@ Page({
     }
 
     var bounsId = options.id;
-    // bounsId = '0c945bef333f42968f4ebe1ce4d4e8f6';
     if (bounsId == null) {
       bounsId = wx.getStorageSync('bounsId');
       this.verifyOpen(bounsId);//验证用户是否已经拆过红包
@@ -117,30 +116,40 @@ Page({
 
   /*拆红包*/
   grabRedPacket: function (bonusId) {
-    utils.requestLoading(grab_redPacket + "?sessionKey=" + sessionKey, "post",
-      JSON.stringify({ bonusId: bonusId }), "数据加载中...",
-      function (res) {
-        switch (res.Status){
-          case 1:case 2:
-            wx.redirectTo({
-              url: '/pages/redPacket_detail/redPacket_detail?id=' + bonusId,
-            });
-            break;
-          case 5:
-            wx.removeStorageSync("sessionKey");
-            utils.getSessionKey(utils.getSetting);
-            break;
-          default:
-            wx.showToast({
-              title: res.Msg,
-              icon: 'none'
-            });
-            break;
+    let isSubmit = true;
+    if(isSubmit){
+      isSubmit = false;
+      utils.requestLoading(grab_redPacket + "?sessionKey=" + sessionKey, "post",
+        JSON.stringify({ bonusId: bonusId }), "数据加载中...",
+        function (res) {
+          isSubmit = true;
+          switch (res.Status){
+            case 1:case 2:
+              wx.redirectTo({
+                url: '/pages/redPacket_detail/redPacket_detail?id=' + bonusId,
+              });
+              break;
+            case 5:
+              wx.removeStorageSync("sessionKey");
+              utils.getSessionKey(utils.getSetting);
+              break;
+            default:
+              wx.showToast({
+                title: res.Msg,
+                icon: 'none'
+              });
+              break;
+          }
+        }, function (res) {
+          console.log(res)
         }
-      }, function (res) {
-        console.log(res)
-      }
-    );
+      );
+    }else{
+      wx.showToast({
+        title: '请求发送中...',
+        icon:'none'
+      })
+    }
   },
 
   /*播放语音*/

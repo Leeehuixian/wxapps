@@ -44,8 +44,8 @@
       <text>我也发一个</text>
     </view>
     <view>
-      <button open-type="share" class="share-btn" bindtap="transpondFun"></button>
-      <text>转发朋友</text>
+      <button open-type="share" class="share-btn" bindtap="transpondFun">转发朋友</button>
+      <!-- <text>转发朋友</text> -->
     </view>
     <view class="to-transmit" bindtap="bindShareTap">
       <image src="/images/firends_circle_icon.png" style="width:44rpx;height:44rpx;"></image>

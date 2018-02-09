@@ -88,11 +88,13 @@ Page({
       utils.requestLoading(withdraw_money + "?sessionKey=" + sessionKey, "post",
         JSON.stringify({ money: that.data.withdrawmoney }), "数据加载中...",
         function (res) {
+          isSubmit = true;
           if (res.Status == 1) {
             wx.showToast({
               title: '提现成功',
               icon: 'success'
-            })
+            });
+            that.getBalance();
           } else if (res.Status == 5) {
             wx.removeStorageSync("sessionKey");
             utils.getSessionKey(utils.getSetting);
@@ -104,6 +106,11 @@ Page({
           }
         }
       )
+    }else{
+      wx.showToast({
+        title: '请求发送中...',
+        icon:'none'
+      })
     }
   }
 

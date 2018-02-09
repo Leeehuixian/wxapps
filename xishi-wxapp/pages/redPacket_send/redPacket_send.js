@@ -109,7 +109,7 @@ Page({
               'signType': res.SignType,
               'paySign': res.PaySign,
               'success': function (res) {
-                isSubmit = false;
+                isSubmit = true;
                 
                 wx.setStorage({
                   key: 'bonusSend_cacheData',

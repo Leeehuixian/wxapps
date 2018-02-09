@@ -95,9 +95,11 @@ Page({
       JSON.stringify({ bonusId: bounsId }), "数据加载中...",
       function (res) {
         // console.log(res)
-        if (res.Msg == ""){
-          wx.hideNavigationBarLoading() //完成停止加载
+        wx.hideNavigationBarLoading() //完成停止加载
+        setTimeout(function(){
           wx.stopPullDownRefresh() //停止下拉刷新
+        },500);
+        if (res.Msg == ""){
           if (res.VoiceUrl){
             that.setData({
               voiceUrl: res.VoiceUrl,
