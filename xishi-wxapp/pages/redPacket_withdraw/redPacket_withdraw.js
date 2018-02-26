@@ -94,6 +94,10 @@ Page({
               title: '提现成功',
               icon: 'success'
             });
+            that.setData({
+              initValue: '',
+              withdrawmoney: 0
+            })
             that.getBalance();
           } else if (res.Status == 5) {
             wx.removeStorageSync("sessionKey");
