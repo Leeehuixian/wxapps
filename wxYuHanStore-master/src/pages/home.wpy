@@ -1,4 +1,4 @@
-<template>
+..<template>
   <view class="container">
     <swiper class="swiper" indicator-active-color="{{indicatorActiveColor}}" indicator-dots="{{indicatorDots}}" autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}" circular="true">
       <block wx:for="{{adList}}" wx:key="key">
